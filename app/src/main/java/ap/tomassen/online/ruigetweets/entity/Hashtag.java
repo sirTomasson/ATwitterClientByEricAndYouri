@@ -4,10 +4,11 @@ package ap.tomassen.online.ruigetweets.entity;
  * Created by Eric on 8-5-2017.
  */
 
-public class Hashtag extends Entity {
+public class HashTag extends Entity {
     private String text;
 
-    public Hashtag(String text) {
+    public HashTag(int[] indices, String text) {
+        super(indices);
         this.text = text;
     }
 

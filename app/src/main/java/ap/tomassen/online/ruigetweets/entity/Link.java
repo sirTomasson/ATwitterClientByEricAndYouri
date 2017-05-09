@@ -9,7 +9,8 @@ public class Link extends Entity {
     private String displayUrl;
     private String extendedUrl;
 
-    public Link(String url, String displayUrl, String extendedUrl) {
+    public Link(int[] indices, String url, String displayUrl, String extendedUrl) {
+        super(indices);
         this.url = url;
         this.displayUrl = displayUrl;
         this.extendedUrl = extendedUrl;

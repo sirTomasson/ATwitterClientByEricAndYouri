@@ -13,7 +13,8 @@ public class Mention extends Entity{
         return userId;
     }
 
-    public Mention(int userId, String name, String screenName) {
+    public Mention(int[] indices, int userId, String name, String screenName) {
+        super(indices);
         this.userId = userId;
         this.name = name;
         this.screenName = screenName;
