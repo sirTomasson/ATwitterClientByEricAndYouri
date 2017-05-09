@@ -1,6 +1,4 @@
-package ap.tomassen.online.ruigetweets.entities;
-
-import ap.tomassen.online.ruigetweets.Entity;
+package ap.tomassen.online.ruigetweets.entity;
 
 /**
  * Created by Eric on 8-5-2017.

@@ -1,4 +1,4 @@
-package ap.tomassen.online.ruigetweets;
+package ap.tomassen.online.ruigetweets.activity;
 
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import ap.tomassen.online.ruigetweets.R;
 
 public class MainActivity extends AppCompatActivity {
 
