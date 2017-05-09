@@ -1,4 +1,4 @@
-package ap.tomassen.online.ruigetweets;
+package ap.tomassen.online.ruigetweets.model;
 
 import java.util.Calendar;
 import java.util.Date;

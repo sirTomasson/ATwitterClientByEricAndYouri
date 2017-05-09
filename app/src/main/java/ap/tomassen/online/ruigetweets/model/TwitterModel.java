@@ -2,8 +2,6 @@ package ap.tomassen.online.ruigetweets.model;
 
 import java.util.ArrayList;
 
-import ap.tomassen.online.ruigetweets.Tweet;
-
 /**
  * Created by youri on 9-5-2017.
  */

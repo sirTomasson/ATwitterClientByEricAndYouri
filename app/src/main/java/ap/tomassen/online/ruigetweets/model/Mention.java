@@ -1,4 +1,4 @@
-package ap.tomassen.online.ruigetweets.entity;
+package ap.tomassen.online.ruigetweets.model;
 
 /**
  * Created by Eric on 8-5-2017.
