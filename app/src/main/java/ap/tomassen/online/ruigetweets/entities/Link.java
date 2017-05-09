@@ -11,6 +11,12 @@ public class Link extends Entity {
     private String displayUrl;
     private String extendedUrl;
 
+    public Link(String url, String displayUrl, String extendedUrl) {
+        this.url = url;
+        this.displayUrl = displayUrl;
+        this.extendedUrl = extendedUrl;
+    }
+
     public String getUrl() {
         return url;
     }

@@ -9,6 +9,10 @@ import ap.tomassen.online.ruigetweets.Entity;
 public class Hashtag extends Entity {
     private String text;
 
+    public Hashtag(String text) {
+        this.text = text;
+    }
+
     public String getText() {
         return text;
     }

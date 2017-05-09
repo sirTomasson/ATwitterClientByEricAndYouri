@@ -7,6 +7,10 @@ package ap.tomassen.online.ruigetweets;
 public class Entity {
     private int[] indices;
 
+    public Entity(int[] indices) {
+        this.indices = indices;
+    }
+
     public int[] getIndices() {
         return indices;
     }

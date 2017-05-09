@@ -17,6 +17,14 @@ public class Tweet {
         return id;
     }
 
+    public Tweet(int id, Date createdAt, String text, int retweetCount, int favoriteCount) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.text = text;
+        this.retweetCount = retweetCount;
+        this.favoriteCount = favoriteCount;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

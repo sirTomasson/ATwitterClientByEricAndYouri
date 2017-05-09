@@ -12,6 +12,15 @@ public class User {
     private String profileImageUrl;
     private String profileUrl;
 
+    public User(int id, String name, String screenName, String description, String profileImageUrl, String profileUrl) {
+        this.id = id;
+        this.name = name;
+        this.screenName = screenName;
+        this.description = description;
+        this.profileImageUrl = profileImageUrl;
+        this.profileUrl = profileUrl;
+    }
+
     public int getId() {
         return id;
     }

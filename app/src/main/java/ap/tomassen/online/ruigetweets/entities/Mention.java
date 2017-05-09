@@ -15,6 +15,12 @@ public class Mention extends Entity{
         return userId;
     }
 
+    public Mention(int userId, String name, String screenName) {
+        this.userId = userId;
+        this.name = name;
+        this.screenName = screenName;
+    }
+
     public void setUserId(int userId) {
         this.userId = userId;
     }
