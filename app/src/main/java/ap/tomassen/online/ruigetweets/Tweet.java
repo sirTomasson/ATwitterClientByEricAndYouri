@@ -10,18 +10,18 @@ public class Tweet {
     private int id;
     private Date createdAt;
     private String text;
-    private int retweetCount;
+    private int reTweetCount;
     private int favoriteCount;
 
     public int getId() {
         return id;
     }
 
-    public Tweet(int id, Date createdAt, String text, int retweetCount, int favoriteCount) {
+    public Tweet(int id, Date createdAt, String text, int reTweetCount, int favoriteCount) {
         this.id = id;
         this.createdAt = createdAt;
         this.text = text;
-        this.retweetCount = retweetCount;
+        this.reTweetCount = reTweetCount;
         this.favoriteCount = favoriteCount;
     }
 
@@ -45,12 +45,12 @@ public class Tweet {
         this.text = text;
     }
 
-    public int getRetweetCount() {
-        return retweetCount;
+    public int getReTweetCount() {
+        return reTweetCount;
     }
 
-    public void setRetweetCount(int retweetCount) {
-        this.retweetCount = retweetCount;
+    public void setReTweetCount(int reTweetCount) {
+        this.reTweetCount = reTweetCount;
     }
 
     public int getFavoriteCount() {
