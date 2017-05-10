@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <ImageView
         android:id="@+id/iv_profileImg"
@@ -14,42 +16,31 @@
         android:minWidth="50dp"
         app:srcCompat="@android:color/background_light"
         tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="8dp" />
+        tools:layout_editor_absoluteY="8dp"
+        android:layout_alignTop="@+id/tv_tweetText"
+        android:layout_toStartOf="@+id/tv_tweetText" />
 
     <TextView
         android:id="@+id/tv_tweetText"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ornare ornare ligula, ac volutpat lectus molestie eu. Praesent orci aliquam."
-        app:layout_constraintLeft_toRightOf="@+id/iv_profileImg"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp" />
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="74dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp"
+        android:layout_marginTop="13dp" />
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="141dp"
         android:layout_height="17dp"
         android:text="DD:MM:YYYY::HH:MM"
+        tools:layout_editor_absoluteY="58dp"
         tools:layout_editor_absoluteX="16dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/iv_profileImg" />
-
-    <TextView
-        android:id="@+id/tv_amountOfRetweets"
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        tools:layout_editor_absoluteY="58dp"
-        app:layout_constraintLeft_toRightOf="@+id/iv_retweets"
-        android:layout_marginLeft="0dp" />
-
-    <TextView
-        android:id="@+id/tv_amountOfFavorites"
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        tools:layout_editor_absoluteY="58dp"
-        app:layout_constraintLeft_toRightOf="@+id/iv_favorites"
-        android:layout_marginLeft="0dp" />
+        android:layout_below="@+id/iv_profileImg"
+        android:layout_alignStart="@+id/iv_profileImg" />
 
     <ImageView
         android:id="@+id/iv_retweets"
@@ -57,8 +48,19 @@
         android:layout_height="16dp"
         app:srcCompat="@mipmap/retweet"
         tools:layout_editor_absoluteX="294dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toTopOf="@+id/tv_amountOfFavorites" />
+        tools:layout_editor_absoluteY="58dp"
+        android:layout_alignTop="@+id/tv_amountOfRetweets"
+        android:layout_toStartOf="@+id/tv_amountOfRetweets" />
+
+    <TextView
+        android:id="@+id/tv_amountOfRetweets"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_alignBottom="@+id/tv_date"
+        android:layout_toStartOf="@+id/iv_favorites"
+        android:text="1000000"
+        tools:layout_editor_absoluteX="310dp"
+        tools:layout_editor_absoluteY="58dp" />
 
     <ImageView
         android:id="@+id/iv_favorites"
@@ -66,7 +68,18 @@
         android:layout_height="16dp"
         app:srcCompat="@mipmap/favorite"
         tools:layout_editor_absoluteX="220dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_tweetText" />
+        tools:layout_editor_absoluteY="58dp"
+        android:layout_alignTop="@+id/tv_amountOfRetweets"
+        android:layout_toStartOf="@+id/tv_amountOfFavorites" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_amountOfFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_alignEnd="@+id/tv_tweetText"
+        android:layout_alignTop="@+id/iv_favorites"
+        android:text="1000000"
+        tools:layout_editor_absoluteX="236dp"
+        tools:layout_editor_absoluteY="58dp" />
+
+</RelativeLayout>
