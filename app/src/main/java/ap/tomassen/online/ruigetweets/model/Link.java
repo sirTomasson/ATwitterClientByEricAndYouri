@@ -1,5 +1,8 @@
 package ap.tomassen.online.ruigetweets.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Eric on 8-5-2017.
  */
@@ -7,13 +10,19 @@ package ap.tomassen.online.ruigetweets.model;
 public class Link extends Entity {
     private String url;
     private String displayUrl;
-    private String extendedUrl;
+    private String expandedUrl;
 
-    public Link(int[] indices, String url, String displayUrl, String extendedUrl) {
+    public Link(JSONObject linkObj) throws JSONException{
+        url = linkObj.getString("url");
+        displayUrl = linkObj.getString("display_url");
+        expandedUrl = linkObj.getString("expanded_url");
+    }
+
+    public Link(int[] indices, String url, String displayUrl, String expandedUrl) {
         super(indices);
         this.url = url;
         this.displayUrl = displayUrl;
-        this.extendedUrl = extendedUrl;
+        this.expandedUrl = expandedUrl;
     }
 
     public String getUrl() {
@@ -32,11 +41,11 @@ public class Link extends Entity {
         this.displayUrl = displayUrl;
     }
 
-    public String getExtendedUrl() {
-        return extendedUrl;
+    public String getExpandedUrl() {
+        return expandedUrl;
     }
 
-    public void setExtendedUrl(String extendedUrl) {
-        this.extendedUrl = extendedUrl;
+    public void setExpandedUrl(String expandedUrl) {
+        this.expandedUrl = expandedUrl;
     }
 }

@@ -7,6 +7,9 @@ package ap.tomassen.online.ruigetweets.model;
 public class Entity {
     private int[] indices;
 
+    public Entity() {
+
+    }
 
     public Entity(int[] indices) {
         this.indices = indices;

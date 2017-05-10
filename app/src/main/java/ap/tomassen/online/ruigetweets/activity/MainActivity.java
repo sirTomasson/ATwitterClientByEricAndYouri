@@ -11,10 +11,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.model.Mention;
+import ap.tomassen.online.ruigetweets.model.TwitterModel;
+import ap.tomassen.online.ruigetweets.model.User;
 
 public class MainActivity extends AppCompatActivity {
+    private TwitterModel twitterModel = TwitterModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +32,18 @@ public class MainActivity extends AppCompatActivity {
             String JsonString = readAssetIntoString(filename);
             JSONObject jsonObject = new JSONObject(JsonString);
             System.out.println(jsonObject.toString());
+            buildArray(jsonObject);
+            User u = twitterModel.get(0).getUser();
+            System.out.println(u.getScreenName());
         } catch (JSONException je) {
             je.printStackTrace();
+        } catch (ParseException pe) {
+            pe.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
 
@@ -66,5 +78,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return sb.toString();
+    }
+
+    private void buildArray(JSONObject jsonObject) throws JSONException, ParseException {
+        twitterModel.setTweets(jsonObject);
     }
 }
