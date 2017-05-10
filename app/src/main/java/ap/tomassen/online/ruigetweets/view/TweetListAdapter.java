@@ -32,8 +32,8 @@ public class TweetListAdapter extends ArrayAdapter<Tweet> {
     private TextView mTvRetweetCount;
     private TextView mTvFavoriteCount;
 
-    public TweetListAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<Tweet> tweets) {
-        super(context, resource, textViewResourceId, tweets);
+    public TweetListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Tweet> tweets) {
+        super(context, resource, tweets);
     }
 
     @NonNull

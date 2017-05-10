@@ -4,6 +4,7 @@ import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.squareup.picasso.Picasso;
 
@@ -20,8 +21,11 @@ import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.Mention;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
+import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 public class MainActivity extends AppCompatActivity {
+    private ListView mLvTwitterFeed;
+
     private TwitterModel twitterModel = TwitterModel.getInstance();
 
     @Override
@@ -44,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
+        mLvTwitterFeed.setAdapter(new TweetListAdapter(
+                this,
+                R.layout.list_item,
+                twitterModel.getTweets()
+        ));
+
     }
 
 
