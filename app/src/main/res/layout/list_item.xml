@@ -37,6 +37,24 @@
         android:layout_width="141dp"
         android:layout_height="17dp"
         android:text="DD:MM:YYYY::HH:MM"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/iv_profileImg"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_retweetCount"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        tools:layout_editor_absoluteY="58dp"
+        app:layout_constraintLeft_toRightOf="@+id/iv_retweets"
+        android:layout_marginLeft="0dp" />
+
+    <TextView
+        android:id="@+id/tv_favoriteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+
         tools:layout_editor_absoluteY="58dp"
         tools:layout_editor_absoluteX="16dp"
         android:layout_below="@+id/iv_profileImg"
@@ -48,6 +66,7 @@
         android:layout_height="16dp"
         app:srcCompat="@mipmap/retweet"
         tools:layout_editor_absoluteX="294dp"
+
         tools:layout_editor_absoluteY="58dp"
         android:layout_alignTop="@+id/tv_amountOfRetweets"
         android:layout_toStartOf="@+id/tv_amountOfRetweets" />
