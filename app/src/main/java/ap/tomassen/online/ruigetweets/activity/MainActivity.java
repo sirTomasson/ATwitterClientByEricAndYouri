@@ -3,6 +3,7 @@ package ap.tomassen.online.ruigetweets.activity;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             String JsonString = readAssetIntoString(filename);
             JSONObject jsonObject = new JSONObject(JsonString);
-            System.out.println(jsonObject.toString());
             buildArray(jsonObject);
             User u = twitterModel.get(0).getUser();
             System.out.println(u.getScreenName());

@@ -125,6 +125,4 @@ public class Tweet {
         String pattern = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         return new SimpleDateFormat(pattern).parse(date);
     }
-
-
 }
