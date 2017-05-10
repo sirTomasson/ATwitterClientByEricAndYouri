@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iv_profileImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="50dp"
+        android:minWidth="50dp"
+        app:srcCompat="@android:color/background_light"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tv_tweetText"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ornare ornare ligula, ac volutpat lectus molestie eu. Praesent orci aliquam."
+        tools:layout_editor_absoluteX="68dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="141dp"
+        android:layout_height="17dp"
+        android:text="DD:MM:YYYY::HH:MM"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="66dp" />
+
+    <TextView
+        android:id="@+id/tv_amountOfRetweets"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        tools:layout_editor_absoluteX="310dp"
+        tools:layout_editor_absoluteY="66dp" />
+
+    <TextView
+        android:id="@+id/tv_amountOfFavorites"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        tools:layout_editor_absoluteX="236dp"
+        tools:layout_editor_absoluteY="66dp" />
+
+    <ImageView
+        android:id="@+id/iv_retweets"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        app:srcCompat="@mipmap/retweet"
+        tools:layout_editor_absoluteX="294dp"
+        tools:layout_editor_absoluteY="66dp" />
+
+    <ImageView
+        android:id="@+id/iv_favorites"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        app:srcCompat="@mipmap/favorite"
+        tools:layout_editor_absoluteX="220dp"
+        tools:layout_editor_absoluteY="66dp" />
+
+</android.support.constraint.ConstraintLayout>
