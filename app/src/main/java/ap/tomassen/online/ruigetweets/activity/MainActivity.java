@@ -1,8 +1,11 @@
 package ap.tomassen.online.ruigetweets.activity;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -18,12 +21,15 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.model.Mention;
+import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
 import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public static final String PROFILE_ID = "profile_id";
     private ListView mLvTwitterFeed;
 
     private TwitterModel twitterModel = TwitterModel.getInstance();
@@ -54,7 +60,21 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.list_item,
                 twitterModel.getTweets()
         ));
+        final Intent profileIntent = new Intent(this, ProfileActivity.class);
 
+        mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+
+                Object tweetObj = adapterView.getItemAtPosition(position);
+                if (tweetObj instanceof Tweet) {
+                    Tweet tweet = (Tweet) tweetObj;
+
+                    profileIntent.putExtra(PROFILE_ID, tweet.getUser().getId());
+                }
+            }
+        });
     }
 
 
