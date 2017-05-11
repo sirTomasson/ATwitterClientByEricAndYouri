@@ -2,8 +2,10 @@ package ap.tomassen.online.ruigetweets.activity;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -27,7 +29,7 @@ import ap.tomassen.online.ruigetweets.model.User;
 import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
     private ListView mLvTwitterFeed;
@@ -70,8 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 Object tweetObj = adapterView.getItemAtPosition(position);
                 if (tweetObj instanceof Tweet) {
                     Tweet tweet = (Tweet) tweetObj;
-
+                    Log.i(TAG, "onItemClick: " + tweet.getUser().getId());
                     profileIntent.putExtra(PROFILE_ID, tweet.getUser().getId());
+
+                    startActivity(profileIntent);
                 }
             }
         });
