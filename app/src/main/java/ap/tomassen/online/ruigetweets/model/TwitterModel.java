@@ -40,8 +40,14 @@ public class TwitterModel {
         return tweets.get(index);
     }
 
-    public User getUser(int index) {
-        return users.get(index);
+    public User getUser(int id) {
+        for (User u : users) {
+
+            if (u.getId() == id) {
+                return u;
+            }
+        }
+        return null;
     }
 
     public List<Tweet> getTweets() {
