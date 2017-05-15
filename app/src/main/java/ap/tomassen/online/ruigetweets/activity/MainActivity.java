@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
         mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
+                if (view instanceof ImageView) {
+                    Log.i(TAG, "onItemClick: view is image view");
+                }
 
                 Object tweetObj = adapterView.getItemAtPosition(position);
                 if (tweetObj instanceof Tweet) {
