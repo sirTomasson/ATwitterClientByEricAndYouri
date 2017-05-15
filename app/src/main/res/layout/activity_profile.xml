@@ -4,21 +4,27 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@android:color/white" />
+        android:background="@mipmap/bg"
+        android:id="@+id/rl_profileBackground">
 
+        <ImageView
+            android:id="@+id/iv_profileImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@android:color/white" />
+    </RelativeLayout>
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Eric Kerkhoven"
-        android:layout_below="@+id/imageView"
-        android:layout_alignStart="@+id/imageView" />
+        android:layout_below="@+id/rl_profileBackground"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/tv_sceenName"
@@ -30,9 +36,49 @@
 
     <TextView
         android:id="@+id/tv_description"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eget ullamcorper magna. Ut aliquet euismod ex. Aliquam erat volutpat. Etiam non maximus libero. Ut luctus ac sapien commodo vulputate. Praesent non elementum nulla. Praesent sed accumsan sed. "
+        android:layout_below="@+id/tv_location"
+        android:layout_alignEnd="@+id/iv_profileRetweets" />
+
+    <TextView
+        android:id="@+id/tv_followers"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
+        android:text="10000"
+        android:layout_below="@+id/tv_description"
+        android:layout_toStartOf="@+id/tv_location" />
+
+    <TextView
+        android:id="@+id/tv_retweets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10000"
+        android:layout_below="@+id/tv_description"
+        android:layout_toEndOf="@+id/tv_name" />
+
+    <ImageView
+        android:id="@+id/iv_profileFollowers"
+        android:layout_width="14sp"
+        android:layout_height="14sp"
+        app:srcCompat="@mipmap/twitter"
+        android:layout_alignBottom="@+id/tv_followers"
+        android:layout_alignStart="@+id/tv_description" />
+
+    <ImageView
+        android:id="@+id/iv_profileRetweets"
+        android:layout_width="14sp"
+        android:layout_height="14sp"
+        app:srcCompat="@mipmap/retweet"
+        android:layout_alignBottom="@+id/tv_retweets"
+        android:layout_toEndOf="@+id/tv_retweets" />
+
+    <TextView
+        android:id="@+id/tv_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enschede"
         android:layout_below="@+id/tv_sceenName"
-        android:layout_centerHorizontal="true"
-        android:text="Hallo dit is een beschrijving" />
+        android:layout_alignStart="@+id/tv_sceenName" />
 </RelativeLayout>
