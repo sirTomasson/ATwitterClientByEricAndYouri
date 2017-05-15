@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@mipmap/bg"
@@ -14,10 +14,9 @@
             android:id="@+id/iv_profileImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
             app:srcCompat="@android:color/white" />
-    </RelativeLayout>
+    </FrameLayout>
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"

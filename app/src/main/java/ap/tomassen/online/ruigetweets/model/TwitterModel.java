@@ -15,6 +15,7 @@ import java.util.List;
 public class TwitterModel {
     private static TwitterModel twitterModel = null;
     private ArrayList<Tweet> tweets;
+    private ArrayList<User> users;
 
     private TwitterModel() {
 
@@ -39,18 +40,27 @@ public class TwitterModel {
         return tweets.get(index);
     }
 
+    public User getUser(int index) {
+        return users.get(index);
+    }
+
     public List<Tweet> getTweets() {
         return tweets;
     }
 
     public void setTweets(JSONObject tweetsObj) throws JSONException, ParseException {
         tweets = new ArrayList<Tweet>();
+        users = new ArrayList<User>();
 
         JSONArray tweetsArray = tweetsObj.getJSONArray("statuses");
 
         for (int i = 0; i < tweetsArray.length(); i++) {
             JSONObject tweetObj = tweetsArray.getJSONObject(i);
             tweets.add(new Tweet(tweetObj));
+        }
+
+        for (int i = 0; i < tweetsArray.length(); i++) {
+            users.add(new User(tweetsArray.getJSONObject(i).getJSONObject("user")));
         }
     }
 }

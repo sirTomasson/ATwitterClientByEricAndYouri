@@ -46,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
             String JsonString = readAssetIntoString(filename);
             JSONObject jsonObject = new JSONObject(JsonString);
             buildArray(jsonObject);
+
+            System.out.println(twitterModel.getUser(0).toString());
+
             User u = twitterModel.get(0).getUser();
             System.out.println(u.getScreenName());
         } catch (JSONException je) {
