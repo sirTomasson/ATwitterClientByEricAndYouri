@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Eric on 8-5-2017.
@@ -122,7 +123,10 @@ public class Tweet {
     }
 
     private Date parseDate(String date) throws ParseException {
-        String pattern = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-        return new SimpleDateFormat(pattern).parse(date);
+        String twitterFormat =  "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        return sf.parse(date);
     }
 }
