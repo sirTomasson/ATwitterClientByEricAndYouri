@@ -4,17 +4,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Downloader;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -43,7 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (intent.hasExtra(MainActivity.PROFILE_ID)){
             int id = intent.getIntExtra(MainActivity.PROFILE_ID, -1);
-            if (id != -1){
+            if (id != -1) {
                 User u = model.getUser(id);
                 URL profileImgUrl = null;
                 try {
@@ -56,22 +60,24 @@ public class ProfileActivity extends AppCompatActivity {
                     bmp = BitmapFactory.decodeStream(profileImgUrl.openConnection().getInputStream());
                 } catch (IOException e) {
                     e.printStackTrace();
-                }/*
+                }
+
                 URL profileBackgroundUrl = null;
                 try {
                     profileBackgroundUrl = new URL(u.getProfileBackgroundUrl());
+                    DownloadFilesTask task = (DownloadFilesTask) new DownloadFilesTask().execute(profileBackgroundUrl);
+                    BitmapDrawable background = task.get();
+                    profileBackground = (FrameLayout) findViewById(R.id.rl_profileBackground);
+                    profileBackground.setBackground(background);
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                }
-                Bitmap bitmap = null;
-                try {
-                    bitmap = BitmapFactory.decodeStream(profileBackgroundUrl.openConnection().getInputStream());
-                } catch (IOException e) {
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-                BitmapDrawable background = new BitmapDrawable(getResources(), bitmap);*/
 
-                /*profileBackground = (FrameLayout) findViewById(R.id.rl_profileBackground);*/
+
                 profileImg = (ImageView) findViewById(R.id.iv_profileImg);
                 name = (TextView) findViewById(R.id.tv_name);
                 screenName = (TextView) findViewById(R.id.tv_sceenName);
@@ -80,7 +86,6 @@ public class ProfileActivity extends AppCompatActivity {
                 retweets = (TextView) findViewById(R.id.tv_retweets);
                 location = (TextView) findViewById(R.id.tv_location);
 
-                /*profileBackground.setBackground(background);*/
                 profileImg.setImageBitmap(bmp);
                 name.setText(u.getName());
                 screenName.setText(u.getScreenName());
@@ -89,6 +94,19 @@ public class ProfileActivity extends AppCompatActivity {
                 retweets.setText(u.getRetweets());
                 location.setText(u.getLocation());
             }
+        }
+    }
+    private class DownloadFilesTask extends AsyncTask<URL,Integer,BitmapDrawable> {
+        protected BitmapDrawable doInBackground(URL... urls) {
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeStream(urls[0].openConnection().getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BitmapDrawable background = new BitmapDrawable(getResources(), bitmap);
+
+            return background;
         }
     }
 }
