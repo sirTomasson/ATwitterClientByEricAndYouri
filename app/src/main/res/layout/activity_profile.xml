@@ -52,6 +52,7 @@
         android:layout_below="@+id/tv_location"
         android:text="@string/place_holder_description" />
 
+
     <TextView
         android:id="@+id/tv_followers"
         android:layout_width="wrap_content"
@@ -61,7 +62,7 @@
         android:text="@string/place_holder_follower_count" />
 
     <TextView
-        android:id="@+id/tv_retweets"
+        android:id="@+id/tv_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_description"
@@ -78,7 +79,7 @@
         app:srcCompat="@mipmap/twitter" />
 
     <ImageView
-        android:id="@+id/iv_profileRetweets"
+        android:id="@+id/iv_profileFavorites"
         android:layout_width="14sp"
         android:layout_height="14sp"
         android:layout_alignBottom="@+id/tv_retweets"
@@ -93,4 +94,15 @@
         android:layout_alignStart="@+id/tv_sceenName"
         android:layout_below="@+id/tv_sceenName"
         android:text="@string/place_holder_location" />
+
+    <TextView
+        android:id="@+id/tv_profileTweets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ornare ornare ligula, ac volutpat lectus molestie eu. Praesent orci aliquam."
+        android:layout_below="@+id/tv_followers"
+        android:layout_alignStart="@+id/iv_profileFollowers"
+        android:layout_marginTop="39dp"
+        android:layout_alignEnd="@+id/iv_profileFavorites" />
+        
 </RelativeLayout>
