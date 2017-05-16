@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,7 +27,8 @@ import ap.tomassen.online.ruigetweets.model.User;
  */
 
 public class ProfileActivity extends AppCompatActivity {
-    private FrameLayout profileBackground;
+
+    private ImageView profileBackground;
     private ImageView profileImg;
     private TextView name;
     private TextView screenName;
@@ -36,7 +36,11 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView followers;
     private TextView retweets;
     private TextView location;
+
+
     private TwitterModel model = TwitterModel.getInstance();
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,53 +54,13 @@ public class ProfileActivity extends AppCompatActivity {
                 User u = model.getUser(id);
 
                 initXmlElements();
-
-                Picasso.with(this).
-                        load(u.getProfileImageUrl())
-                        .into(profileImg);
-
-                URL profileBackgroundUrl = null;
-                try {
-                    profileBackgroundUrl = new URL(u.getProfileBackgroundUrl());
-                    DownloadFilesTask task = (DownloadFilesTask) new DownloadFilesTask().execute(profileBackgroundUrl);
-                    Bitmap background = task.get();
-                    profileBackground = (FrameLayout) findViewById(R.id.rl_profileBackground);
-                    BitmapDrawable bmpBackground = new BitmapDrawable(getResources(), background);
-                    profileBackground.setBackground(bmpBackground);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-
-                name.setText(u.getName());
-                screenName.setText(u.getScreenName());
-                description.setText(u.getDescription());
-                followers.setText(u.getFollowers());
-                retweets.setText(u.getRetweets());
-                location.setText(u.getLocation());
+                setContent(u);
             }
         }
     }
-    private class DownloadFilesTask extends AsyncTask<URL,Integer,Bitmap> {
-        @Override
-        protected Bitmap doInBackground(URL... urls) {
-            Bitmap bitmap = null;
-
-            try {
-                bitmap = BitmapFactory.decodeStream(urls[0].openConnection().getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return bitmap;
-        }
-    }
-
 
     private void initXmlElements() {
+
         profileImg = (ImageView) findViewById(R.id.iv_profileImg);
         name = (TextView) findViewById(R.id.tv_name);
         screenName = (TextView) findViewById(R.id.tv_sceenName);
@@ -104,26 +68,20 @@ public class ProfileActivity extends AppCompatActivity {
         followers = (TextView) findViewById(R.id.tv_followers);
         retweets = (TextView) findViewById(R.id.tv_retweets);
         location = (TextView) findViewById(R.id.tv_location);
-        profileBackground = (FrameLayout) findViewById(R.id.rl_profileBackground);
+        profileBackground = (ImageView) findViewById(R.id.iv_profileBackground);
 
     }
 
-    private void setContent(User u)
-            throws ExecutionException, InterruptedException,IOException {
-        //TODO : in ontwikkeling nog niet klaar voor gebruik.
-        URL profileImgUrl = new URL(u.getProfileUrl());
-        URL profileBackgroundImgUrl = new URL (u.getProfileBackgroundUrl());
+    private void setContent(User u) {
 
-        Bitmap bmpProfile = new DownloadFilesTask()
-                .execute(profileImgUrl).get();
+        Picasso.with(this).
+                load(u.getProfileImageUrl())
+                .into(profileImg);
 
-        Bitmap bmpBackground = new DownloadFilesTask()
-                .execute(profileBackgroundImgUrl).get();
+        Picasso.with(this)
+                .load(u.getProfileBackgroundUrl())
+                .into(profileBackground);
 
-        BitmapDrawable drawableBackground = new BitmapDrawable(getResources(), bmpBackground);
-
-        profileImg.setImageBitmap(bmpProfile);
-        profileBackground.setBackground(drawableBackground);
         name.setText(u.getName());
         screenName.setText(u.getScreenName());
         description.setText(u.getDescription());

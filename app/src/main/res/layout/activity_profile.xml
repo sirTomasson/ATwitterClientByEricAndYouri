@@ -1,83 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <FrameLayout
+    <FrameLayout android:id="@+id/fl_img_container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@mipmap/bg"
-        android:id="@+id/rl_profileBackground">
+        android:layout_height="280dp">
+
+        <ImageView
+            android:id="@+id/iv_profileBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/iv_background_img_description"
+            android:src="@mipmap/bg" />
 
         <ImageView
             android:id="@+id/iv_profileImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/iv_profile_img_content_description"
             app:srcCompat="@android:color/white" />
+
     </FrameLayout>
+
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eric Kerkhoven"
-        android:layout_below="@+id/rl_profileBackground"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/fl_img_container"
+        android:layout_centerHorizontal="true"
+        android:text="@string/place_holder_name" />
 
     <TextView
         android:id="@+id/tv_sceenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="eeriek95"
+        android:layout_alignStart="@+id/tv_name"
         android:layout_below="@+id/tv_name"
-        android:layout_alignStart="@+id/tv_name" />
+        android:text="@string/place_holder_screen_name" />
 
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eget ullamcorper magna. Ut aliquet euismod ex. Aliquam erat volutpat. Etiam non maximus libero. Ut luctus ac sapien commodo vulputate. Praesent non elementum nulla. Praesent sed accumsan sed. "
+        android:layout_alignEnd="@+id/iv_profileRetweets"
         android:layout_below="@+id/tv_location"
-        android:layout_alignEnd="@+id/iv_profileRetweets" />
+        android:text="@string/place_holder_description" />
 
     <TextView
         android:id="@+id/tv_followers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10000"
         android:layout_below="@+id/tv_description"
-        android:layout_toStartOf="@+id/tv_location" />
+        android:layout_toStartOf="@+id/tv_location"
+        android:text="@string/place_holder_follower_count" />
 
     <TextView
         android:id="@+id/tv_retweets"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10000"
         android:layout_below="@+id/tv_description"
-        android:layout_toEndOf="@+id/tv_name" />
+        android:layout_toEndOf="@+id/tv_name"
+        android:text="@string/place_holder_retweet_count" />
 
     <ImageView
         android:id="@+id/iv_profileFollowers"
         android:layout_width="14sp"
         android:layout_height="14sp"
-        app:srcCompat="@mipmap/twitter"
         android:layout_alignBottom="@+id/tv_followers"
-        android:layout_alignStart="@+id/tv_description" />
+        android:layout_alignStart="@+id/tv_description"
+        android:contentDescription="@string/iv_followers_content_description"
+        app:srcCompat="@mipmap/twitter" />
 
     <ImageView
         android:id="@+id/iv_profileRetweets"
         android:layout_width="14sp"
         android:layout_height="14sp"
-        app:srcCompat="@mipmap/retweet"
         android:layout_alignBottom="@+id/tv_retweets"
-        android:layout_toEndOf="@+id/tv_retweets" />
+        android:layout_toEndOf="@+id/tv_retweets"
+        android:contentDescription="@string/iv_retweet_content_description"
+        app:srcCompat="@mipmap/retweet" />
 
     <TextView
         android:id="@+id/tv_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enschede"
+        android:layout_alignStart="@+id/tv_sceenName"
         android:layout_below="@+id/tv_sceenName"
-        android:layout_alignStart="@+id/tv_sceenName" />
+        android:text="@string/place_holder_location" />
 </RelativeLayout>
