@@ -39,7 +39,7 @@
         android:layout_height="150dp"
         android:text="  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eget ullamcorper magna. Ut aliquet euismod ex. Aliquam erat volutpat. Etiam non maximus libero. Ut luctus ac sapien commodo vulputate. Praesent non elementum nulla. Praesent sed accumsan sed. "
         android:layout_below="@+id/tv_location"
-        android:layout_alignEnd="@+id/iv_profileRetweets" />
+        android:layout_alignEnd="@+id/iv_profileFavorites" />
 
     <TextView
         android:id="@+id/tv_followers"
@@ -50,7 +50,7 @@
         android:layout_toStartOf="@+id/tv_location" />
 
     <TextView
-        android:id="@+id/tv_retweets"
+        android:id="@+id/tv_favorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10000"
@@ -66,12 +66,12 @@
         android:layout_alignStart="@+id/tv_description" />
 
     <ImageView
-        android:id="@+id/iv_profileRetweets"
+        android:id="@+id/iv_profileFavorites"
         android:layout_width="14sp"
         android:layout_height="14sp"
-        app:srcCompat="@mipmap/retweet"
-        android:layout_alignBottom="@+id/tv_retweets"
-        android:layout_toEndOf="@+id/tv_retweets" />
+        app:srcCompat="@mipmap/favorite"
+        android:layout_alignBottom="@+id/tv_favorites"
+        android:layout_toEndOf="@+id/tv_favorites" />
 
     <TextView
         android:id="@+id/tv_location"
@@ -80,4 +80,14 @@
         android:text="Enschede"
         android:layout_below="@+id/tv_sceenName"
         android:layout_alignStart="@+id/tv_sceenName" />
+
+    <TextView
+        android:id="@+id/tv_profileTweets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ornare ornare ligula, ac volutpat lectus molestie eu. Praesent orci aliquam."
+        android:layout_below="@+id/tv_followers"
+        android:layout_alignStart="@+id/iv_profileFollowers"
+        android:layout_marginTop="39dp"
+        android:layout_alignEnd="@+id/iv_profileFavorites" />
 </RelativeLayout>
