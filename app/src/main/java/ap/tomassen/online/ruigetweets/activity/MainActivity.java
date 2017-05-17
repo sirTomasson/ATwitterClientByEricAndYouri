@@ -19,9 +19,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.text.ParseException;
+import java.util.Arrays;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.model.Entity;
+import ap.tomassen.online.ruigetweets.model.Mention;
 import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
@@ -46,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
             String JsonString = readAssetIntoString(filename);
             JSONObject jsonObject = new JSONObject(JsonString);
             buildArray(jsonObject);
+
+            //TODO: delete this test code
+            Entity e = twitterModel.getTweets().get(0).getEntity(0);
+            if (e != null) {
+                System.out.println(Arrays.toString(e.getIndices()));
+            }
 
         } catch (JSONException je) {
             je.printStackTrace();
