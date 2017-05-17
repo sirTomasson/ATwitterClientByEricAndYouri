@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String PROFILE_ID = "profile_id";
     private ListView mLvTwitterFeed;
 
+    private boolean userSignedIn;
+
     private TwitterModel twitterModel = TwitterModel.getInstance();
 
     @Override
@@ -44,18 +46,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+
+        if (userSignedIn) {
+            startActivity(loginIntent);
+        }
+
         String filename = "output.json";
 
         try {
             String JsonString = readAssetIntoString(filename);
             JSONObject jsonObject = new JSONObject(JsonString);
             buildArray(jsonObject);
-
-            //TODO: delete this test code
-            Entity e = twitterModel.getTweets().get(0).getEntity(0);
-            if (e != null) {
-                System.out.println(Arrays.toString(e.getIndices()));
-            }
 
         } catch (JSONException je) {
             je.printStackTrace();
@@ -75,9 +77,6 @@ public class MainActivity extends AppCompatActivity {
         mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                if (view instanceof ImageView) {
-                    Log.i(TAG, "onItemClick: view is image view");
-                }
 
                 Object tweetObj = adapterView.getItemAtPosition(position);
                 if (tweetObj instanceof Tweet) {
