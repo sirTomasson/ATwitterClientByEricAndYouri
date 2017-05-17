@@ -1,10 +1,6 @@
 package ap.tomassen.online.ruigetweets.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -34,7 +25,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView screenName;
     private TextView description;
     private TextView followers;
-    private TextView retweets;
+    private TextView favorites;
     private TextView location;
 
 
@@ -66,7 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
         screenName = (TextView) findViewById(R.id.tv_sceenName);
         description = (TextView) findViewById(R.id.tv_description);
         followers = (TextView) findViewById(R.id.tv_followers);
-        retweets = (TextView) findViewById(R.id.tv_retweets);
+        favorites = (TextView) findViewById(R.id.tv_favorites);
         location = (TextView) findViewById(R.id.tv_location);
         profileBackground = (ImageView) findViewById(R.id.iv_profileBackground);
 
@@ -86,7 +77,7 @@ public class ProfileActivity extends AppCompatActivity {
         screenName.setText(u.getScreenName());
         description.setText(u.getDescription());
         followers.setText(u.getFollowers());
-        retweets.setText(u.getRetweets());
+        favorites.setText(u.getRetweets());
         location.setText(u.getLocation());
     }
 }
