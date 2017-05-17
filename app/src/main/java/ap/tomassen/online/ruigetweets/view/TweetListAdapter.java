@@ -67,7 +67,7 @@ public class TweetListAdapter extends ArrayAdapter<Tweet> {
         Picasso.with(getContext()).
                 load(tweet.getUser().getProfileImageUrl())
                 .into(mIvProfileImg);
-        
+
         if (!tweet.getEntities().isEmpty()) {
             entitiesToClickableSpan(tweet);
         } else {
