@@ -19,7 +19,6 @@ import ap.tomassen.online.ruigetweets.model.TwitterApi;
  */
 
 public class LoginActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

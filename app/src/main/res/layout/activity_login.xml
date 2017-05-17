@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="137dp"
-        android:layout_height="62dp"
-        app:srcCompat="@mipmap/twitter" />
+    <fragment
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fr_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="android.support.v7.app.AppCompatDialogFragment"
+        tools:layout="@layout/login_view" />
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/holo_blue_bright"
-        android:text="Inloggen bij Twitter"
-        android:textColor="#FFFFFF" />
+    <fragment
+        android:id="@+id/fr_twitterView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="android.webkit.WebViewFragment"
+        tools:layout="@layout/twitter_view" />
 </LinearLayout>
