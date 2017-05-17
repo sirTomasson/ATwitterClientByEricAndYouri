@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String PROFILE_ID = "profile_id";
     private ListView mLvTwitterFeed;
 
-    private boolean userSignedIn;
+    private boolean userSignedIn = false;
 
     private TwitterModel twitterModel = TwitterModel.getInstance();
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent loginIntent = new Intent(this, LoginActivity.class);
 
-        if (userSignedIn) {
+        if (!userSignedIn) {
             startActivity(loginIntent);
         }
 
