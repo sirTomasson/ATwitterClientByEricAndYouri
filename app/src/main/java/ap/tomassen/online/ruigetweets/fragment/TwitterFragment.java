@@ -14,13 +14,13 @@ import ap.tomassen.online.ruigetweets.R;
  * Created by Eric on 17-5-2017.
  */
 
-public class TwitterView extends Fragment {
+public class TwitterFragment extends Fragment {
 
-    public TwitterView() {
+    public TwitterFragment() {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.twitter_view, container, false);
+        View view = inflater.inflate(R.layout.twitter_fragment, container, false);
 
         WebView wvTwitter = (WebView) view.findViewById(R.id.wv_twitterLogin);
         wvTwitter.setWebViewClient(new WebViewClient());
