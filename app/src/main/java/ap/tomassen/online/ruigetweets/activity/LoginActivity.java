@@ -1,5 +1,7 @@
 package ap.tomassen.online.ruigetweets.activity;
-
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,10 +12,12 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.fragment.TwitterView;
 import ap.tomassen.online.ruigetweets.model.TwitterApi;
+
+import ap.tomassen.online.ruigetweets.fragment.LoginView;
 
 /**
  * Created by youri on 17-5-2017.
@@ -24,6 +28,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        LoginView loginView = new LoginView();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fl_fragment_container, loginView);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
         //TODO: finish building AsyncTask. but leave commented out for testing other components
 
