@@ -10,6 +10,7 @@ import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.TwitterApi;
@@ -24,7 +25,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        System.out.println(new RequestTokens());
+        //TODO: finish building AsyncTask. but leave commented out for testing other components
+
+//        try {
+//            System.out.println(new RequestTokens().execute().get());
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private class RequestTokens extends AsyncTask<Void, Void, String> {
