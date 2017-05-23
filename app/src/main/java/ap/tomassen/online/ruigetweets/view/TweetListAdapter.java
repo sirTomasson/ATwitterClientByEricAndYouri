@@ -54,11 +54,11 @@ public class TweetListAdapter extends ArrayAdapter<Status> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
 
-        mIvProfileImg = (ImageView) convertView.findViewById(R.id.iv_profileImg);
+        mIvProfileImg = (ImageView) convertView.findViewById(R.id.iv_profile_img);
         mTvTweetText = (TextView) convertView.findViewById(R.id.tv_tweetText);
         mTvDate = (TextView) convertView.findViewById(R.id.tv_date);
         mTvRetweetCount = (TextView) convertView.findViewById(R.id.tv_retweetCount);
-        mTvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favoriteCount);
+        mTvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favorites_ount);
 
         Picasso.with(getContext()).
                 load(status.getUser().getProfileImageUrl())

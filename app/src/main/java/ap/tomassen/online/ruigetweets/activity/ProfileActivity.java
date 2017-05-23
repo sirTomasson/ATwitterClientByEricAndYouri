@@ -52,14 +52,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initXmlElements() {
 
-        ivProfileImg = (ImageView) findViewById(R.id.iv_profileImg);
+        ivProfileImg = (ImageView) findViewById(R.id.iv_profile_img);
         tvName = (TextView) findViewById(R.id.tv_name);
-        tvScreenName = (TextView) findViewById(R.id.tv_sceenName);
+        tvScreenName = (TextView) findViewById(R.id.tv_sceen_name);
         tvDescription = (TextView) findViewById(R.id.tv_description);
-        tvFollowersCount = (TextView) findViewById(R.id.tv_followers);
-        tvFavoritesCount = (TextView) findViewById(R.id.tv_favorites);
+        tvFollowersCount = (TextView) findViewById(R.id.tv_followers_count);
+        tvFavoritesCount = (TextView) findViewById(R.id.tv_favorites_count);
         tvLocation = (TextView) findViewById(R.id.tv_location);
-        ivProfileBackground = (ImageView) findViewById(R.id.iv_profileBackground);
+        ivProfileBackground = (ImageView) findViewById(R.id.iv_profile_background);
 
     }
 
