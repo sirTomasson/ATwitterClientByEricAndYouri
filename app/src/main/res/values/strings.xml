@@ -5,7 +5,7 @@
     <string name="place_holder_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eget ullamcorper magna. Ut aliquet euismod ex. Aliquam erat volutpat. Etiam non maximus libero. Ut luctus ac sapien commodo vulputate. Praesent non elementum nulla. Praesent sed accumsan sed.</string>
     <string name="place_holder_follower_count">10000</string>
     <string name="place_holder_retweet_count">10000</string>
-    <string name="iv_followers_content_description">icon for number of followers</string>
+    <string name="iv_followers_content_description">icon for number of followersCount</string>
     <string name="iv_retweet_content_description">icon for retweet count</string>
     <string name="place_holder_location">Enschede</string>
     <string name="iv_profile_img_content_description">profile picture from the user</string>

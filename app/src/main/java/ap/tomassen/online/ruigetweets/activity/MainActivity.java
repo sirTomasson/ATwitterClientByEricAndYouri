@@ -7,10 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,16 +16,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.util.Arrays;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.model.Entity;
-import ap.tomassen.online.ruigetweets.model.Mention;
-import ap.tomassen.online.ruigetweets.model.Tweet;
+import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
-import ap.tomassen.online.ruigetweets.model.User;
 import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         Intent loginIntent = new Intent(this, LoginActivity.class);
 
-        if (!userSignedIn) {
-            startActivity(loginIntent);
-        }
+//        if (!userSignedIn) {
+//            startActivity(loginIntent);
+//        }
 
         String filename = "output.json";
 
@@ -70,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         mLvTwitterFeed.setAdapter(new TweetListAdapter(
                 this,
                 R.layout.list_item,
-                twitterModel.getTweets()
+                twitterModel.getStatuses()
         ));
         final Intent profileIntent = new Intent(this, ProfileActivity.class);
 
@@ -79,10 +71,10 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 Object tweetObj = adapterView.getItemAtPosition(position);
-                if (tweetObj instanceof Tweet) {
-                    Tweet tweet = (Tweet) tweetObj;
-                    Log.i(TAG, "onItemClick: " + tweet.getUser().getId());
-                    profileIntent.putExtra(PROFILE_ID, tweet.getUser().getId());
+                if (tweetObj instanceof Status) {
+                    Status status = (Status) tweetObj;
+                    Log.i(TAG, "onItemClick: " + status.getUser().getId());
+                    profileIntent.putExtra(PROFILE_ID, status.getUser().getId());
 
                     startActivity(profileIntent);
                 }
@@ -125,6 +117,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buildArray(JSONObject jsonObject) throws JSONException, ParseException {
-        twitterModel.setTweets(jsonObject);
+        twitterModel.setStatuses(jsonObject);
     }
 }

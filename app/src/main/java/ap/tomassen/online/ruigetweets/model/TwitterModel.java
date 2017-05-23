@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TwitterModel {
     private static TwitterModel twitterModel = null;
-    private ArrayList<Tweet> tweets;
+    private ArrayList<Status> statuses;
     private ArrayList<User> users;
 
     private TwitterModel() {
@@ -28,16 +28,16 @@ public class TwitterModel {
         return twitterModel;
     }
 
-    public void add(Tweet tweet) {
-        tweets.add(tweet);
+    public void add(Status status) {
+        statuses.add(status);
     }
 
-    public void add(int index, Tweet tweet) {
-        tweets.add(index, tweet);
+    public void add(int index, Status status) {
+        statuses.add(index, status);
     }
 
-    public Tweet get(int index) {
-        return tweets.get(index);
+    public Status get(int index) {
+        return statuses.get(index);
     }
 
     public User getUser(int id) {
@@ -50,19 +50,19 @@ public class TwitterModel {
         return null;
     }
 
-    public List<Tweet> getTweets() {
-        return tweets;
+    public List<Status> getStatuses() {
+        return statuses;
     }
 
-    public void setTweets(JSONObject tweetsObj) throws JSONException, ParseException {
-        tweets = new ArrayList<Tweet>();
+    public void setStatuses(JSONObject tweetsObj) throws JSONException, ParseException {
+        statuses = new ArrayList<Status>();
         users = new ArrayList<User>();
 
         JSONArray tweetsArray = tweetsObj.getJSONArray("statuses");
 
         for (int i = 0; i < tweetsArray.length(); i++) {
             JSONObject tweetObj = tweetsArray.getJSONObject(i);
-            tweets.add(new Tweet(tweetObj));
+            statuses.add(new Status(tweetObj));
         }
 
         for (int i = 0; i < tweetsArray.length(); i++) {

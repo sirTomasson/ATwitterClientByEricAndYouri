@@ -15,21 +15,21 @@ import java.util.Locale;
  * Created by Eric on 8-5-2017.
  */
 
-public class Tweet {
-    private int id;
+public class Status {
     private Date createdAt;
+    private int id;
     private String text;
-    private int reTweetCount;
-    private int favoriteCount;
     private List<Entity> entities;
+    private int retweetCount;
+    private int favoritesCount;
     private User user;
 
-    public Tweet(JSONObject tweetObj) throws JSONException, ParseException {
+    public Status(JSONObject tweetObj) throws JSONException, ParseException {
         createdAt = parseDate(tweetObj.getString("created_at"));
         id = tweetObj.getInt("id");
         text = tweetObj.getString("text");
-        reTweetCount = tweetObj.getInt("retweet_count");
-        favoriteCount = tweetObj.getInt("favorite_count");
+        retweetCount = tweetObj.getInt("retweet_count");
+        favoritesCount = tweetObj.getInt("favorite_count");
 
         entities = new ArrayList<Entity>();
 
@@ -68,12 +68,12 @@ public class Tweet {
         return user;
     }
 
-    public Tweet(int id, Date createdAt, String text, int reTweetCount, int favoriteCount, List<Entity> entities, User user) {
+    public Status(int id, Date createdAt, String text, int retweetCount, int favoritesCount, List<Entity> entities, User user) {
         this.id = id;
         this.createdAt = createdAt;
         this.text = text;
-        this.reTweetCount = reTweetCount;
-        this.favoriteCount = favoriteCount;
+        this.retweetCount = retweetCount;
+        this.favoritesCount = favoritesCount;
         this.entities = entities;
         this.user = user;
     }
@@ -102,24 +102,24 @@ public class Tweet {
         this.text = text;
     }
 
-    public int getReTweetCount() {
-        return reTweetCount;
+    public int getRetweetCount() {
+        return retweetCount;
     }
 
-    public void setReTweetCount(int reTweetCount) {
-        this.reTweetCount = reTweetCount;
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
     }
 
-    public int getFavoriteCount() {
-        return favoriteCount;
+    public int getFavoritesCount() {
+        return favoritesCount;
     }
 
     public Entity getEntity(int index) {
         return entities.get(index);
     }
 
-    public void setFavoriteCount(int favoriteCount) {
-        this.favoriteCount = favoriteCount;
+    public void setFavoritesCount(int favoritesCount) {
+        this.favoritesCount = favoritesCount;
     }
 
     private Date parseDate(String date) throws ParseException {

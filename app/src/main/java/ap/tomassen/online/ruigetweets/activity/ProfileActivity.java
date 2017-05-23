@@ -19,14 +19,14 @@ import ap.tomassen.online.ruigetweets.model.User;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private ImageView profileBackground;
-    private ImageView profileImg;
-    private TextView name;
-    private TextView screenName;
-    private TextView description;
-    private TextView followers;
-    private TextView favorites;
-    private TextView location;
+    private ImageView ivProfileBackground;
+    private ImageView ivProfileImg;
+    private TextView tvName;
+    private TextView tvScreenName;
+    private TextView tvDescription;
+    private TextView tvFollowersCount;
+    private TextView tvFavoritesCount;
+    private TextView tvLocation;
 
 
     private TwitterModel model = TwitterModel.getInstance();
@@ -52,14 +52,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initXmlElements() {
 
-        profileImg = (ImageView) findViewById(R.id.iv_profileImg);
-        name = (TextView) findViewById(R.id.tv_name);
-        screenName = (TextView) findViewById(R.id.tv_sceenName);
-        description = (TextView) findViewById(R.id.tv_description);
-        followers = (TextView) findViewById(R.id.tv_followers);
-        favorites = (TextView) findViewById(R.id.tv_favorites);
-        location = (TextView) findViewById(R.id.tv_location);
-        profileBackground = (ImageView) findViewById(R.id.iv_profileBackground);
+        ivProfileImg = (ImageView) findViewById(R.id.iv_profileImg);
+        tvName = (TextView) findViewById(R.id.tv_name);
+        tvScreenName = (TextView) findViewById(R.id.tv_sceenName);
+        tvDescription = (TextView) findViewById(R.id.tv_description);
+        tvFollowersCount = (TextView) findViewById(R.id.tv_followers);
+        tvFavoritesCount = (TextView) findViewById(R.id.tv_favorites);
+        tvLocation = (TextView) findViewById(R.id.tv_location);
+        ivProfileBackground = (ImageView) findViewById(R.id.iv_profileBackground);
 
     }
 
@@ -67,17 +67,17 @@ public class ProfileActivity extends AppCompatActivity {
 
         Picasso.with(this).
                 load(u.getProfileImageUrl())
-                .into(profileImg);
+                .into(ivProfileImg);
 
         Picasso.with(this)
                 .load(u.getProfileBackgroundUrl())
-                .into(profileBackground);
+                .into(ivProfileBackground);
 
-        name.setText(u.getName());
-        screenName.setText(u.getScreenName());
-        description.setText(u.getDescription());
-        followers.setText(u.getFollowers());
-        favorites.setText(u.getRetweets());
-        location.setText(u.getLocation());
+        tvName.setText(u.getName());
+        tvScreenName.setText(u.getScreenName());
+        tvDescription.setText(u.getDescription());
+        tvFollowersCount.setText(u.getFollowersCount());
+        tvFavoritesCount.setText(u.getFavoritesCount());
+        tvLocation.setText(u.getLocation());
     }
 }
