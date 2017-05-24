@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         Intent loginIntent = new Intent(this, LoginActivity.class);
 
-//        if (!userSignedIn) {
-//            startActivity(loginIntent);
-//        }
+        if (!userSignedIn) {
+            startActivity(loginIntent);
+        }
 
         String filename = "output.json";
 

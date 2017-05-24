@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
@@ -16,12 +17,17 @@ import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.TwitterApi;
 
 import ap.tomassen.online.ruigetweets.fragment.LoginFragment;
+import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 /**
  * Created by youri on 17-5-2017.
  */
 
 public class LoginActivity extends AppCompatActivity {
+    private final static String TAG = LoginActivity.class.getSimpleName();
+
+    private TwitterModel model = TwitterModel.getInstance();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,29 +42,21 @@ public class LoginActivity extends AppCompatActivity {
 
         //TODO: finish building AsyncTask. but leave commented out for testing other components
 
-//        try {
-//            System.out.println(new RequestTokens().execute().get());
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }
+
+        new RequestToken();
     }
 
-    private class RequestTokens extends AsyncTask<Void, Void, String> {
+    private class RequestToken extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
-            final OAuth10aService authService = new ServiceBuilder()
-                    .apiKey("sUWAnBCiS9ssPIlNDWeby1ol4")
-                    .apiSecret("YMpi7BcHd57TWMNIfS9A1lymuulnm0lXKjlpeqgsGmoj2nUZrZ")
-                    .callback("http://www.erickerkhoven.nl")
-                    .build(TwitterApi.getInstance());
+            OAuth10aService authService = model.getAuthService();
 
             String url = null;
             try {
                 OAuth1RequestToken reqToken = authService.getRequestToken();
                 url = authService.getAuthorizationUrl(reqToken);
+                Log.i(TAG, "doInBackground: url = " + url);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,5 +64,15 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            System.out.println(s);
+        }
     }
 }

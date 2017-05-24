@@ -1,5 +1,8 @@
 package ap.tomassen.online.ruigetweets.model;
 
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.oauth.OAuth10aService;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,9 +19,14 @@ public class TwitterModel {
     private static TwitterModel twitterModel = null;
     private ArrayList<Status> statuses;
     private ArrayList<User> users;
+    private OAuth10aService authService;
 
     private TwitterModel() {
-
+        authService = new ServiceBuilder()
+                .apiSecret(TwitterApi.API_SECRET)
+                .apiKey(TwitterApi.API_KEY)
+                .callback(TwitterApi.CALL_BACK_URL)
+                .build(TwitterApi.getInstance());
     }
 
     public static TwitterModel getInstance() {
@@ -68,5 +76,9 @@ public class TwitterModel {
         for (int i = 0; i < tweetsArray.length(); i++) {
             users.add(new User(tweetsArray.getJSONObject(i).getJSONObject("user")));
         }
+    }
+
+    public OAuth10aService getAuthService() {
+        return authService;
     }
 }
