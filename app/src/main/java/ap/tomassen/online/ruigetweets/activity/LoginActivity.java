@@ -42,12 +42,13 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         loginFragment = new LoginFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fl_fragment_container, loginFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
 
+        transaction
+                .replace(R.id.fl_fragment_container, loginFragment)
+                .addToBackStack(null)
+                .commit();
 
         new RequestToken().execute();
     }
