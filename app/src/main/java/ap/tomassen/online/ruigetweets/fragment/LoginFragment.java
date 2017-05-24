@@ -1,8 +1,6 @@
 package ap.tomassen.online.ruigetweets.fragment;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -19,36 +17,38 @@ import ap.tomassen.online.ruigetweets.R;
 
 public class LoginFragment extends Fragment {
 
-    private LoginFragmentCallbackListener context;
+    private LoginFragmentCallbackListener listener;
 
     public LoginFragment() {
-    }
-
-    public interface LoginFragmentCallbackListener {
-        void onItemSelected();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-    }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        try {
+            listener = (LoginFragmentCallbackListener) context;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.login_fragment, container, false);
 
         Button btnLogin = (Button) view.findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TwitterFragment twitterFragment = new TwitterFragment();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fl_fragment_container, twitterFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                listener.onLoginClick();
             }
         });
 
         return view;
+    }
+
+    public interface LoginFragmentCallbackListener {
+        void onLoginClick();
     }
 }

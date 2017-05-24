@@ -22,11 +22,11 @@ public class TwitterModel {
     private OAuth10aService authService;
 
     private TwitterModel() {
-//        authService = new ServiceBuilder()
-//                .apiSecret(MyTwitterApi.API_SECRET)
-//                .apiKey(MyTwitterApi.API_KEY)
-//                .callback(MyTwitterApi.CALL_BACK_URL)
-//                .build(MyTwitterApi.getInstance());
+        authService = new ServiceBuilder()
+                .apiSecret(MyTwitterApi.API_SECRET)
+                .apiKey(MyTwitterApi.API_KEY)
+                .callback(MyTwitterApi.CALL_BACK_URL)
+                .build(MyTwitterApi.getInstance());
     }
 
     public static TwitterModel getInstance() {

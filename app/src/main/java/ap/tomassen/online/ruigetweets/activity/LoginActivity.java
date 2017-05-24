@@ -1,5 +1,4 @@
 package ap.tomassen.online.ruigetweets.activity;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.AsyncTask;
@@ -7,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.webkit.WebView;
-import android.widget.FrameLayout;
 
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -35,11 +32,15 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
 
     private TwitterModel model = TwitterModel.getInstance();
 
+    private String authorizationUrl;
+
     private TwitterFragment twitterFragment;
     private LoginFragment loginFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        new RequestTokenTask().execute();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -52,40 +53,36 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
                 .addToBackStack(null)
                 .commit();
 
-        new RequestToken().execute();
-
     }
-
     @Override
-    public void onItemSelected() {
-        
+    public void onLoginClick() {
+        twitterFragment = new TwitterFragment();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
 
+        transaction
+                .replace(R.id.fl_fragment_container, twitterFragment)
+                .addToBackStack(null)
+                .commit();
+
+        twitterFragment.setAuthorizationUrl(authorizationUrl);
     }
 
-    private class RequestToken extends AsyncTask<Void, Void, String> {
+    private class RequestTokenTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
-            OAuth10aService authService = new ServiceBuilder()
-                    .apiKey(MyTwitterApi.API_KEY)
-                    .apiSecret(MyTwitterApi.API_SECRET)
-                    .callback(MyTwitterApi.CALL_BACK_URL)
-                    .build(MyTwitterApi.getInstance());
+            OAuth10aService authService = model.getAuthService();
 
             String url = null;
+
             try {
                 OAuth1RequestToken reqToken = authService.getRequestToken();
                 url = authService.getAuthorizationUrl(reqToken);
-                Log.i(TAG, "doInBackground: url = " + url);
-
-
-//                twitterFragment.setURL(url);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return url;
-
         }
 
         @Override
@@ -94,8 +91,9 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(String url) {
+            super.onPostExecute(url);
+            authorizationUrl = url;
         }
     }
 }
