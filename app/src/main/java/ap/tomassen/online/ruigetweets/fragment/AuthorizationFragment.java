@@ -14,11 +14,11 @@ import ap.tomassen.online.ruigetweets.R;
  * Created by Eric on 17-5-2017.
  */
 
-public class TwitterFragment extends Fragment {
+public class AuthorizationFragment extends Fragment {
 
     private String authorizationUrl;
 
-    public TwitterFragment() {
+    public AuthorizationFragment() {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

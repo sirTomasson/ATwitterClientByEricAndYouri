@@ -5,18 +5,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
-import com.github.scribejava.apis.TwitterApi;
-import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import java.io.IOException;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.fragment.TwitterFragment;
-import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
+import ap.tomassen.online.ruigetweets.fragment.AuthorizationFragment;
 
 
 import ap.tomassen.online.ruigetweets.fragment.LoginFragment;
@@ -34,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
 
     private String authorizationUrl;
 
-    private TwitterFragment twitterFragment;
+    private AuthorizationFragment authorizationFragment;
     private LoginFragment loginFragment;
 
     @Override
@@ -56,16 +52,16 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
     }
     @Override
     public void onLoginClick() {
-        twitterFragment = new TwitterFragment();
+        authorizationFragment = new AuthorizationFragment();
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
         transaction
-                .replace(R.id.fl_fragment_container, twitterFragment)
+                .replace(R.id.fl_fragment_container, authorizationFragment)
                 .addToBackStack(null)
                 .commit();
 
-        twitterFragment.setAuthorizationUrl(authorizationUrl);
+        authorizationFragment.setAuthorizationUrl(authorizationUrl);
     }
 
     private class RequestTokenTask extends AsyncTask<Void, Void, String> {
