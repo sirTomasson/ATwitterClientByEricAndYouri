@@ -16,7 +16,6 @@ import ap.tomassen.online.ruigetweets.R;
 
 public class TwitterFragment extends Fragment {
 
-    private WebView wvTwitter;
     private String authorizationUrl;
 
     public TwitterFragment() {
@@ -25,7 +24,7 @@ public class TwitterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.twitter_fragment, container, false);
 
-        wvTwitter = (WebView) view.findViewById(R.id.wv_twitterLogin);
+        WebView wvTwitter = (WebView) view.findViewById(R.id.wv_twitterLogin);
         wvTwitter.setWebViewClient(new WebViewClient());
         wvTwitter.loadUrl(authorizationUrl);
 
