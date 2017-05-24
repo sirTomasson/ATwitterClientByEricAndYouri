@@ -19,9 +19,13 @@ import ap.tomassen.online.ruigetweets.R;
 
 public class LoginFragment extends Fragment {
 
-    private CallBackListener context;
+    private LoginFragmentCallbackListener context;
 
     public LoginFragment() {
+    }
+
+    public interface LoginFragmentCallbackListener {
+        void onItemSelected();
     }
 
     @Override
@@ -46,9 +50,5 @@ public class LoginFragment extends Fragment {
         });
 
         return view;
-    }
-
-    public interface CallBackListener {
-        public void LoginCallback();
     }
 }

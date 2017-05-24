@@ -21,6 +21,7 @@ import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.fragment.TwitterFragment;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 
+
 import ap.tomassen.online.ruigetweets.fragment.LoginFragment;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
@@ -28,8 +29,9 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
  * Created by youri on 17-5-2017.
  */
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements LoginFragment.LoginFragmentCallbackListener {
     private final static String TAG = LoginActivity.class.getSimpleName();
+
 
     private TwitterModel model = TwitterModel.getInstance();
 
@@ -51,6 +53,13 @@ public class LoginActivity extends AppCompatActivity {
                 .commit();
 
         new RequestToken().execute();
+
+    }
+
+    @Override
+    public void onItemSelected() {
+        
+
     }
 
     private class RequestToken extends AsyncTask<Void, Void, String> {

@@ -17,8 +17,13 @@ import ap.tomassen.online.ruigetweets.R;
 public class TwitterFragment extends Fragment {
 
     private WebView wvTwitter;
+    private TwitterFragmentCallbackListener context;
 
     public TwitterFragment() {
+    }
+
+    public interface TwitterFragmentCallbackListener {
+        void onItemSelected();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,7 +31,6 @@ public class TwitterFragment extends Fragment {
 
         wvTwitter = (WebView) view.findViewById(R.id.wv_twitterLogin);
         wvTwitter.setWebViewClient(new WebViewClient());
-        wvTwitter.loadUrl("https://www.twitter.com");
 
         return view;
     }
