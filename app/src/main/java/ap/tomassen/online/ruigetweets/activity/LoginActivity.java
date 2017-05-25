@@ -1,6 +1,8 @@
 package ap.tomassen.online.ruigetweets.activity;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +16,11 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.InputStream;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.fragment.AuthorizationFragment;
@@ -28,7 +34,7 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
  */
 
 public class LoginActivity extends AppCompatActivity
-        implements LoginFragment.LoginFragmentCallbackListener, AuthorizationFragment.AuthorizationCallbackListener{
+        implements LoginFragment.LoginFragmentCallbackListener, AuthorizationFragment.AuthorizationCallbackListener {
     private final static String TAG = LoginActivity.class.getSimpleName();
 
 
@@ -41,12 +47,15 @@ public class LoginActivity extends AppCompatActivity
     private AuthorizationFragment authorizationFragment;
     private LoginFragment loginFragment;
 
+    private Intent intent;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         new RequestTokenTask().execute();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        intent = new Intent(this, MainActivity.class);
 
         loginFragment = new LoginFragment();
         FragmentManager manager = getFragmentManager();
@@ -58,6 +67,7 @@ public class LoginActivity extends AppCompatActivity
                 .commit();
 
     }
+
     @Override
     public void onLoginClick() {
         authorizationFragment = new AuthorizationFragment();
@@ -125,11 +135,13 @@ public class LoginActivity extends AppCompatActivity
                 OAuth1AccessToken accessToken = authService
                         .getAccessToken(reqToken, verifier);
 
-                if (accessToken==null) throw new AssertionError("accessToken cannot be null");
+                if (accessToken == null) throw new AssertionError("accessToken cannot be null");
 
                 OAuthRequest request = new OAuthRequest(Verb.GET,
                         "https://api.twitter.com/1.1/account/verify_credentials.json",
                         authService);
+
+                model.setAccessToken(accessToken);
 
                 authService.signRequest(accessToken, request);
 
@@ -139,12 +151,20 @@ public class LoginActivity extends AppCompatActivity
                     String res = response.getBody();
 
                     Log.i(TAG, "doInBackground: res " + res);
+                    startActivity(intent);
+
+                    JSONObject userObj = new JSONObject(res);
+
+                    Log.i(TAG, "doInBackground: user " + userObj.getString("name"));
+
+
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
 
 
             return null;
