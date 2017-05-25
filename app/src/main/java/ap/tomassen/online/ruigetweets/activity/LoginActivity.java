@@ -5,8 +5,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import java.io.IOException;
@@ -22,11 +27,14 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
  * Created by youri on 17-5-2017.
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginFragment.LoginFragmentCallbackListener {
+public class LoginActivity extends AppCompatActivity
+        implements LoginFragment.LoginFragmentCallbackListener, AuthorizationFragment.AuthorizationCallbackListener{
     private final static String TAG = LoginActivity.class.getSimpleName();
 
 
     private TwitterModel model = TwitterModel.getInstance();
+
+    private OAuth1RequestToken reqToken;
 
     private String authorizationUrl;
 
@@ -64,6 +72,11 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
         authorizationFragment.setAuthorizationUrl(authorizationUrl);
     }
 
+    @Override
+    public void AuthorizationListener(String verifier) {
+        new AccessTokenTask().execute(verifier);
+    }
+
     private class RequestTokenTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -73,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
             String url = null;
 
             try {
-                OAuth1RequestToken reqToken = authService.getRequestToken();
+                reqToken = authService.getRequestToken();
                 url = authService.getAuthorizationUrl(reqToken);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -90,6 +103,51 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.Lo
         protected void onPostExecute(String url) {
             super.onPostExecute(url);
             authorizationUrl = url;
+        }
+    }
+
+
+    private class AccessTokenTask extends AsyncTask<String, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            OAuth10aService authService = model.getAuthService();
+
+            String verifier = strings[0];
+
+            Log.i(TAG, "doInBackground: verifier " + verifier);
+            Log.i(TAG, "doInBackground: request token " + reqToken.toString());
+
+
+            try {
+
+                OAuth1AccessToken accessToken = authService
+                        .getAccessToken(reqToken, verifier);
+
+                if (accessToken==null) throw new AssertionError("accessToken cannot be null");
+
+                OAuthRequest request = new OAuthRequest(Verb.GET,
+                        "https://api.twitter.com/1.1/account/verify_credentials.json",
+                        authService);
+
+                authService.signRequest(accessToken, request);
+
+                Response response = request.send();
+
+                if (response.isSuccessful()) {
+                    String res = response.getBody();
+
+                    Log.i(TAG, "doInBackground: res " + res);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+            return null;
         }
     }
 }
