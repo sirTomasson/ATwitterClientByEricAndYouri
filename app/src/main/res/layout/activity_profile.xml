@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:contentDescription="@string/iv_background_img_description"
             android:scaleType="centerCrop"
-            android:src="@mipmap/bg" />
+            android:src="@drawable/bg" />
 
         <ImageView
             android:id="@+id/iv_profile_img"
@@ -63,7 +63,7 @@
             android:layout_width="14sp"
             android:layout_height="14sp"
             android:contentDescription="@string/iv_followers_content_description"
-            app:srcCompat="@mipmap/twitter" />
+            app:srcCompat="@drawable/twitter" />
 
         <TextView
             android:id="@+id/tv_followers_count"
@@ -76,7 +76,7 @@
             android:layout_width="14sp"
             android:layout_height="14sp"
             android:contentDescription="@string/iv_retweet_content_description"
-            app:srcCompat="@mipmap/favorite" />
+            app:srcCompat="@drawable/favorite" />
 
 
         <TextView
