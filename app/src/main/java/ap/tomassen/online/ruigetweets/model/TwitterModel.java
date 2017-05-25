@@ -21,7 +21,6 @@ public class TwitterModel {
     private ArrayList<Status> statuses;
     private ArrayList<User> users;
     private OAuth10aService authService;
-    private OAuth1AccessToken accessToken;
 
     private TwitterModel() {
         authService = new ServiceBuilder()
@@ -50,14 +49,6 @@ public class TwitterModel {
         return statuses.get(index);
     }
 
-
-    public OAuth1AccessToken getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(OAuth1AccessToken accessToken) {
-        this.accessToken = accessToken;
-    }
 
     public User getUser(int id) {
         for (User u : users) {

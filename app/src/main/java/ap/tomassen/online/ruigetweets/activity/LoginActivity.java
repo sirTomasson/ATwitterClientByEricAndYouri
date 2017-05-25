@@ -141,8 +141,6 @@ public class LoginActivity extends AppCompatActivity
                         "https://api.twitter.com/1.1/account/verify_credentials.json",
                         authService);
 
-                model.setAccessToken(accessToken);
-
                 authService.signRequest(accessToken, request);
 
                 Response response = request.send();
@@ -151,7 +149,7 @@ public class LoginActivity extends AppCompatActivity
                     String res = response.getBody();
 
                     JSONObject userObj = new JSONObject(res);
-                    Profile.getInstance(userObj);
+                    Profile.getInstance(userObj, accessToken);
 
                     startActivity(intent);
                 }

@@ -1,5 +1,7 @@
 package ap.tomassen.online.ruigetweets.model;
 
+import com.github.scribejava.core.model.OAuth1AccessToken;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,12 +12,14 @@ import ap.tomassen.online.ruigetweets.exception.ProfileException;
  */
 
 public class Profile extends User {
+    private OAuth1AccessToken accessToken;
 
     private static Profile instance = null;
 
-    public static Profile getInstance(JSONObject userObj) throws JSONException {
+    public static Profile getInstance(JSONObject userObj, OAuth1AccessToken accessToken)
+            throws JSONException {
         if (instance == null) {
-            instance = new Profile(userObj);
+            instance = new Profile(userObj, accessToken);
         }
         return instance;
     }
@@ -28,8 +32,13 @@ public class Profile extends User {
         }
     }
 
-    private Profile(JSONObject userObj) throws JSONException {
+    private Profile(JSONObject userObj, OAuth1AccessToken accessToken) throws JSONException {
         super(userObj);
+        this.accessToken = accessToken;
+    }
+
+    public OAuth1AccessToken getAccessToken() {
+        return accessToken;
     }
 
     public static boolean isSet() {
