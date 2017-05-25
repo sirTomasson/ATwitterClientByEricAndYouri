@@ -3,8 +3,10 @@ package ap.tomassen.online.ruigetweets.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,8 +18,6 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -26,7 +26,6 @@ import ap.tomassen.online.ruigetweets.fragment.AuthorizationFragment;
 
 
 import ap.tomassen.online.ruigetweets.fragment.LoginFragment;
-import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 /**
@@ -36,6 +35,8 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 public class LoginActivity extends AppCompatActivity
         implements LoginFragment.LoginFragmentCallbackListener, AuthorizationFragment.AuthorizationCallbackListener {
     private final static String TAG = LoginActivity.class.getSimpleName();
+    public static final String USER_TOKEN = "user_token";
+    public static final String USER_SECRET = "user_secret";
 
 
     private TwitterModel model = TwitterModel.getInstance();
@@ -126,37 +127,25 @@ public class LoginActivity extends AppCompatActivity
 
             String verifier = strings[0];
 
-            Log.i(TAG, "doInBackground: verifier " + verifier);
-            Log.i(TAG, "doInBackground: request token " + reqToken.toString());
-
-
             try {
+
 
                 OAuth1AccessToken accessToken = authService
                         .getAccessToken(reqToken, verifier);
 
-                if (accessToken == null) throw new AssertionError("accessToken cannot be null");
 
-                OAuthRequest request = new OAuthRequest(Verb.GET,
-                        "https://api.twitter.com/1.1/account/verify_credentials.json",
-                        authService);
+                String token = accessToken.getToken();
+                String secret = accessToken.getTokenSecret();
 
-                authService.signRequest(accessToken, request);
+                PreferenceManager.getDefaultSharedPreferences(
+                        getApplicationContext()).edit()
+                        .putString(USER_TOKEN, token)
+                        .putString(USER_SECRET, secret)
+                        .commit();
 
-                Response response = request.send();
-
-                if (response.isSuccessful()) {
-                    String res = response.getBody();
-
-                    JSONObject userObj = new JSONObject(res);
-                    Profile.getInstance(userObj, accessToken);
-
-                    startActivity(intent);
-                }
+                startActivity(intent);
 
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
                 e.printStackTrace();
             }
 

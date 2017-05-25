@@ -2,12 +2,20 @@ package ap.tomassen.online.ruigetweets.activity;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuth10aService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
-    private ListView mLvTwitterFeed;
+    public static final String SHIT_BROKE = "sh!t_broke";
 
-    private boolean userSignedIn = false;
+    private ListView mLvTwitterFeed;
 
     private TwitterModel twitterModel = TwitterModel.getInstance();
 
@@ -39,11 +47,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String token = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(LoginActivity.USER_TOKEN, SHIT_BROKE);
 
-        if (!Profile.isSet()) {
+        String secret = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(LoginActivity.USER_SECRET, SHIT_BROKE);
+
+        Log.i(TAG, "onCreate: token " + token);
+        Log.i(TAG, "onCreate: secret " + secret);
+
+        if (secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
+        } else {
+            OAuth1AccessToken accessToken = new OAuth1AccessToken(token, secret);
+            new UserProfileRequest().execute(accessToken);
         }
+
 
         String filename = "output.json";
 
@@ -74,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                 Object tweetObj = adapterView.getItemAtPosition(position);
                 if (tweetObj instanceof Status) {
                     Status status = (Status) tweetObj;
-                    Log.i(TAG, "onItemClick: " + status.getUser().getId());
                     profileIntent.putExtra(PROFILE_ID, status.getUser().getId());
 
                     startActivity(profileIntent);
@@ -119,5 +138,39 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildArray(JSONObject jsonObject) throws JSONException, ParseException {
         twitterModel.setStatuses(jsonObject);
+    }
+
+    private class UserProfileRequest extends AsyncTask<OAuth1AccessToken, Object, Profile> {
+
+        @Override
+        protected Profile doInBackground(OAuth1AccessToken... accessTokens) {
+            OAuth10aService authService = twitterModel.getAuthService();
+            Profile profile = null;
+
+            try {
+
+                OAuthRequest request = new OAuthRequest(Verb.GET,
+                        "https://api.twitter.com/1.1/account/verify_credentials.json",
+                        authService);
+
+                authService.signRequest(accessTokens[0], request);
+
+                Response response = request.send();
+
+                if (response.isSuccessful()) {
+                    String res = response.getBody();
+
+                    JSONObject userObj = new JSONObject(res);
+                    profile = Profile.getInstance(userObj, accessTokens[0]);
+
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return profile;
+        }
     }
 }
