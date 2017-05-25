@@ -31,8 +31,14 @@ public class Profile extends User {
     private Profile(JSONObject userObj) throws JSONException {
         super(userObj);
     }
-    private Profile(int id, String name, String screenName, String description, String profileImageUrl, String profileUrl, String profileBackgroundUrl, String followersCount, String retweets, String location) {
-        super(id, name, screenName, description, profileImageUrl, profileUrl, profileBackgroundUrl, followersCount, retweets, location);
+
+    public static boolean isSet() {
+        if (instance == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
+
 
 }

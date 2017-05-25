@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
@@ -38,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent loginIntent = new Intent(this, LoginActivity.class);
 
-        if (!userSignedIn) {
+        if (!Profile.isSet()) {
+            Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         }
 

@@ -20,13 +20,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.fragment.AuthorizationFragment;
 
 
 import ap.tomassen.online.ruigetweets.fragment.LoginFragment;
+import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 /**
@@ -150,14 +150,10 @@ public class LoginActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
                     String res = response.getBody();
 
-                    Log.i(TAG, "doInBackground: res " + res);
-                    startActivity(intent);
-
                     JSONObject userObj = new JSONObject(res);
+                    Profile.getInstance(userObj);
 
-                    Log.i(TAG, "doInBackground: user " + userObj.getString("name"));
-
-
+                    startActivity(intent);
                 }
 
             } catch (IOException e) {
