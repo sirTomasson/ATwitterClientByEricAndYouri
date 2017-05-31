@@ -1,7 +1,6 @@
 package ap.tomassen.online.ruigetweets.activity;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,16 +16,15 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -53,94 +51,18 @@ public class MainActivity extends AppCompatActivity {
         String secret = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_SECRET, SHIT_BROKE);
 
-        Log.i(TAG, "onCreate: token " + token);
-        Log.i(TAG, "onCreate: secret " + secret);
 
         if (secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {
             OAuth1AccessToken accessToken = new OAuth1AccessToken(token, secret);
-            new UserProfileRequest().execute(accessToken);
+            new UserProfileRequestTask().execute(accessToken);
+            new UserTimelineTask().execute(accessToken);
         }
-
-
-        String filename = "output.json";
-
-        try {
-            String JsonString = readAssetIntoString(filename);
-            JSONObject jsonObject = new JSONObject(JsonString);
-            buildArray(jsonObject);
-
-        } catch (JSONException je) {
-            je.printStackTrace();
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
-        mLvTwitterFeed.setAdapter(new TweetListAdapter(
-                this,
-                R.layout.list_item,
-                twitterModel.getStatuses()
-        ));
-        final Intent profileIntent = new Intent(this, ProfileActivity.class);
-
-        mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                Object tweetObj = adapterView.getItemAtPosition(position);
-                if (tweetObj instanceof Status) {
-                    Status status = (Status) tweetObj;
-                    profileIntent.putExtra(PROFILE_ID, status.getUser().getId());
-
-                    startActivity(profileIntent);
-                }
-            }
-        });
     }
 
-
-    /**
-     * Reads an asset file and returns a string with the full contents.
-     *
-     * @param filename The filename of the file to read.
-     * @return The contents of the file.
-     * @throws IOException If file could not be found or not read.
-     */
-    private String readAssetIntoString(String filename) throws IOException {
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-            InputStream is = getAssets().open(filename, AssetManager.ACCESS_BUFFER);
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    private void buildArray(JSONObject jsonObject) throws JSONException, ParseException {
-        twitterModel.setStatuses(jsonObject);
-    }
-
-    private class UserProfileRequest extends AsyncTask<OAuth1AccessToken, Object, Profile> {
+    private class UserProfileRequestTask extends AsyncTask<OAuth1AccessToken, Void, Profile> {
 
         @Override
         protected Profile doInBackground(OAuth1AccessToken... accessTokens) {
@@ -172,5 +94,82 @@ public class MainActivity extends AppCompatActivity {
             }
             return profile;
         }
+    }
+
+
+    private class UserTimelineTask extends AsyncTask<OAuth1AccessToken, JSONArray, JSONArray> {
+
+        @Override
+        protected JSONArray doInBackground(OAuth1AccessToken... oAuth1AccessTokens) {
+            OAuth10aService authService = twitterModel.getAuthService();
+
+
+            OAuthRequest request = new OAuthRequest(Verb.GET,
+                    "https://api.twitter.com/1.1/statuses/home_timeline.json",
+                    authService);
+
+            JSONArray tweetsObject = null;
+
+            try {
+                authService.signRequest(Profile.getInstance().getAccessToken(), request);
+
+                Response response = request.send();
+
+                if (response.isSuccessful()) {
+                    String res = response.getBody();
+
+                    tweetsObject = new JSONArray(res);
+                }
+
+            } catch (ProfileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+            return tweetsObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            super.onPostExecute(jsonArray);
+            try {
+                twitterModel.setStatuses(jsonArray);
+                buildListView();
+//                startActivity(timelineIntent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void buildListView() {
+        if (twitterModel.getStatuses() == null) throw new AssertionError("Statuses cannot be null");
+
+        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
+        mLvTwitterFeed.setAdapter(new TweetListAdapter(
+                this,
+                R.layout.list_item,
+                twitterModel.getStatuses()
+        ));
+        final Intent profileIntent = new Intent(this, ProfileActivity.class);
+
+        mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Object tweetObj = adapterView.getItemAtPosition(position);
+                if (tweetObj instanceof Status) {
+                    Status status = (Status) tweetObj;
+                    profileIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
+
+                    startActivity(profileIntent);
+                }
+            }
+        });
     }
 }

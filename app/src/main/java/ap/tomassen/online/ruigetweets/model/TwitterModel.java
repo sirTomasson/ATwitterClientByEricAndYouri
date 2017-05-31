@@ -64,11 +64,10 @@ public class TwitterModel {
         return statuses;
     }
 
-    public void setStatuses(JSONObject tweetsObj) throws JSONException, ParseException {
+    public void setStatuses(JSONArray tweetsArray) throws JSONException, ParseException {
         statuses = new ArrayList<Status>();
         users = new ArrayList<User>();
 
-        JSONArray tweetsArray = tweetsObj.getJSONArray("statuses");
 
         for (int i = 0; i < tweetsArray.length(); i++) {
             JSONObject tweetObj = tweetsArray.getJSONObject(i);
