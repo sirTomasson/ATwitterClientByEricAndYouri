@@ -1,5 +1,6 @@
 package ap.tomassen.online.ruigetweets.view;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
@@ -41,6 +42,7 @@ public class TweetListAdapter extends ArrayAdapter<Status> {
 
     private Intent userIntent;
 
+
     public TweetListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Status> statuses) {
         super(context, resource, statuses);
     }
@@ -49,6 +51,7 @@ public class TweetListAdapter extends ArrayAdapter<Status> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final Status status = getItem(position);
+
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
@@ -81,6 +84,7 @@ public class TweetListAdapter extends ArrayAdapter<Status> {
             public void onClick(View view) {
                 userIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
                 getContext().startActivity(userIntent);
+
             }
         });
 

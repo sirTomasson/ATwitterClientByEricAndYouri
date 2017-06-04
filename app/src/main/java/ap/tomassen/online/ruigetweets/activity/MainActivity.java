@@ -30,6 +30,7 @@ import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
 import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
+import ap.tomassen.online.ruigetweets.fragment.TimelineFragment;
 import ap.tomassen.online.ruigetweets.fragment.WriteTweetFragment;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
@@ -83,29 +84,35 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void buildListView() {
-        if (model.getStatuses() == null) throw new AssertionError("Statuses cannot be null");
+        TimelineFragment fragment = new TimelineFragment();
 
-        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
-        mLvTwitterFeed.setAdapter(new TweetListAdapter(
-                this,
-                R.layout.list_item,
-                model.getStatuses()
-        ));
-        final Intent profileIntent = new Intent(this, ProfileActivity.class);
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction
+                .add(R.id.fl_container, fragment)
+                .addToBackStack(null)
+                .commit();
 
-        mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                Object tweetObj = adapterView.getItemAtPosition(position);
-                if (tweetObj instanceof Status) {
-                    Status status = (Status) tweetObj;
-                    profileIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
-
-                    startActivity(profileIntent);
-                }
-            }
-        });
+//        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
+//        mLvTwitterFeed.setAdapter(new TweetListAdapter(
+//                this,
+//                R.layout.list_item,
+//                model.getStatuses()
+//        ));
+//        final Intent profileIntent = new Intent(this, ProfileActivity.class);
+//
+//        mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//
+//                Object tweetObj = adapterView.getItemAtPosition(position);
+//                if (tweetObj instanceof Status) {
+//                    Status status = (Status) tweetObj;
+//                    profileIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
+//
+//                    startActivity(profileIntent);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -126,14 +133,20 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = manager.beginTransaction();
 
         transaction
-                .add(R.id.fl_container, fragment)
+                .replace(R.id.fl_container, fragment)
                 .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void showTimeLine() {
+        TimelineFragment fragment = new TimelineFragment();
 
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction
+                .replace(R.id.fl_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
@@ -200,6 +213,8 @@ public class MainActivity extends AppCompatActivity
                     String res = response.getBody();
 
                     tweetsObject = new JSONArray(res);
+                    model.setStatuses(tweetsObject);
+
                 }
 
             } catch (ProfileException e) {
@@ -209,6 +224,8 @@ public class MainActivity extends AppCompatActivity
             } catch (JSONException e) {
                 e.printStackTrace();
 
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
             return tweetsObject;
         }
@@ -216,15 +233,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
-            try {
-                model.setStatuses(jsonArray);
-                buildListView();
-//                startActivity(timelineIntent);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            showTimeLine();
         }
     }
 

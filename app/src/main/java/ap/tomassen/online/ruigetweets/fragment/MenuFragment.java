@@ -44,8 +44,10 @@ public class MenuFragment extends Fragment {
         ivViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+//                startActivity(intent);
+
+                listener.showProfile();
             }
         });
         ImageView ivTwitterFeed = (ImageView) view.findViewById(R.id.iv_twitter_feed);
@@ -55,7 +57,7 @@ public class MenuFragment extends Fragment {
 //                Intent intent = new Intent(getActivity(), MainActivity.class);
 //                startActivity(intent);
 
-                listener.showProfile();
+                listener.showTimeLine();
             }
         });
 

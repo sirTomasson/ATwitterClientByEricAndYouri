@@ -8,12 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.model.TwitterModel;
+import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 /**
  * Created by Eric on 4-6-2017.
  */
 
 public class TimelineFragment extends ListFragment {
+
+    private TwitterModel model = TwitterModel.getInstance();
 
     public CallbackListener listener;
 
@@ -34,7 +38,11 @@ public class TimelineFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.)
+        View rootView = inflater.inflate(R.layout.fragment_timeline, container, false);
+
+        setListAdapter(new TweetListAdapter(getContext(), R.layout.list_item, model.getStatuses()));
+
+        return rootView;
     }
 
     public interface CallbackListener {
