@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void sendTweet(String tweet) {
         new SendTweetTask().execute(tweet);
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStack();
     }
 
     private class UserProfileRequestTask extends AsyncTask<OAuth1AccessToken, Void, Profile> {

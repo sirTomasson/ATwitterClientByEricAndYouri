@@ -4,9 +4,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +17,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
@@ -25,14 +33,20 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 public class WriteTweetFragment extends Fragment {
 
+    private final String TAG = WriteTweetFragment.class.getSimpleName();
+
     /*====================================================*/
 
     private MyTwitterApi api = MyTwitterApi.getInstance();
     private TwitterModel model = TwitterModel.getInstance();
 
+    private final int STATUS_LENGTH = 140;
+    private int charCount = STATUS_LENGTH;
+
     private EditText etWriteTweet;
     private Button btnSendTweet;
-    private TextView tvDateTime;
+    private TextView tvDateTime, tvCharCount;
+
 
     private SendTweetCallbackListener listener;
 
@@ -67,7 +81,22 @@ public class WriteTweetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_write_tweet, container, false);
 
+        tvCharCount = (TextView) rootView.findViewById(R.id.tv_char_count);
+        tvCharCount.setText(STATUS_LENGTH + "");
+        tvDateTime = (TextView) rootView.findViewById(R.id.tv_date_time);
+
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+        dateFormatter.setLenient(false);
+        Date today = new Date();
+        String s = dateFormatter.format(today);
+
+        tvDateTime.setText(s);
+
+        Log.i(TAG, "onCreateView: date " + s);
+
+
         etWriteTweet = (EditText) rootView.findViewById(R.id.et_write_tweet);
+
 
         etWriteTweet.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,7 +106,11 @@ public class WriteTweetFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (STATUS_LENGTH > 0) {
+                    charCount = STATUS_LENGTH - charSequence.length();
 
+                    tvCharCount.setText(charCount + "");
+                }
             }
 
             @Override
