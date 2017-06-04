@@ -1,5 +1,6 @@
 package ap.tomassen.online.ruigetweets.activity;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -29,13 +30,14 @@ import java.text.ParseException;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
+import ap.tomassen.online.ruigetweets.fragment.WriteTweetFragment;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MenuFragment.MenuFragmentCallBackListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
@@ -69,6 +71,17 @@ public class MainActivity extends AppCompatActivity {
             MyTwitterApi api = MyTwitterApi.getInstance();
             api.setAccessToken(accessToken);
         }
+    }
+
+    @Override
+    public void createNewTweet() {
+        WriteTweetFragment fragment = new WriteTweetFragment();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction.add(R.id.fl_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private class UserProfileRequestTask extends AsyncTask<OAuth1AccessToken, Void, Profile> {

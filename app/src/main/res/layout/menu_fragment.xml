@@ -16,7 +16,7 @@
         android:background="@drawable/border">
 
         <ImageView
-            android:id="@+id/iv_addTweet"
+            android:id="@+id/iv_add_tweet"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/iv_add_tweet_description"

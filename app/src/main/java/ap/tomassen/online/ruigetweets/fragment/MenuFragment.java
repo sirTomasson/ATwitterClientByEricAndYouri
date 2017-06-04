@@ -21,6 +21,8 @@ public class MenuFragment extends Fragment {
 
     private MenuFragmentCallBackListener listener;
 
+    private ImageView ivAddTweet;
+
     public MenuFragment (){
     }
     @Override
@@ -56,10 +58,20 @@ public class MenuFragment extends Fragment {
             }
         });
 
+        ivAddTweet = (ImageView) view.findViewById(R.id.iv_add_tweet);
+        ivAddTweet.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                listener.createNewTweet();
+            }
+        });
+
+
         return view;
     }
 
-    private interface MenuFragmentCallBackListener {
-
+    public interface MenuFragmentCallBackListener {
+        void createNewTweet();
     }
 }

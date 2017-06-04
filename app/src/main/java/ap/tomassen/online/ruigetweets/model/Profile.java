@@ -30,6 +30,7 @@ public class Profile extends User {
         } else {
             return instance;
         }
+
     }
 
     private Profile(JSONObject userObj, OAuth1AccessToken accessToken) throws JSONException {

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="2"
+    android:padding="8dp">
+
+    <EditText android:id="@+id/et_write_tweet"
+        android:background="@color/colorPurtiestGrey"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+    <LinearLayout android:id="@+id/tweet_info_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <TextView android:id="@+id/tv_date_time"
+            android:gravity="bottom"
+            android:padding="8dp"
+            android:text="@string/date_time_place_holder"
+            android:layout_marginStart="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <Button android:id="@+id/btn_send_tweet"
+            android:layout_marginStart="8dp"
+            android:text="@string/send_tweet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>

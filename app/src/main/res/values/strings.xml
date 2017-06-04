@@ -17,4 +17,6 @@
     <string name="iv_go_to_profile_description">Ga naar profielpagina</string>
     <string name="iv_go_to_timeline_description">Ga naar tijdlijn</string>
     <string name="iv_add_tweet_description">Voeg een tweet toe</string>
+    <string name="send_tweet">send</string>
+    <string name="date_time_place_holder">dd/MMM/yyyy HH:mm:ss</string>
 </resources>
