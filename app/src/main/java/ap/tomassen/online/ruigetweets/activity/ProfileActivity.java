@@ -24,7 +24,7 @@ import ap.tomassen.online.ruigetweets.model.User;
  * Created by Eric on 10-5-2017.
  */
 
-public class ProfileActivity extends AppCompatActivity implements MenuFragment.MenuFragmentCallBackListener {
+public class ProfileActivity extends AppCompatActivity  {
 
     private ImageView ivProfileBackground;
     private ImageView ivProfileImg;

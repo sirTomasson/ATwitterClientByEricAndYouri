@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -33,7 +34,14 @@ public class WriteTweetFragment extends Fragment {
     private Button btnSendTweet;
     private TextView tvDateTime;
 
+    private SendTweetCallbackListener listener;
+
     /*=====================================================*/
+
+
+    public interface SendTweetCallbackListener {
+        void sendTweet(String tweet);
+    }
 
     public WriteTweetFragment() {
     }
@@ -46,6 +54,12 @@ public class WriteTweetFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        try {
+            listener = (SendTweetCallbackListener) context;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
     }
 
     @Nullable
@@ -69,6 +83,17 @@ public class WriteTweetFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+
+        btnSendTweet = (Button) rootView.findViewById(R.id.btn_send_tweet);
+        btnSendTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String tweet = etWriteTweet.getText().toString();
+
+                listener.sendTweet(tweet);
             }
         });
 
