@@ -10,4 +10,11 @@
     <string name="place_holder_location">Enschede</string>
     <string name="iv_profile_img_content_description">profile picture from the user</string>
     <string name="iv_background_img_description">background picture from the user profile</string>
+    <string name="btn_login_description">Inloggen bij Twitter</string>
+    <string name="tv_add_tweet">Nieuwe Tweet</string>
+    <string name="tv_go_to_profile">Profiel</string>
+    <string name="tv_go_to_timeline">Tijdlijn</string>
+    <string name="iv_go_to_profile_description">Ga naar profielpagina</string>
+    <string name="iv_go_to_timeline_description">Ga naar tijdlijn</string>
+    <string name="iv_add_tweet_description">Voeg een tweet toe</string>
 </resources>

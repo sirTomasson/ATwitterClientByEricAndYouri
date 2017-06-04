@@ -1,22 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:layout_height="40dp"
-    android:layout_alignParentBottom="true"
-    android:layout_centerHorizontal="true"
-    android:layout_gravity="center">
-    <ImageView
-        android:id="@+id/ib_twitterFeed"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_gravity="bottom"
+    android:weightSum="3"
+    android:id="@+id/fr_menu">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:orientation="vertical"
         android:layout_weight="1"
-        android:src="@drawable/twitterblue"/>
+        android:gravity="center"
+        android:background="@drawable/border">
 
-    <ImageView
-        android:id="@+id/ib_viewProfile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        <ImageView
+            android:id="@+id/iv_addTweet"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/iv_add_tweet_description"
+            android:src="@drawable/plus" />
+
+        <TextView
+            android:id="@+id/tv_add_tweet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_add_tweet" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
         android:layout_weight="1"
-        android:src="@drawable/user" />
+        android:gravity="center"
+        android:background="@drawable/border">
+
+        <ImageView
+            android:id="@+id/iv_twitterFeed"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/twitterblue"
+            android:contentDescription="@string/iv_go_to_timeline_description" />
+
+        <TextView
+            android:id="@+id/tv_go_to_timeline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_go_to_timeline" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:background="@drawable/border">
+        <ImageView
+            android:id="@+id/iv_viewProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/user"
+            android:contentDescription="@string/iv_go_to_profile_description" />
+
+        <TextView
+            android:id="@+id/tv_go_to_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_go_to_profile" />
+    </LinearLayout>
 </LinearLayout>

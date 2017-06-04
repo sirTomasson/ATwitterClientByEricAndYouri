@@ -1,5 +1,7 @@
 package ap.tomassen.online.ruigetweets.activity;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -25,6 +27,7 @@ import java.text.ParseException;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
+import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
 import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -44,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.fr_menu_main, new MenuFragment());
+        transaction.commit();
 
         String token = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_TOKEN, SHIT_BROKE);
