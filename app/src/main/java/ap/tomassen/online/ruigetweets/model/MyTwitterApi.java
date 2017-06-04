@@ -1,6 +1,7 @@
 package ap.tomassen.online.ruigetweets.model;
 
 import com.github.scribejava.core.builder.api.DefaultApi10a;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
@@ -11,6 +12,8 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 public class MyTwitterApi extends DefaultApi10a {
 
     private static MyTwitterApi api = null;
+
+    private OAuth1AccessToken accessToken = null;
 
     public static final String CALL_BACK_URL = "http://www.erickerkhoven.nl";
     public static final String API_KEY = "sUWAnBCiS9ssPIlNDWeby1ol4";
@@ -46,5 +49,15 @@ public class MyTwitterApi extends DefaultApi10a {
     @Override
     public String getAuthorizationUrl(OAuth1RequestToken requestToken) {
         return AUTHORIZATION_TOKEN_URL + "?oauth_token=" + requestToken.getToken();
+    }
+
+    public void setAccessToken(OAuth1AccessToken accessToken) {
+        if (this.accessToken == null) {
+            this.accessToken = accessToken;
+        }
+    }
+
+    public OAuth1AccessToken getAccessToken() {
+        return accessToken;
     }
 }

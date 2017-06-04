@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
@@ -28,6 +29,7 @@ import java.text.ParseException;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
+import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -48,11 +50,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//        transaction.add(R.id.fr_menu_main, new MenuFragment());
-//        transaction.commit();
-
         String token = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_TOKEN, SHIT_BROKE);
 
@@ -65,8 +62,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
         } else {
             OAuth1AccessToken accessToken = new OAuth1AccessToken(token, secret);
+
             new UserProfileRequestTask().execute(accessToken);
             new UserTimelineTask().execute(accessToken);
+
+            MyTwitterApi api = MyTwitterApi.getInstance();
+            api.setAccessToken(accessToken);
         }
     }
 

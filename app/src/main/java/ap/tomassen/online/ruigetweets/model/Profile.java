@@ -12,7 +12,7 @@ import ap.tomassen.online.ruigetweets.exception.ProfileException;
  */
 
 public class Profile extends User {
-    private OAuth1AccessToken accessToken;
+    private OAuth1AccessToken accessToken = null;
 
     private static Profile instance = null;
 
@@ -48,6 +48,5 @@ public class Profile extends User {
             return true;
         }
     }
-
 
 }
