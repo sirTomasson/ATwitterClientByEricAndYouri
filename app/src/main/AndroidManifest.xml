@@ -26,8 +26,6 @@
         <activity android:name=".activity.LoginActivity"
             android:parentActivityName=".activity.MainActivity"/>
 
-        <activity android:name=".activity.TimeLineActivity"
-            android:parentActivityName=".activity.MainActivity"/>
     </application>
 
 </manifest>

@@ -5,7 +5,8 @@
     android:layout_height="60dp"
     android:layout_gravity="bottom"
     android:weightSum="3"
-    android:id="@+id/fr_menu">
+    android:id="@+id/fr_menu"
+    android:background="@color/colorWhite">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"

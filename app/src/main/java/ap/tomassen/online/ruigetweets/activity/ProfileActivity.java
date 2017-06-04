@@ -14,7 +14,9 @@ import com.squareup.picasso.Picasso;
 
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
+import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
 
@@ -22,7 +24,7 @@ import ap.tomassen.online.ruigetweets.model.User;
  * Created by Eric on 10-5-2017.
  */
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements MenuFragment.MenuFragmentCallBackListener {
 
     private ImageView ivProfileBackground;
     private ImageView ivProfileImg;
@@ -35,19 +37,14 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private TwitterModel model = TwitterModel.getInstance();
+    private Profile profile;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fr_menu_profile, new MenuFragment());
-        transaction.commit();
-
         Intent intent = getIntent();
-
         if (intent.hasExtra(MainActivity.PROFILE_ID)){
             int id = intent.getIntExtra(MainActivity.PROFILE_ID, -1);
             if (id != -1) {
@@ -56,6 +53,16 @@ public class ProfileActivity extends AppCompatActivity {
                 initXmlElements();
                 setContent(u);
             }
+        }
+        else {
+            Profile u = null;
+            try {
+                u = Profile.getInstance();
+            } catch (ProfileException e) {
+                e.printStackTrace();
+            }
+            initXmlElements();
+            setContent(u);
         }
     }
 

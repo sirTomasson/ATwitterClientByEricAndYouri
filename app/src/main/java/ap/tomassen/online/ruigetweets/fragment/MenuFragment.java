@@ -12,14 +12,16 @@ import android.widget.ImageView;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.activity.MainActivity;
 import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
+import ap.tomassen.online.ruigetweets.exception.ProfileException;
+import ap.tomassen.online.ruigetweets.model.Profile;
 
 /**
  * Created by Eric on 25-5-2017.
  */
 
 public class MenuFragment extends Fragment {
-
-    private MenuFragmentCallBackListener listener;
+    final public static String PROFILE_INTENT="ShowProfile";
+    public MenuFragmentCallBackListener listener;
 
     public MenuFragment (){
     }
@@ -59,7 +61,6 @@ public class MenuFragment extends Fragment {
         return view;
     }
 
-    private interface MenuFragmentCallBackListener {
-
+    public interface MenuFragmentCallBackListener {
     }
 }
