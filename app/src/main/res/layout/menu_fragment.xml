@@ -39,7 +39,7 @@
         android:background="@drawable/border">
 
         <ImageView
-            android:id="@+id/iv_twitterFeed"
+            android:id="@+id/iv_twitter_feed"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/twitterblue"
@@ -62,7 +62,7 @@
         android:gravity="center"
         android:background="@drawable/border">
         <ImageView
-            android:id="@+id/iv_viewProfile"
+            android:id="@+id/iv_view_profile"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/user"

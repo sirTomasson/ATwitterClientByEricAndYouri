@@ -2,13 +2,10 @@ package ap.tomassen.online.ruigetweets.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +16,7 @@ import android.widget.TextView;
 
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
@@ -48,12 +43,12 @@ public class WriteTweetFragment extends Fragment {
     private TextView tvDateTime, tvCharCount;
 
 
-    private SendTweetCallbackListener listener;
+    private CallbackListener listener;
 
     /*=====================================================*/
 
 
-    public interface SendTweetCallbackListener {
+    public interface CallbackListener {
         void sendTweet(String tweet);
     }
 
@@ -70,7 +65,7 @@ public class WriteTweetFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            listener = (SendTweetCallbackListener) context;
+            listener = (CallbackListener) context;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }

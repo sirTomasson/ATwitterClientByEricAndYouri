@@ -10,10 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.activity.MainActivity;
 import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
-import ap.tomassen.online.ruigetweets.exception.ProfileException;
-import ap.tomassen.online.ruigetweets.model.Profile;
 
 /**
  * Created by Eric on 25-5-2017.
@@ -21,7 +18,7 @@ import ap.tomassen.online.ruigetweets.model.Profile;
 
 public class MenuFragment extends Fragment {
     final public static String PROFILE_INTENT="ShowProfile";
-    public MenuFragmentCallBackListener listener;
+    public CallBackListener listener;
 
     private ImageView ivAddTweet;
 
@@ -32,7 +29,7 @@ public class MenuFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            listener = (MenuFragmentCallBackListener) context;
+            listener = (CallBackListener) context;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -43,7 +40,7 @@ public class MenuFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.menu_fragment, container, false);
 
-        ImageView ivViewProfile = (ImageView) view.findViewById(R.id.iv_viewProfile);
+        ImageView ivViewProfile = (ImageView) view.findViewById(R.id.iv_view_profile);
         ivViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,12 +48,14 @@ public class MenuFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        ImageView ivTwitterFeed = (ImageView) view.findViewById(R.id.iv_twitterFeed);
+        ImageView ivTwitterFeed = (ImageView) view.findViewById(R.id.iv_twitter_feed);
         ivTwitterFeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getActivity(), MainActivity.class);
+//                startActivity(intent);
+
+                listener.showProfile();
             }
         });
 
@@ -72,7 +71,9 @@ public class MenuFragment extends Fragment {
         return view;
     }
 
-    public interface MenuFragmentCallBackListener {
+    public interface CallBackListener {
         void createNewTweet();
+        void showProfile();
+        void showTimeLine();
     }
 }

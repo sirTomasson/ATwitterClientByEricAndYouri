@@ -1,6 +1,5 @@
 package ap.tomassen.online.ruigetweets.activity;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
@@ -31,6 +29,7 @@ import java.text.ParseException;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
+import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
 import ap.tomassen.online.ruigetweets.fragment.WriteTweetFragment;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
@@ -40,8 +39,11 @@ import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 
 public class MainActivity extends AppCompatActivity
-        implements MenuFragment.MenuFragmentCallBackListener,
-        WriteTweetFragment.SendTweetCallbackListener {
+        implements MenuFragment.CallBackListener,
+        WriteTweetFragment.CallbackListener {
+
+
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
@@ -49,9 +51,11 @@ public class MainActivity extends AppCompatActivity
 
     private ListView mLvTwitterFeed;
 
-    private TwitterModel twitterModel = TwitterModel.getInstance();
-
+    private TwitterModel model = TwitterModel.getInstance();
     private MyTwitterApi api = MyTwitterApi.getInstance();
+
+
+    private FragmentManager manager = getFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +83,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void buildListView() {
-        if (twitterModel.getStatuses() == null) throw new AssertionError("Statuses cannot be null");
+        if (model.getStatuses() == null) throw new AssertionError("Statuses cannot be null");
 
         mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
         mLvTwitterFeed.setAdapter(new TweetListAdapter(
                 this,
                 R.layout.list_item,
-                twitterModel.getStatuses()
+                model.getStatuses()
         ));
         final Intent profileIntent = new Intent(this, ProfileActivity.class);
 
@@ -107,12 +111,29 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void createNewTweet() {
         WriteTweetFragment fragment = new WriteTweetFragment();
-        FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction.add(R.id.fl_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        transaction
+                .add(R.id.fl_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showProfile() {
+        ProfileFragment fragment = new ProfileFragment();
+
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction
+                .add(R.id.fl_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void showTimeLine() {
+
     }
 
     @Override
@@ -126,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected Profile doInBackground(OAuth1AccessToken... accessTokens) {
-            OAuth10aService authService = twitterModel.getAuthService();
+            OAuth10aService authService = model.getAuthService();
             Profile profile = null;
 
             try {
@@ -160,7 +181,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected JSONArray doInBackground(OAuth1AccessToken... oAuth1AccessTokens) {
-            OAuth10aService authService = twitterModel.getAuthService();
+            OAuth10aService authService = model.getAuthService();
 
 
 
@@ -196,7 +217,7 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
             try {
-                twitterModel.setStatuses(jsonArray);
+                model.setStatuses(jsonArray);
                 buildListView();
 //                startActivity(timelineIntent);
             } catch (JSONException e) {
@@ -218,7 +239,7 @@ public class MainActivity extends AppCompatActivity
 //
 //            if (tweet.isEmpty()) throw new AssertionError("empty tweet");
 
-            OAuth10aService authService = twitterModel.getAuthService();
+            OAuth10aService authService = model.getAuthService();
 
             String encode = "?status=Hello%20World.";
 
