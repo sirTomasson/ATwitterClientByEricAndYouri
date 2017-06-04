@@ -47,10 +47,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fr_menu_main, new MenuFragment());
-        transaction.commit();
+
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.add(R.id.fr_menu_main, new MenuFragment());
+//        transaction.commit();
 
         String token = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_TOKEN, SHIT_BROKE);
@@ -102,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
             return profile;
         }
     }
-
 
     private class UserTimelineTask extends AsyncTask<OAuth1AccessToken, JSONArray, JSONArray> {
 

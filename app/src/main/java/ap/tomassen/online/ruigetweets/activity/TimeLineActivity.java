@@ -9,9 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
-import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 /**
  * Created by youri on 31-5-2017.
