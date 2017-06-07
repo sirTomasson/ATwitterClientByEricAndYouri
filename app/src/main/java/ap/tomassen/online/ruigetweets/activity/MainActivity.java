@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
 //        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
-//        mLvTwitterFeed.setAdapter(new TweetListAdapter(
+//        mLvTwitterFeed.setAdapter(new StatusListAdapter(
 //                this,
 //                R.layout.list_item,
 //                model.getStatuses()
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void sendTweet(String tweet) {
-        new SendTweetTask().execute(tweet);
+        new UpdateStatusTask().execute(tweet);
         FragmentManager manager = getFragmentManager();
         manager.popBackStack();
     }
@@ -233,16 +233,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class SendTweetTask extends AsyncTask<String, String, String> {
+    private class UpdateStatusTask extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... Strings) {
 
             String statusUpdate = Strings[0];
-
-//            if (tweet == null) throw new AssertionError("null tweet");
-//
-//            if (tweet.isEmpty()) throw new AssertionError("empty tweet");
 
             OAuth10aService authService = model.getAuthService();
 
@@ -284,6 +280,27 @@ public class MainActivity extends AppCompatActivity
             if (aString != null) {
                 showToastMessage(aString);
             }
+        }
+    }
+
+    private class CreateFavoritesTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... integers) {
+
+            OAuth10aService authService = model.getAuthService();
+
+            int statusId = integers[0];
+
+            String url = "https://api.twitter.com/1.1/favorites/create.json";
+
+            OAuthRequest request = new OAuthRequest(Verb.POST,
+                    url,
+                    authService
+            );
+
+            request.addBodyParameter("id", statusId + "");
+            return null;
         }
     }
 

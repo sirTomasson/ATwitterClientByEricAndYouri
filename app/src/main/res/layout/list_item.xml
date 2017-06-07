@@ -45,9 +45,10 @@
         android:layout_alignStart="@+id/iv_profile_img" />
 
     <ImageView
+        android:clickable="true"
         android:id="@+id/iv_retweets"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:srcCompat="@drawable/retweet"
         tools:layout_editor_absoluteX="294dp"
 
@@ -67,9 +68,10 @@
         tools:layout_editor_absoluteY="58dp" />
 
     <ImageView
+        android:clickable="true"
         android:id="@+id/iv_favorites"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:srcCompat="@drawable/favorite"
         tools:layout_editor_absoluteX="220dp"
         tools:layout_editor_absoluteY="58dp"

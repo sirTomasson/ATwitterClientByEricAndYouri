@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class Status {
     private Date createdAt;
-    private int id;
+    private long id;
     private String text;
     private List<Entity> entities;
     private int retweetCount;
@@ -26,7 +26,7 @@ public class Status {
 
     public Status(JSONObject tweetObj) throws JSONException, ParseException {
         createdAt = parseDate(tweetObj.getString("created_at"));
-        id = tweetObj.getInt("id");
+        id = tweetObj.getLong("id");
         text = tweetObj.getString("text");
         retweetCount = tweetObj.getInt("retweet_count");
         favoritesCount = tweetObj.getInt("favorite_count");
@@ -78,7 +78,7 @@ public class Status {
         this.user = user;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
