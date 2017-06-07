@@ -8,8 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,17 +29,15 @@ import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
 import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
 import ap.tomassen.online.ruigetweets.fragment.TimelineFragment;
-import ap.tomassen.online.ruigetweets.fragment.WriteTweetFragment;
+import ap.tomassen.online.ruigetweets.fragment.UpdateStatusFragment;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
-import ap.tomassen.online.ruigetweets.model.Status;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
-import ap.tomassen.online.ruigetweets.view.TweetListAdapter;
 
 
 public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
-        WriteTweetFragment.CallbackListener {
+        UpdateStatusFragment.CallbackListener {
 
 
 
@@ -68,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
         String secret = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_SECRET, SHIT_BROKE);
-
+//        secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)
 
         if (secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -117,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void createNewTweet() {
-        WriteTweetFragment fragment = new WriteTweetFragment();
+        UpdateStatusFragment fragment = new UpdateStatusFragment();
         FragmentTransaction transaction = manager.beginTransaction();
 
         transaction
@@ -242,7 +238,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected String doInBackground(String... Strings) {
 
-            String tweet = Strings[0];
+            String statusUpdate = Strings[0];
 
 //            if (tweet == null) throw new AssertionError("null tweet");
 //
@@ -250,14 +246,15 @@ public class MainActivity extends AppCompatActivity
 
             OAuth10aService authService = model.getAuthService();
 
-            String encode = "?status=Hello%20World.";
 
-            String url = "https://api.twitter.com/1.1/statuses/update.json?status=Hello%20World.";
+            String url = "https://api.twitter.com/1.1/statuses/update.json";
 
             OAuthRequest request = new OAuthRequest(Verb.POST,
                     url,
                     authService
             );
+
+            request.addBodyParameter("status", statusUpdate);
 
 
 

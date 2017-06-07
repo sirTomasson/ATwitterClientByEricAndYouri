@@ -26,9 +26,9 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
  * Created by youri on 4-6-2017.
  */
 
-public class WriteTweetFragment extends Fragment {
+public class UpdateStatusFragment extends Fragment {
 
-    private final String TAG = WriteTweetFragment.class.getSimpleName();
+    private final String TAG = UpdateStatusFragment.class.getSimpleName();
 
     /*====================================================*/
 
@@ -38,7 +38,7 @@ public class WriteTweetFragment extends Fragment {
     private final int STATUS_LENGTH = 140;
     private int charCount = STATUS_LENGTH;
 
-    private EditText etWriteTweet;
+    private EditText etWriteStatus;
     private Button btnSendTweet;
     private TextView tvDateTime, tvCharCount;
 
@@ -52,7 +52,7 @@ public class WriteTweetFragment extends Fragment {
         void sendTweet(String tweet);
     }
 
-    public WriteTweetFragment() {
+    public UpdateStatusFragment() {
     }
 
     @Override
@@ -90,10 +90,10 @@ public class WriteTweetFragment extends Fragment {
         Log.i(TAG, "onCreateView: date " + s);
 
 
-        etWriteTweet = (EditText) rootView.findViewById(R.id.et_write_tweet);
+        etWriteStatus = (EditText) rootView.findViewById(R.id.et_write_tweet);
 
 
-        etWriteTweet.addTextChangedListener(new TextWatcher() {
+        etWriteStatus.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -101,16 +101,17 @@ public class WriteTweetFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (STATUS_LENGTH > 0) {
-                    charCount = STATUS_LENGTH - charSequence.length();
 
-                    tvCharCount.setText(charCount + "");
-                }
+                charCount = STATUS_LENGTH - charSequence.length();
+                tvCharCount.setText(charCount + "");
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (editable.length() >= STATUS_LENGTH) {
+                    editable.delete(STATUS_LENGTH, editable.length());
+                }
             }
         });
 
@@ -119,7 +120,7 @@ public class WriteTweetFragment extends Fragment {
         btnSendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String tweet = etWriteTweet.getText().toString();
+                String tweet = etWriteStatus.getText().toString();
 
                 listener.sendTweet(tweet);
             }
