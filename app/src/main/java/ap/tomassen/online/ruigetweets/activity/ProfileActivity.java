@@ -92,4 +92,7 @@ public class ProfileActivity extends AppCompatActivity  {
         tvFavoritesCount.setText(u.getFavoritesCount());
         tvLocation.setText(u.getLocation());
     }
+
+    public void createNewTweet() {
+    }
 }

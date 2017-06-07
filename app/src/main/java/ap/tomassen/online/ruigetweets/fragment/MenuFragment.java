@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
@@ -20,7 +21,9 @@ public class MenuFragment extends Fragment {
     final public static String PROFILE_INTENT="ShowProfile";
     public CallBackListener listener;
 
-    private ImageView ivAddTweet;
+    private LinearLayout ivAddTweet;
+    private LinearLayout llViewProfile;
+    private LinearLayout llViewTimeline;
 
     public MenuFragment (){
     }
@@ -40,28 +43,24 @@ public class MenuFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.menu_fragment, container, false);
 
-        ImageView ivViewProfile = (ImageView) view.findViewById(R.id.iv_view_profile);
-        ivViewProfile.setOnClickListener(new View.OnClickListener() {
+        llViewProfile = (LinearLayout) view.findViewById(R.id.ll_go_to_profile);
+        llViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), ProfileActivity.class);
-//                startActivity(intent);
 
                 listener.showProfile();
             }
         });
-        ImageView ivTwitterFeed = (ImageView) view.findViewById(R.id.iv_twitter_feed);
-        ivTwitterFeed.setOnClickListener(new View.OnClickListener() {
+        llViewTimeline = (LinearLayout) view.findViewById(R.id.ll_go_to_timeline);
+        llViewTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), MainActivity.class);
-//                startActivity(intent);
 
                 listener.showTimeLine();
             }
         });
 
-        ivAddTweet = (ImageView) view.findViewById(R.id.iv_add_tweet);
+        ivAddTweet = (LinearLayout) view.findViewById(R.id.ll_add_tweet);
         ivAddTweet.setOnClickListener(new View.OnClickListener() {
 
             @Override
