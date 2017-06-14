@@ -21,9 +21,10 @@ public class MenuFragment extends Fragment {
     final public static String PROFILE_INTENT="ShowProfile";
     public CallBackListener listener;
 
-    private LinearLayout ivAddTweet;
-    private LinearLayout llViewProfile;
+    private LinearLayout llAddTweet;
+    private LinearLayout llSearchTweet;
     private LinearLayout llViewTimeline;
+    private LinearLayout llViewProfile;
 
     public MenuFragment (){
     }
@@ -43,14 +44,24 @@ public class MenuFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.menu_fragment, container, false);
 
-        llViewProfile = (LinearLayout) view.findViewById(R.id.ll_go_to_profile);
-        llViewProfile.setOnClickListener(new View.OnClickListener() {
+        llAddTweet = (LinearLayout) view.findViewById(R.id.ll_add_tweet);
+        llAddTweet.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-
-                listener.showProfile();
+                listener.createNewTweet();
             }
         });
+
+        llSearchTweet = (LinearLayout) view.findViewById(R.id.ll_search_tweet);
+        llSearchTweet.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                listener.showSearchTweet();
+            }
+        });
+
         llViewTimeline = (LinearLayout) view.findViewById(R.id.ll_go_to_timeline);
         llViewTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,12 +71,12 @@ public class MenuFragment extends Fragment {
             }
         });
 
-        ivAddTweet = (LinearLayout) view.findViewById(R.id.ll_add_tweet);
-        ivAddTweet.setOnClickListener(new View.OnClickListener() {
-
+        llViewProfile = (LinearLayout) view.findViewById(R.id.ll_go_to_profile);
+        llViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.createNewTweet();
+
+                listener.showProfile();
             }
         });
 
@@ -74,7 +85,8 @@ public class MenuFragment extends Fragment {
 
     public interface CallBackListener {
         void createNewTweet();
-        void showProfile();
+        void showSearchTweet();
         void showTimeLine();
+        void showProfile();
     }
 }

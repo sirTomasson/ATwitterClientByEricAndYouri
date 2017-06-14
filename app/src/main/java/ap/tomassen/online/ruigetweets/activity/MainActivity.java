@@ -28,6 +28,7 @@ import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
 import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
+import ap.tomassen.online.ruigetweets.fragment.SearchFragment;
 import ap.tomassen.online.ruigetweets.fragment.TimelineFragment;
 import ap.tomassen.online.ruigetweets.fragment.UpdateStatusFragment;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
@@ -37,7 +38,7 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
-        UpdateStatusFragment.CallbackListener {
+        UpdateStatusFragment.CallbackListener, SearchFragment.SearchFragmentCallbackListener {
 
 
 
@@ -123,6 +124,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void showSearchTweet() {
+        SearchFragment fragment = new SearchFragment();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction
+                .add(R.id.fl_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void showProfile() {
         ProfileFragment fragment = new ProfileFragment();
 
@@ -151,6 +162,14 @@ public class MainActivity extends AppCompatActivity
         FragmentManager manager = getFragmentManager();
         manager.popBackStack();
     }
+
+    @Override
+    public void searchTweet(String searchText) {
+        new SearchTweetTask().execute(searchText);
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStack();
+    }
+
 
     private class UserProfileRequestTask extends AsyncTask<OAuth1AccessToken, Void, Profile> {
 
@@ -280,6 +299,40 @@ public class MainActivity extends AppCompatActivity
             if (aString != null) {
                 showToastMessage(aString);
             }
+        }
+    }
+
+    private class SearchTweetTask extends AsyncTask<String, String, JSONArray>{
+
+        @Override
+        protected JSONArray doInBackground(String... Strings) {
+            OAuth10aService authService = model.getAuthService();
+            String searchText = Strings[0];
+            String url = "https://api.twitter.com/1.1/search/tweets.json?";
+            JSONObject searchObject = null;
+
+            OAuthRequest request = new OAuthRequest(Verb.GET,
+                    url + "q=" + searchText,
+                    authService);
+
+            try {
+                authService.signRequest(api.getAccessToken(), request);
+                Response response = request.send();
+                if (response.isSuccessful()) {
+                    String res = response.getBody();
+                    searchObject = new JSONObject(res);
+                    Log.i(TAG, "searchTweet: response successful" +
+                            response.getBody());
+//                    model.setStatuses(searchObject);
+                }
+                else {
+                    Log.i(TAG, "doInBackground: response failed"+
+                            response.getBody());
+                }
+            } catch (IOException  | JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 

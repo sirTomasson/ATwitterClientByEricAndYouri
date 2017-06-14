@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="60dp"
+    android:layout_gravity="end"
+    android:weightSum="1">
+
+    <EditText
+        android:id="@+id/et_search_tweet"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.98"
+        android:background="@color/colorPurtiestGrey"
+        android:ems="10"
+        android:hint="@string/tv_search_text"
+        android:inputType="text"
+        android:textSize="25sp" />
+
+    <ImageView
+        android:id="@+id/iv_search_tweet"
+        android:layout_width="25sp"
+        android:layout_height="match_parent"
+        android:src="@drawable/search" />
+</LinearLayout>
