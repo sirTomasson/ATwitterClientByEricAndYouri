@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity
 //            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 //
 //                Object tweetObj = adapterView.getItemAtPosition(position);
-//                if (tweetObj instanceof Status) {
-//                    Status status = (Status) tweetObj;
+//                if (tweetObj instanceof Tweet) {
+//                    Tweet status = (Tweet) tweetObj;
 //                    profileIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
 //
 //                    startActivity(profileIntent);

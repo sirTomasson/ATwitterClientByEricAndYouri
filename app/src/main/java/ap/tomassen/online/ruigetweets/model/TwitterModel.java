@@ -1,7 +1,6 @@
 package ap.tomassen.online.ruigetweets.model;
 
 import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
 import org.json.JSONArray;
@@ -18,7 +17,7 @@ import java.util.List;
 
 public class TwitterModel {
     private static TwitterModel twitterModel = null;
-    private ArrayList<Status> statuses;
+    private ArrayList<Tweet> statuses;
     private ArrayList<User> users;
     private OAuth10aService authService;
 
@@ -37,15 +36,15 @@ public class TwitterModel {
         return twitterModel;
     }
 
-    public void add(Status status) {
-        statuses.add(status);
+    public void add(Tweet tweet) {
+        statuses.add(tweet);
     }
 
-    public void add(int index, Status status) {
-        statuses.add(index, status);
+    public void add(int index, Tweet tweet) {
+        statuses.add(index, tweet);
     }
 
-    public Status get(int index) {
+    public Tweet get(int index) {
         return statuses.get(index);
     }
 
@@ -60,18 +59,18 @@ public class TwitterModel {
         return null;
     }
 
-    public List<Status> getStatuses() {
+    public List<Tweet> getStatuses() {
         return statuses;
     }
 
     public void setStatuses(JSONArray tweetsArray) throws JSONException, ParseException {
-        statuses = new ArrayList<Status>();
+        statuses = new ArrayList<Tweet>();
         users = new ArrayList<User>();
 
 
         for (int i = 0; i < tweetsArray.length(); i++) {
             JSONObject tweetObj = tweetsArray.getJSONObject(i);
-            statuses.add(new Status(tweetObj));
+            statuses.add(new Tweet(tweetObj));
         }
 
         for (int i = 0; i < tweetsArray.length(); i++) {

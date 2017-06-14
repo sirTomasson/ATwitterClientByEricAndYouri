@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,14 +35,14 @@ import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
 import ap.tomassen.online.ruigetweets.model.Entity;
 import ap.tomassen.online.ruigetweets.model.Mention;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
-import ap.tomassen.online.ruigetweets.model.Status;
+import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 /**
  * Created by youri on 10-5-2017.
  */
 
-public class StatusListAdapter extends ArrayAdapter<Status> {
+public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
     private final String TAG = StatusListAdapter.class.getSimpleName();
 
@@ -61,14 +60,14 @@ public class StatusListAdapter extends ArrayAdapter<Status> {
     private Intent userIntent;
 
 
-    public StatusListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Status> statuses) {
+    public StatusListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Tweet> statuses) {
         super(context, resource, statuses);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final Status status = getItem(position);
+        final Tweet tweet = getItem(position);
 
 
         if (convertView == null) {
@@ -84,25 +83,25 @@ public class StatusListAdapter extends ArrayAdapter<Status> {
         mTvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favorites_ount);
 
         Picasso.with(getContext()).
-                load(status.getUser().getProfileImageUrl())
+                load(tweet.getUser().getProfileImageUrl())
                 .into(mIvProfileImg);
 
-        if (!status.getEntities().isEmpty()) {
-            entitiesToClickableSpan(status);
+        if (!tweet.getEntities().isEmpty()) {
+            entitiesToClickableSpan(tweet);
         } else {
-            mTvTweetText.setText(status.getText());
+            mTvTweetText.setText(tweet.getText());
         }
 
-        mTvDate.setText(status.getCreatedAt().toString());
-        mTvRetweetCount.setText("" + status.getRetweetCount());
-        mTvFavoriteCount.setText("" + status.getFavoritesCount());
+        mTvDate.setText(tweet.getCreatedAt().toString());
+        mTvRetweetCount.setText("" + tweet.getRetweetCount());
+        mTvFavoriteCount.setText("" + tweet.getFavoritesCount());
 
         userIntent = new Intent(getContext(), ProfileActivity.class);
 
         mIvProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
+                userIntent.putExtra(MainActivity.PROFILE_ID, tweet.getUser().getId());
                 getContext().startActivity(userIntent);
 
             }
@@ -111,15 +110,16 @@ public class StatusListAdapter extends ArrayAdapter<Status> {
         mIvFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: statusId " + status.getId());
-                new CreateFavoriteTask().execute(status.getId());
+                Log.d(TAG, "onClick: statusId " + tweet.getId());
+                new CreateFavoriteTask().execute(tweet.getId());
             }
         });
 
         mIvRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.d(TAG, "onClick: retweet -- statusId " + tweet.getId());
+                new CreateFavoriteTask().execute(tweet.getId());
             }
         });
 
@@ -127,10 +127,10 @@ public class StatusListAdapter extends ArrayAdapter<Status> {
         return convertView;
     }
 
-    private void entitiesToClickableSpan(Status status) {
-        ArrayList<Entity> entities = new ArrayList<>(status.getEntities());
+    private void entitiesToClickableSpan(Tweet tweet) {
+        ArrayList<Entity> entities = new ArrayList<>(tweet.getEntities());
 
-        final SpannableString tweetString = new SpannableString(status.getText());
+        final SpannableString tweetString = new SpannableString(tweet.getText());
         for (final Entity e : entities) {
 
             int[] indices = e.getIndices();
@@ -161,6 +161,48 @@ public class StatusListAdapter extends ArrayAdapter<Status> {
 
 
         mTvTweetText.setText(tweetString);
+    }
+    private class ReTweetTask extends AsyncTask<Tweet, Void, String>{
+
+        @Override
+        protected String doInBackground(Tweet... tweets) {
+            Tweet tweet = tweets[0];
+            long tweetId = tweet.getId();
+
+            OAuth10aService authService = model.getAuthService();
+
+            String url = "https://api.twitter.com/1.1/favorites/" +  tweetId + ".json";
+
+            OAuthRequest request = new OAuthRequest(Verb.POST,
+                    url,
+                    authService
+            );
+
+            authService.signRequest(api.getAccessToken(), request);
+
+            Response response = request.send();
+
+            String res = null;
+            try {
+
+                if (response.isSuccessful()) {
+                    res = response.getBody();
+
+                    Log.i(TAG, "doInBackground: response successful");
+                } else {
+                    Log.d(TAG, "doInBackground: response unsuccessful " + response.getBody() + tweetId);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return res;
+        }
+
+        @Override
+        protected void onPostExecute(String aString) {
+            super.onPostExecute(aString);
+            makeToast(aString);
+        }
     }
 
     private class CreateFavoriteTask extends AsyncTask<Long, Void, String>{

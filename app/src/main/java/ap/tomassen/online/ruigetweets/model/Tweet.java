@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created by Eric on 8-5-2017.
  */
 
-public class Status {
+public class Tweet {
     private Date createdAt;
     private long id;
     private String text;
@@ -24,7 +24,7 @@ public class Status {
     private int favoritesCount;
     private User user;
 
-    public Status(JSONObject tweetObj) throws JSONException, ParseException {
+    public Tweet(JSONObject tweetObj) throws JSONException, ParseException {
         createdAt = parseDate(tweetObj.getString("created_at"));
         id = tweetObj.getLong("id");
         text = tweetObj.getString("text");
@@ -68,46 +68,20 @@ public class Status {
         return user;
     }
 
-    public Status(int id, Date createdAt, String text, int retweetCount, int favoritesCount, List<Entity> entities, User user) {
-        this.id = id;
-        this.createdAt = createdAt;
-        this.text = text;
-        this.retweetCount = retweetCount;
-        this.favoritesCount = favoritesCount;
-        this.entities = entities;
-        this.user = user;
-    }
-
     public long getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public int getRetweetCount() {
         return retweetCount;
-    }
-
-    public void setRetweetCount(int retweetCount) {
-        this.retweetCount = retweetCount;
     }
 
     public int getFavoritesCount() {
@@ -118,15 +92,19 @@ public class Status {
         return entities.get(index);
     }
 
-    public void setFavoritesCount(int favoritesCount) {
-        this.favoritesCount = favoritesCount;
-    }
-
     private Date parseDate(String date) throws ParseException {
         String twitterFormat =  "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
 
         return sf.parse(date);
+    }
+
+    private void increaseFavoriteCount() {
+        favoritesCount++;
+    }
+
+    private void increaseRetweetCount() {
+        retweetCount++;
     }
 }
