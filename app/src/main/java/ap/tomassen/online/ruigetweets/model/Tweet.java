@@ -100,11 +100,11 @@ public class Tweet {
         return sf.parse(date);
     }
 
-    private void increaseFavoriteCount() {
+    public void increaseFavoriteCount() {
         favoritesCount++;
     }
 
-    private void increaseRetweetCount() {
+    public void increaseRetweetCount() {
         retweetCount++;
     }
 }

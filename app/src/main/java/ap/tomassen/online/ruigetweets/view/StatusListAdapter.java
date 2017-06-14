@@ -110,16 +110,14 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         mIvFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: statusId " + tweet.getId());
-                new CreateFavoriteTask().execute(tweet.getId());
+                new CreateFavoriteTask().execute(tweet);
             }
         });
 
         mIvRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "onClick: retweet -- statusId " + tweet.getId());
-                new CreateFavoriteTask().execute(tweet.getId());
+                new ReTweetTask().execute(tweet);
             }
         });
 
@@ -162,16 +160,16 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
         mTvTweetText.setText(tweetString);
     }
-    private class ReTweetTask extends AsyncTask<Tweet, Void, String>{
+    private class ReTweetTask extends AsyncTask<Tweet, Void, Boolean>{
 
         @Override
-        protected String doInBackground(Tweet... tweets) {
+        protected Boolean doInBackground(Tweet... tweets) {
             Tweet tweet = tweets[0];
             long tweetId = tweet.getId();
 
             OAuth10aService authService = model.getAuthService();
 
-            String url = "https://api.twitter.com/1.1/favorites/" +  tweetId + ".json";
+            String url = "https://api.twitter.com/1.1/statuses/retweet/" +  tweetId + ".json";
 
             OAuthRequest request = new OAuthRequest(Verb.POST,
                     url,
@@ -187,7 +185,7 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
                 if (response.isSuccessful()) {
                     res = response.getBody();
-
+                    tweet.increaseRetweetCount();
                     Log.i(TAG, "doInBackground: response successful");
                 } else {
                     Log.d(TAG, "doInBackground: response unsuccessful " + response.getBody() + tweetId);
@@ -195,21 +193,24 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return res;
+            return response.isSuccessful();
         }
 
         @Override
-        protected void onPostExecute(String aString) {
-            super.onPostExecute(aString);
-            makeToast(aString);
+        protected void onPostExecute(Boolean successfulResponse) {
+            super.onPostExecute(successfulResponse);
+            if (successfulResponse) {
+                notifyDataSetChanged();
+            }
         }
     }
 
-    private class CreateFavoriteTask extends AsyncTask<Long, Void, String>{
+    private class CreateFavoriteTask extends AsyncTask<Tweet, Void, Boolean>{
 
         @Override
-        protected String doInBackground(Long... longs) {
-            long statusId = longs[0];
+        protected Boolean doInBackground(Tweet... tweets) {
+            Tweet tweet = tweets[0];
+            long statusId = tweet.getId();
 
             OAuth10aService authService = model.getAuthService();
 
@@ -228,30 +229,27 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
             Response response = request.send();
 
             String res = null;
-
-            if (response.isSuccessful()) {
-                try {
+            try {
+                if (response.isSuccessful()) {
                     res = response.getBody();
-                    Log.i(TAG, "doInBackground: response successful" +
-                            "");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
+                    Log.i(TAG, "doInBackground: response successful");
+                    tweet.increaseFavoriteCount();
+                } else {
                     Log.d(TAG, "doInBackground: response unsuccessful " + response.getBody() + statusId);
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            return res;
+            return response.isSuccessful();
         }
 
         @Override
-        protected void onPostExecute(String aString) {
-            super.onPostExecute(aString);
-            makeToast(aString);
+        protected void onPostExecute(Boolean successfulResponse) {
+            super.onPostExecute(successfulResponse);
+            if (successfulResponse) {
+                notifyDataSetChanged();
+            }
         }
     }
 

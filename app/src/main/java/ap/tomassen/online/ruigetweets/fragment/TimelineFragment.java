@@ -32,7 +32,7 @@ public class TimelineFragment extends ListFragment {
         try {
             listener = (CallbackListener) context;
         } catch (ClassCastException e) {
-            e.printStackTrace();
+            System.err.println("host activity has to implement call back methods");
         }
     }
 
