@@ -18,5 +18,6 @@
     <string name="send_tweet">send</string>
     <string name="date_time_place_holder">dd/MMM/yyyy HH:mm:ss</string>
     <string name="char_count">140</string>
+    <string name="iv_content_description">An image of the user that posted the tweet</string>
     <string name="tv_search_text">Zoeken</string>
 </resources>
