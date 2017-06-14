@@ -1,90 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp"
-    android:descendantFocusability="beforeDescendants">
+    android:descendantFocusability="beforeDescendants"
+    android:padding="8dp">
 
     <ImageView
         android:id="@+id/iv_profile_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="50dp"
-        android:minWidth="50dp"
-        app:srcCompat="@android:color/background_light"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="8dp"
-        android:layout_alignTop="@+id/tv_tweetText"
-        android:layout_toStartOf="@+id/tv_tweetText" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/iv_content_description"
+        android:minHeight="80dp"
+        android:minWidth="80dp"
+        app:srcCompat="@android:color/background_light" />
 
     <TextView
         android:id="@+id/tv_tweetText"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ornare ornare ligula, ac volutpat lectus molestie eu. Praesent orci aliquam."
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="74dp"
-        android:layout_alignParentTop="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_profile_img"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="11dp"
-        android:layout_marginTop="13dp" />
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/iv_profile_img"
+        android:padding="8dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ornare ornare ligula, ac volutpat lectus molestie eu. Praesent orci aliquam." />
 
     <TextView
         android:id="@+id/tv_date"
-        android:layout_width="141dp"
-        android:layout_height="17dp"
-        android:text="DD:MM:YYYY::HH:MM"
-        app:layout_constraintTop_toBottomOf="@+id/iv_profile_img"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_below="@+id/iv_profile_img"
-        android:layout_alignStart="@+id/iv_profile_img" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/iv_favorites"
+        android:layout_marginEnd="16dp"
+        android:text="DD:MM:YYYY::HH:MM" />
 
     <ImageView
-        android:clickable="true"
         android:id="@+id/iv_retweets"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:srcCompat="@drawable/retweet"
-        tools:layout_editor_absoluteX="294dp"
-        tools:layout_editor_absoluteY="58dp"
-        android:layout_marginStart="37dp"
-        android:layout_alignBottom="@+id/tv_date"
-        android:layout_toEndOf="@+id/tv_date" />
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_below="@id/iv_profile_img"
+        android:layout_marginEnd="8dp"
+        android:clickable="true"
+        android:minHeight="24dp"
+        android:minWidth="24dp"
+        android:layout_toStartOf="@+id/tv_retweet_count"
+        app:srcCompat="@drawable/retweet" />
 
     <TextView
-        android:id="@+id/tv_retweetCount"
+        android:id="@+id/tv_retweet_count"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_alignTop="@+id/iv_retweets"
-        android:layout_marginLeft="0dp"
-        android:layout_toEndOf="@+id/iv_retweets"
-        app:layout_constraintLeft_toRightOf="@+id/iv_retweets"
-        tools:layout_editor_absoluteY="58dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_alignBottom="@+id/iv_retweets"
+        android:layout_toStartOf="@+id/iv_favorites"
+        android:text="00" />
 
     <ImageView
-        android:clickable="true"
+        android:layout_marginEnd="8dp"
         android:id="@+id/iv_favorites"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:srcCompat="@drawable/favorite"
-        tools:layout_editor_absoluteX="220dp"
-        tools:layout_editor_absoluteY="58dp"
-        android:layout_marginStart="27dp"
-        android:layout_alignTop="@+id/tv_retweetCount"
-        android:layout_toEndOf="@+id/tv_retweetCount" />
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_below="@+id/iv_profile_img"
+        android:layout_toStartOf="@+id/tv_favorites_count"
+        android:clickable="true"
+        android:maxHeight="24dp"
+        android:minWidth="24dp"
+        app:srcCompat="@drawable/favorite" />
 
     <TextView
-        android:id="@+id/tv_favorites_ount"
+        android:id="@+id/tv_favorites_count"
         android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_alignTop="@+id/iv_favorites"
-        android:layout_toEndOf="@+id/iv_favorites"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="58dp" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/iv_favorites"
+        android:text="00" />
 
 </RelativeLayout>

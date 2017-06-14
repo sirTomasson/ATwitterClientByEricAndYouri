@@ -26,8 +26,12 @@ import com.github.scribejava.core.oauth.OAuth10aService;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.activity.MainActivity;
@@ -79,8 +83,8 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         mIvProfileImg = (ImageView) convertView.findViewById(R.id.iv_profile_img);
         mTvTweetText = (TextView) convertView.findViewById(R.id.tv_tweetText);
         mTvDate = (TextView) convertView.findViewById(R.id.tv_date);
-        mTvRetweetCount = (TextView) convertView.findViewById(R.id.tv_retweetCount);
-        mTvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favorites_ount);
+        mTvRetweetCount = (TextView) convertView.findViewById(R.id.tv_retweet_count);
+        mTvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favorites_count);
 
         Picasso.with(getContext()).
                 load(tweet.getUser().getProfileImageUrl())
@@ -91,6 +95,7 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         } else {
             mTvTweetText.setText(tweet.getText());
         }
+
 
         mTvDate.setText(tweet.getCreatedAt().toString());
         mTvRetweetCount.setText("" + tweet.getRetweetCount());
@@ -160,6 +165,7 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
         mTvTweetText.setText(tweetString);
     }
+
     private class ReTweetTask extends AsyncTask<Tweet, Void, Boolean>{
 
         @Override
