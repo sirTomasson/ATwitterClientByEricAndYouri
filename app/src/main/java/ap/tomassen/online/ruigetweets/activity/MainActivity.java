@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     public static final String PROFILE_ID = "profile_id";
     public static final String SHIT_BROKE = "sh!t_broke";
     public static final String TAG_DIALOG_FRAGMENT = "dialog_tag_fragment";
-    public static final String ERROR_CODE = "ERROR_CODE";
+    public static final String ERROR_TITLE = "ERROR_TITLE";
     public static final String ERROR_MESSAGE = "ERROR_MESSAGE";
 
     private TwitterModel model = TwitterModel.getInstance();
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
             api.setAccessToken(accessToken);
         }
     }
+
     public void createErrorDialog(String json) {
         ArrayList<Error> errors = null;
 
@@ -96,9 +97,13 @@ public class MainActivity extends AppCompatActivity
         Bundle b = new Bundle();
 
         if (errors != null) {
-            Error error = errors.get(0);
-            b.putString(ERROR_CODE, error.getCode() + "");
-            b.putString(ERROR_MESSAGE, error.getMessage());
+            String message = "";
+            for (Error error : errors) {
+                message += "Code: " + error.getCode() + "\n";
+                message += error.getMessage() + "\n\n";
+            }
+            b.putString(ERROR_TITLE, "SOMETHING HAPPENED!");
+            b.putString(ERROR_MESSAGE, message);
         }
 
         dialogFragment.setArguments(b);
@@ -238,22 +243,15 @@ public class MainActivity extends AppCompatActivity
                 Response response = request.send();
 
                 if (response.isSuccessful()) {
-                    String res = response.getBody();
 
-                    tweetsObject = new JSONArray(res);
+                    tweetsObject = new JSONArray(response.getBody());
                     model.setStatuses(tweetsObject);
 
+                } else {
+                    createErrorDialog(response.getBody());
                 }
 
-
-            } catch (ProfileException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-            } catch (ParseException e) {
+            } catch (ProfileException | IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
             return tweetsObject;
@@ -266,17 +264,17 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class UpdateStatusTask extends AsyncTask<String, String, String> {
+    private class UpdateStatusTask extends AsyncTask<String, String, Void> {
 
         @Override
-        protected String doInBackground(String... Strings) {
+        protected Void doInBackground(String... Strings) {
 
             String statusUpdate = Strings[0];
 
             OAuth10aService authService = model.getAuthService();
 
 
-            String url = "https://api.twitter.com/1.1/status/update.json";
+            String url = "https://api.twitter.com/1.1/statuses/update.json";
 
             OAuthRequest request = new OAuthRequest(Verb.POST,
                     url,
@@ -290,34 +288,15 @@ public class MainActivity extends AppCompatActivity
 
             Response response = request.send();
 
-            String res = null;
-
             try {
-                if (response.isSuccessful()) {
-                    try {
-                        res = response.getBody();
-                        Log.i(TAG, "doInBackground: response successful" +
-                                "");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
+                if (!response.isSuccessful()) {
                     createErrorDialog(response.getBody());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            return res;
-        }
-
-        @Override
-        protected void onPostExecute(String aString) {
-            super.onPostExecute(aString);
-
-            if (aString != null) {
-                showToastMessage(aString);
-            }
+            return null;
         }
     }
 
@@ -346,6 +325,7 @@ public class MainActivity extends AppCompatActivity
                 } else {
                     Log.i(TAG, "doInBackground: response failed" +
                             response.getBody());
+                    createErrorDialog(response.getBody());
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();

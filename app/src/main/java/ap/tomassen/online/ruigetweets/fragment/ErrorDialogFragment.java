@@ -17,8 +17,8 @@ public class ErrorDialogFragment extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle b = getArguments();
         AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
-        if (b != null && b.containsKey(MainActivity.ERROR_CODE)) {
-            alertDialog.setTitle("Code: " + b.getString(MainActivity.ERROR_CODE));
+        if (b != null && b.containsKey(MainActivity.ERROR_TITLE)) {
+            alertDialog.setTitle(b.getString(MainActivity.ERROR_TITLE));
             alertDialog.setMessage(b.getString(MainActivity.ERROR_MESSAGE));
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,
