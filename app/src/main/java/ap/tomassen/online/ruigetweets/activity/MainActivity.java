@@ -317,6 +317,8 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /*============================================================================================*/
+
     private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
