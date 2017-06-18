@@ -66,8 +66,7 @@ public class MenuFragment extends Fragment {
         llViewTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                listener.showTimeLine();
+                listener.refreshTimeline();
             }
         });
 
@@ -86,7 +85,7 @@ public class MenuFragment extends Fragment {
     public interface CallBackListener {
         void createNewTweet();
         void showSearchTweet();
-        void showTimeLine();
+        void refreshTimeline();
         void showProfile();
     }
 }

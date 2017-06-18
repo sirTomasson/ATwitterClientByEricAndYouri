@@ -24,7 +24,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Iterator;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
@@ -128,7 +127,6 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
-    @Override
     public void showTimeLine() {
         TimelineFragment fragment = new TimelineFragment();
 
@@ -139,6 +137,11 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    @Override
+    public void refreshTimeline(){
+        new UserTimelineTask().execute(api.getAccessToken());
+        showTimeLine();
+    }
     @Override
     public void sendTweet(String tweet) {
         new UpdateStatusTask().execute(tweet);
@@ -312,7 +315,11 @@ public class MainActivity extends AppCompatActivity
             }
             return searchArray;
         }
-
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            super.onPostExecute(jsonArray);
+            showTimeLine();
+        }
     }
 
     /*============================================================================================*/
