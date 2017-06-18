@@ -40,14 +40,11 @@ public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
         UpdateStatusFragment.CallbackListener, SearchFragment.SearchFragmentCallbackListener {
 
-
-
+    
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
     public static final String SHIT_BROKE = "sh!t_broke";
-
-    private ListView mLvTwitterFeed;
 
     private TwitterModel model = TwitterModel.getInstance();
     private MyTwitterApi api = MyTwitterApi.getInstance();
@@ -65,7 +62,6 @@ public class MainActivity extends AppCompatActivity
 
         String secret = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_SECRET, SHIT_BROKE);
-//        secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)
 
         if (secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -80,37 +76,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void buildListView() {
-        TimelineFragment fragment = new TimelineFragment();
-
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction
-                .add(R.id.fl_container, fragment)
-                .addToBackStack(null)
-                .commit();
-
-//        mLvTwitterFeed = (ListView) findViewById(R.id.lv_twitter_feed);
-//        mLvTwitterFeed.setAdapter(new StatusListAdapter(
-//                this,
-//                R.layout.list_item,
-//                model.getStatuses()
-//        ));
-//        final Intent profileIntent = new Intent(this, ProfileActivity.class);
-//
-//        mLvTwitterFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//
-//                Object tweetObj = adapterView.getItemAtPosition(position);
-//                if (tweetObj instanceof Tweet) {
-//                    Tweet status = (Tweet) tweetObj;
-//                    profileIntent.putExtra(MainActivity.PROFILE_ID, status.getUser().getId());
-//
-//                    startActivity(profileIntent);
-//                }
-//            }
-//        });
-    }
+    /*=======================================CALLBACKS============================================*/
 
     @Override
     public void createNewTweet() {
@@ -170,6 +136,7 @@ public class MainActivity extends AppCompatActivity
         manager.popBackStack();
     }
 
+    /*==============================ASYNC TASKS===================================================*/
 
     private class UserProfileRequestTask extends AsyncTask<OAuth1AccessToken, Void, Profile> {
 
