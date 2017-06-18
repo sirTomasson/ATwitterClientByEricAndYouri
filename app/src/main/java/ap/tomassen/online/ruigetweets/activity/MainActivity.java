@@ -161,7 +161,6 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
-    @Override
     public void showTimeLine() {
         TimelineFragment fragment = new TimelineFragment();
 
@@ -170,6 +169,12 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.fl_container, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void refreshTimeline(){
+        new UserTimelineTask().execute(api.getAccessToken());
+        showTimeLine();
     }
 
     @Override
@@ -307,7 +312,7 @@ public class MainActivity extends AppCompatActivity
             OAuth10aService authService = model.getAuthService();
             String searchText = Strings[0];
             String url = "https://api.twitter.com/1.1/search/tweets.json?";
-            JSONObject searchObject = null;
+            JSONArray searchArray = null;
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     url + "q=" + searchText,
@@ -317,22 +322,21 @@ public class MainActivity extends AppCompatActivity
                 authService.signRequest(api.getAccessToken(), request);
                 Response response = request.send();
                 if (response.isSuccessful()) {
-                    String res = response.getBody();
-                    searchObject = new JSONObject(res);
-                    Log.i(TAG, "searchTweet: response successful" +
-                            response.getBody());
-//                    model.setStatuses(searchObject);
-                } else {
-                    Log.i(TAG, "doInBackground: response failed" +
-                            response.getBody());
-                    createErrorDialog(response.getBody());
+                    JSONObject searchObject = new JSONObject(response.getBody());
+                    searchArray = searchObject.getJSONArray("statuses");
+                    model.setStatuses(searchArray);
                 }
-            } catch (IOException | JSONException e) {
+            } catch (IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
-            return null;
+            return searchArray;
         }
-
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            super.onPostExecute(jsonArray);
+            if (jsonArray != null)
+            showTimeLine();
+        }
     }
 
     /*============================================================================================*/
