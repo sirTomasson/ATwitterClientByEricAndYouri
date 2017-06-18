@@ -1,5 +1,6 @@
 package ap.tomassen.online.ruigetweets.activity;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -80,23 +81,38 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void createNewTweet() {
-        UpdateStatusFragment fragment = new UpdateStatusFragment();
-        FragmentTransaction transaction = manager.beginTransaction();
+        Fragment fragment = manager.findFragmentById(R.id.fl_container);
 
-        transaction
-                .add(R.id.fl_container, fragment)
-                .addToBackStack(null)
-                .commit();
+        if (fragment != null && fragment instanceof UpdateStatusFragment) {
+            Log.d(TAG, "createNewTweet: ");
+            manager.popBackStack();
+        } else {
+            fragment = new UpdateStatusFragment();
+            FragmentTransaction transaction = manager.beginTransaction();
+
+            transaction
+                    .add(R.id.fl_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override
     public void showSearchTweet() {
-        SearchFragment fragment = new SearchFragment();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction
-                .add(R.id.fl_container, fragment)
-                .addToBackStack(null)
-                .commit();
+
+        Fragment fragment = manager.findFragmentById(R.id.fl_container);
+
+        if (fragment != null && fragment instanceof SearchFragment) {
+            manager.popBackStack();
+        } else {
+
+            fragment = new SearchFragment();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction
+                    .add(R.id.fl_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     @Override
@@ -179,7 +195,6 @@ public class MainActivity extends AppCompatActivity
             OAuth10aService authService = model.getAuthService();
 
 
-
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     "https://api.twitter.com/1.1/statuses/home_timeline.json",
                     authService);
@@ -239,7 +254,6 @@ public class MainActivity extends AppCompatActivity
             request.addBodyParameter("status", statusUpdate);
 
 
-
             authService.signRequest(api.getAccessToken(), request);
 
             Response response = request.send();
@@ -269,7 +283,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class SearchTweetTask extends AsyncTask<String, String, JSONArray>{
+    private class SearchTweetTask extends AsyncTask<String, String, JSONArray> {
 
         @Override
         protected JSONArray doInBackground(String... Strings) {
@@ -291,18 +305,18 @@ public class MainActivity extends AppCompatActivity
                     Log.i(TAG, "searchTweet: response successful" +
                             response.getBody());
 //                    model.setStatuses(searchObject);
-                }
-                else {
-                    Log.i(TAG, "doInBackground: response failed"+
+                } else {
+                    Log.i(TAG, "doInBackground: response failed" +
                             response.getBody());
                 }
-            } catch (IOException  | JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return null;
         }
+
     }
-    
+
     private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
