@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Iterator;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
@@ -291,6 +292,7 @@ public class MainActivity extends AppCompatActivity
             String searchText = Strings[0];
             String url = "https://api.twitter.com/1.1/search/tweets.json?";
             JSONObject searchObject = null;
+            JSONArray searchArray = null;
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     url + "q=" + searchText,
@@ -301,18 +303,14 @@ public class MainActivity extends AppCompatActivity
                 Response response = request.send();
                 if (response.isSuccessful()) {
                     String res = response.getBody();
-                    searchObject = new JSONObject(res);
-                    Log.i(TAG, "searchTweet: response successful" +
-                            response.getBody());
-//                    model.setStatuses(searchObject);
-                } else {
-                    Log.i(TAG, "doInBackground: response failed" +
-                            response.getBody());
+                    searchObject= new JSONObject(res);
+                    searchArray = searchObject.getJSONArray("statuses");
+                    model.setStatuses(searchArray);
                 }
-            } catch (IOException | JSONException e) {
+            } catch (IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
-            return null;
+            return searchArray;
         }
 
     }
