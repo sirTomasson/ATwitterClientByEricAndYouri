@@ -1,8 +1,11 @@
 package ap.tomassen.online.ruigetweets.view;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +28,9 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +38,9 @@ import java.util.List;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.activity.MainActivity;
 import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
+import ap.tomassen.online.ruigetweets.fragment.ErrorDialogFragment;
 import ap.tomassen.online.ruigetweets.model.Entity;
+import ap.tomassen.online.ruigetweets.model.Error;
 import ap.tomassen.online.ruigetweets.model.Mention;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Tweet;
@@ -59,16 +67,22 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
     private Intent userIntent;
 
+    private FragmentManager manager;
+
 
     public StatusListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Tweet> statuses) {
         super(context, resource, statuses);
     }
+
+
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final Tweet tweet = getItem(position);
 
+        final Context context = parent.getContext();
+        manager = ((Activity) context).getFragmentManager();
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
@@ -182,15 +196,13 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
             Response response = request.send();
 
-            String res = null;
             try {
 
                 if (response.isSuccessful()) {
-                    res = response.getBody();
                     tweet.increaseRetweetCount();
-                    Log.i(TAG, "doInBackground: response successful");
+
                 } else {
-                    Log.d(TAG, "doInBackground: response unsuccessful " + response.getBody() + tweetId);
+                    createErrorDialog(response.getBody());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -225,19 +237,15 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
             request.addBodyParameter("id", statusId + "");
 
-
             authService.signRequest(api.getAccessToken(), request);
 
             Response response = request.send();
 
-            String res = null;
             try {
                 if (response.isSuccessful()) {
-                    res = response.getBody();
-                    Log.i(TAG, "doInBackground: response successful");
                     tweet.increaseFavoriteCount();
                 } else {
-                    Log.d(TAG, "doInBackground: response unsuccessful " + response.getBody() + statusId);
+                    createErrorDialog(response.getBody());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -257,5 +265,32 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
     private void makeToast(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+    }
+
+    private void createErrorDialog(String json) {
+        ArrayList<Error> errors = null;
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            errors = model.getErrorMessagesFromJson(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
+        Bundle b = new Bundle();
+
+        if (errors != null) {
+            String message = "";
+            for (Error error : errors) {
+                message += "Code: " + error.getCode() + "\n";
+                message += error.getMessage() + "\n\n";
+            }
+            b.putString(MainActivity.ERROR_TITLE, "SOMETHING HAPPENED!");
+            b.putString(MainActivity.ERROR_MESSAGE, message);
+        }
+
+        dialogFragment.setArguments(b);
+        dialogFragment.show(manager, MainActivity.TAG_DIALOG_FRAGMENT);
     }
 }

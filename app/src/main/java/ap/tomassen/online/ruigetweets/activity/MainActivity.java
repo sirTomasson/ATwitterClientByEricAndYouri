@@ -83,32 +83,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void createErrorDialog(String json) {
-        ArrayList<Error> errors = null;
-
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            errors = model.getErrorMessagesFromJson(jsonObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-        Bundle b = new Bundle();
-
-        if (errors != null) {
-            String message = "";
-            for (Error error : errors) {
-                message += "Code: " + error.getCode() + "\n";
-                message += error.getMessage() + "\n\n";
-            }
-            b.putString(ERROR_TITLE, "SOMETHING HAPPENED!");
-            b.putString(ERROR_MESSAGE, message);
-        }
-
-        dialogFragment.setArguments(b);
-        dialogFragment.show(getFragmentManager(), TAG_DIALOG_FRAGMENT);
-    }
 
 
     /*=======================================CALLBACKS============================================*/
@@ -155,16 +129,6 @@ public class MainActivity extends AppCompatActivity
 
         FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction
-                .replace(R.id.fl_container, fragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    public void showTimeLine() {
-        TimelineFragment fragment = new TimelineFragment();
-
-        FragmentTransaction transaction = manager.beginTransaction();
         transaction
                 .replace(R.id.fl_container, fragment)
                 .addToBackStack(null)
@@ -220,9 +184,7 @@ public class MainActivity extends AppCompatActivity
                     createErrorDialog(response.getMessage());
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return profile;
@@ -321,6 +283,7 @@ public class MainActivity extends AppCompatActivity
             try {
                 authService.signRequest(api.getAccessToken(), request);
                 Response response = request.send();
+
                 if (response.isSuccessful()) {
                     JSONObject searchObject = new JSONObject(response.getBody());
                     searchArray = searchObject.getJSONArray("statuses");
@@ -369,4 +332,42 @@ public class MainActivity extends AppCompatActivity
         return json;
 
     }
+
+    public void showTimeLine() {
+        TimelineFragment fragment = new TimelineFragment();
+
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction
+                .replace(R.id.fl_container, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void createErrorDialog(String json) {
+        ArrayList<Error> errors = null;
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            errors = model.getErrorMessagesFromJson(jsonObject);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
+        Bundle b = new Bundle();
+
+        if (errors != null) {
+            String message = "";
+            for (Error error : errors) {
+                message += "Code: " + error.getCode() + "\n";
+                message += error.getMessage() + "\n\n";
+            }
+            b.putString(ERROR_TITLE, "SOMETHING HAPPENED!");
+            b.putString(ERROR_MESSAGE, message);
+        }
+
+        dialogFragment.setArguments(b);
+        dialogFragment.show(getFragmentManager(), TAG_DIALOG_FRAGMENT);
+    }
+
 }
