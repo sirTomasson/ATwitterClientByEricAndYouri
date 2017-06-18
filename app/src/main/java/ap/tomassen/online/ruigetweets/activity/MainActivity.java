@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
         UpdateStatusFragment.CallbackListener, SearchFragment.SearchFragmentCallbackListener {
 
-    
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
@@ -302,28 +302,7 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
     }
-
-    private class CreateFavoritesTask extends AsyncTask<Integer, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Integer... integers) {
-
-            OAuth10aService authService = model.getAuthService();
-
-            int statusId = integers[0];
-
-            String url = "https://api.twitter.com/1.1/favorites/create.json";
-
-            OAuthRequest request = new OAuthRequest(Verb.POST,
-                    url,
-                    authService
-            );
-
-            request.addBodyParameter("id", statusId + "");
-            return null;
-        }
-    }
-
+    
     private void showToastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
