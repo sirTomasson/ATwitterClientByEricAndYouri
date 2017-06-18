@@ -11,10 +11,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by youri on 9-5-2017.
- */
-
 public class TwitterModel {
     private static TwitterModel twitterModel = null;
     private ArrayList<Tweet> statuses;
@@ -80,5 +76,15 @@ public class TwitterModel {
 
     public OAuth10aService getAuthService() {
         return authService;
+    }
+
+    public ArrayList<Error> getErrorMessagesFromJson(JSONObject twitterError) throws JSONException {
+        ArrayList<Error> errors = new ArrayList<Error>();
+        JSONArray twitterErrors = twitterError.getJSONArray("errors");
+
+        for (int i = 0; i < twitterErrors.length(); i++) {
+            errors.add(new Error(twitterErrors.getJSONObject(i)));
+        }
+        return errors;
     }
 }
