@@ -2,7 +2,6 @@ package ap.tomassen.online.ruigetweets.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +10,6 @@ import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.github.scribejava.apis.TwitterApi;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
@@ -44,7 +41,7 @@ public class AuthorizationFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.twitter_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_twitter, container, false);
 
         WebView wvAuthorization = (WebView) view.findViewById(R.id.wv_twitterLogin);
         wvAuthorization.loadUrl(authorizationUrl);
