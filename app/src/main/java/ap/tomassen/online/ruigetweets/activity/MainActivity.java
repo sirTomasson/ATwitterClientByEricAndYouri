@@ -27,7 +27,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.fragment.ErrorDialogFragment;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
 import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PROFILE_ID = "profile_id";
-    public static final String SHIT_BROKE = "sh!t_broke";
+    public static final String TOKEN_NOT_SAVED = "tokens not in shared preferences";
     public static final String TAG_DIALOG_FRAGMENT = "dialog_tag_fragment";
     public static final String ERROR_TITLE = "ERROR_TITLE";
     public static final String ERROR_MESSAGE = "ERROR_MESSAGE";
@@ -66,12 +65,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         String token = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(LoginActivity.USER_TOKEN, SHIT_BROKE);
+                .getString(LoginActivity.USER_TOKEN, TOKEN_NOT_SAVED);
 
         String secret = PreferenceManager.getDefaultSharedPreferences(this)
-                .getString(LoginActivity.USER_SECRET, SHIT_BROKE);
+                .getString(LoginActivity.USER_SECRET, TOKEN_NOT_SAVED);
 
-        if (secret.equals(SHIT_BROKE) && token.equals(SHIT_BROKE)) {
+        if (secret.equals(TOKEN_NOT_SAVED) && token.equals(TOKEN_NOT_SAVED)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {
@@ -145,11 +144,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void showHomeTimeline() {
         new HomeTimeLineTask().execute();
-        showTimeLine();
     }
 
     @Override
-    public void refreshTimeline(){
+    public void refreshTimeline() {
         new HomeTimeLineTask().execute();
     }
 
@@ -207,84 +205,83 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class UserTimelineTask extends AsyncTask<Void, Void, Void> {
+    private class UserTimelineTask extends AsyncTask<Void, Void, Response> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Response doInBackground(Void... voids) {
             OAuth10aService authService = model.getAuthService();
             OAuth1AccessToken accessToken = api.getAccessToken();
-
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     "https://api.twitter.com/1.1/statuses/user_timeline.json",
                     authService);
+            authService.signRequest(accessToken, request);
 
-            JSONArray tweetsObject = null;
+            Response response = request.send();
 
             try {
-                authService.signRequest(accessToken, request);
-
-                Response response = request.send();
-
                 if (response.isSuccessful()) {
 
-                    tweetsObject = new JSONArray(response.getBody());
-                    model.setStatuses(tweetsObject);
+                    model.setStatuses(new JSONArray(response.getBody()));
+
+
 
                 } else {
                     createErrorDialog(response.getBody());
                 }
 
-            } catch (IOException | JSONException | ParseException e) {
+            } catch (IOException | ParseException | JSONException e) {
                 e.printStackTrace();
             }
-            return null;
+
+            return response;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            super.onPostExecute(aVoid);
-            Fragment f = manager.findFragmentById(R.id.fl_container);
-            if (f != null && f instanceof ProfileFragment) {
-                ((ProfileFragment) f).changeListContents(model.getStatuses());
+        protected void onPostExecute(Response response) {
+            super.onPostExecute(response);
+            if (response.isSuccessful()) {
+                Fragment f = manager.findFragmentById(R.id.fl_container);
+                if (f != null && f instanceof ProfileFragment) {
+                    ((ProfileFragment) f).changeListContents(model.getStatuses());
+                }
             }
         }
     }
 
-    private class HomeTimeLineTask extends AsyncTask<Void, Void, Void> {
+    private class HomeTimeLineTask extends AsyncTask<Void, Void, Response> {
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Response doInBackground(Void... voids) {
             OAuth10aService authService = model.getAuthService();
-
+            OAuth1AccessToken accessToken = api.getAccessToken();
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     "https://api.twitter.com/1.1/statuses/home_timeline.json",
                     authService);
+            authService.signRequest(accessToken, request);
 
-            JSONArray tweetsObject = null;
+            Response response = request.send();
 
             try {
-                authService.signRequest(api.getAccessToken(), request);
-
-                Response response = request.send();
-
                 if (response.isSuccessful()) {
 
-                    tweetsObject = new JSONArray(response.getBody());
-                    model.setStatuses(tweetsObject);
-
+                    model.setStatuses(new JSONArray(response.getBody()));
                 } else {
                     createErrorDialog(response.getBody());
                 }
-
             } catch (IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
-            return null;
+
+            return response;
         }
 
+        @Override
+        protected void onPostExecute(Response response) {
+            super.onPostExecute(response);
+            if (response.isSuccessful()) showTimeLine();
+        }
     }
 
     private class FavoriteListTask extends AsyncTask<Void, Void, Void> {
@@ -393,11 +390,12 @@ public class MainActivity extends AppCompatActivity
             }
             return searchArray;
         }
+
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
             if (jsonArray != null)
-            showTimeLine();
+                showTimeLine();
         }
     }
 
