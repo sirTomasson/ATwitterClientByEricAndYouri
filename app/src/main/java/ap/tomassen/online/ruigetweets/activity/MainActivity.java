@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private FragmentManager manager = getFragmentManager();
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity
             if (!api.isAccessTokenSet()) api.setAccessToken(new OAuth1AccessToken(token, secret));
 
             new UserProfileTask().execute();
-            new TimeLineTask().execute("/statuses/home_timeline.json");
+            new HomeTimeLineTask().execute();
         }
     }
 
@@ -133,24 +134,28 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showUserTimeline() {
-        new TimeLineTask().execute("/statuses/user_timeline.json");
+        new UserTimelineTask().execute();
     }
 
     @Override
-    public void showFavorites() {
-        new TimeLineTask().execute("/favorites/list.json");
+    public void showFavoritesList() {
+        new FavoriteListTask().execute();
     }
 
     @Override
     public void showHomeTimeline() {
-        new TimeLineTask().execute("/statuses/home_timeline.json");
+        new HomeTimeLineTask().execute();
         showTimeLine();
     }
 
     @Override
     public void refreshTimeline(){
-        new TimeLineTask().execute("/statuses/home_timeline.json");
-        showTimeLine();
+        new HomeTimeLineTask().execute();
+    }
+
+    @Override
+    public Fragment currentFragment() {
+        return manager.findFragmentById(R.id.fl_container);
     }
 
     @Override
@@ -202,21 +207,22 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class UserTimelineTask extends AsyncTask<OAuth1AccessToken, JSONArray, JSONArray> {
+    private class UserTimelineTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected JSONArray doInBackground(OAuth1AccessToken... oAuth1AccessTokens) {
+        protected Void doInBackground(Void... voids) {
             OAuth10aService authService = model.getAuthService();
+            OAuth1AccessToken accessToken = api.getAccessToken();
 
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
-                    "https://api.twitter.com/1.1/statuses/home_timeline.json",
+                    "https://api.twitter.com/1.1/statuses/user_timeline.json",
                     authService);
 
             JSONArray tweetsObject = null;
 
             try {
-                authService.signRequest(Profile.getInstance().getAccessToken(), request);
+                authService.signRequest(accessToken, request);
 
                 Response response = request.send();
 
@@ -229,29 +235,32 @@ public class MainActivity extends AppCompatActivity
                     createErrorDialog(response.getBody());
                 }
 
-            } catch (ProfileException | IOException | JSONException | ParseException e) {
+            } catch (IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
-            return tweetsObject;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            super.onPostExecute(jsonArray);
-            showTimeLine();
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            super.onPostExecute(aVoid);
+            Fragment f = manager.findFragmentById(R.id.fl_container);
+            if (f != null && f instanceof ProfileFragment) {
+                ((ProfileFragment) f).changeListContents(model.getStatuses());
+            }
         }
     }
 
-    private class TimeLineTask extends AsyncTask<String, JSONArray, JSONArray> {
+    private class HomeTimeLineTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected JSONArray doInBackground(String... strings) {
-            String requestUrl = strings[0];
+        protected Void doInBackground(Void... voids) {
             OAuth10aService authService = model.getAuthService();
 
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
-                    "https://api.twitter.com/1.1" + requestUrl,
+                    "https://api.twitter.com/1.1/statuses/home_timeline.json",
                     authService);
 
             JSONArray tweetsObject = null;
@@ -273,13 +282,51 @@ public class MainActivity extends AppCompatActivity
             } catch (IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
-            return tweetsObject;
+            return null;
+        }
+
+    }
+
+    private class FavoriteListTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            OAuth10aService authService = model.getAuthService();
+
+
+            OAuthRequest request = new OAuthRequest(Verb.GET,
+                    "https://api.twitter.com/1.1/favorites/list.json",
+                    authService);
+
+            JSONArray tweetsObject = null;
+
+            try {
+                authService.signRequest(api.getAccessToken(), request);
+
+                Response response = request.send();
+
+                if (response.isSuccessful()) {
+
+                    tweetsObject = new JSONArray(response.getBody());
+                    model.setStatuses(tweetsObject);
+
+                } else {
+                    createErrorDialog(response.getBody());
+                }
+
+            } catch (IOException | JSONException | ParseException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            super.onPostExecute(jsonArray);
-            showTimeLine();
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Fragment f = manager.findFragmentById(R.id.fl_container);
+            if (f != null && f instanceof ProfileFragment) {
+                ((ProfileFragment) f).changeListContents(model.getStatuses());
+            }
         }
     }
 

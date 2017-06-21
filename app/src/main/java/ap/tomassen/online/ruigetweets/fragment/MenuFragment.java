@@ -2,29 +2,35 @@ package ap.tomassen.online.ruigetweets.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
 
 /**
  * Created by Eric on 25-5-2017.
  */
 
 public class MenuFragment extends Fragment {
-    final public static String PROFILE_INTENT = "ShowProfile";
+
+
+    private final String TAG = MenuFragment.class.getSimpleName();
+
+    public static final String PROFILE_INTENT = "ShowProfile";
     public CallBackListener listener;
 
     private LinearLayout llAddTweet;
     private LinearLayout llSearchTweet;
     private LinearLayout llViewTimeline;
     private LinearLayout llViewProfile;
+
+    private final int USER_TIME_LINE = 42;
+    private final int FAVORITE_LIST = 33;
+    private int currentList = USER_TIME_LINE;
 
     public MenuFragment() {
     }
@@ -68,7 +74,20 @@ public class MenuFragment extends Fragment {
         llViewTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.refreshTimeline();
+                Fragment f = listener.currentFragment();
+                if (f instanceof ProfileFragment) {
+                    if (currentList == USER_TIME_LINE) {
+                        Log.d(TAG, "onClick: favorites");
+                        listener.showFavoritesList();
+                        currentList = FAVORITE_LIST;
+                    } else if (currentList == FAVORITE_LIST) {
+                        Log.d(TAG, "onClick: user time line");
+                        listener.showUserTimeline();
+                        currentList = USER_TIME_LINE;
+                    }
+                } else {
+                    listener.refreshTimeline();
+                }
             }
         });
 
@@ -76,8 +95,13 @@ public class MenuFragment extends Fragment {
         llViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                listener.showProfile();
+                Fragment f = listener.currentFragment();
+                if (f instanceof ProfileFragment) {
+                    Log.d(TAG, "onClick: back to home time line");
+                    listener.showHomeTimeline();
+                } else {
+                    listener.showProfile();
+                }
             }
         });
 
@@ -95,8 +119,10 @@ public class MenuFragment extends Fragment {
 
         void showUserTimeline();
 
-        void showFavorites();
+        void showFavoritesList();
 
         void showHomeTimeline();
+
+        Fragment currentFragment();
     }
 }

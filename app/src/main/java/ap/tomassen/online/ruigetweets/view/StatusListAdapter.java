@@ -293,4 +293,9 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         dialogFragment.setArguments(b);
         dialogFragment.show(manager, MainActivity.TAG_DIALOG_FRAGMENT);
     }
+
+    private void changeListItems(List<Tweet> tweets) {
+        clear();
+        addAll(tweets);
+    }
 }

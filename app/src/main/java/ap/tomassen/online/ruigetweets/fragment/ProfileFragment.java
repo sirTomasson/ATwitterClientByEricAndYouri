@@ -8,24 +8,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
-import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
 import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
+import ap.tomassen.online.ruigetweets.view.StatusListAdapter;
 
-/**
- * Created by Eric on 4-6-2017.
- */
 
 public class ProfileFragment extends Fragment {
 
@@ -38,11 +38,14 @@ public class ProfileFragment extends Fragment {
     private TextView tvFollowersCount;
     private TextView tvFavoritesCount;
     private TextView tvLocation;
+    private ListView lvProfile;
 
 
     private final String TAG = ProfileFragment.class.getSimpleName();
 
     private CallbackListener listener;
+
+    private TwitterModel model = TwitterModel.getInstance();
 
     public ProfileFragment(){
 
@@ -94,7 +97,7 @@ public class ProfileFragment extends Fragment {
         tvFavoritesCount = (TextView) rootView.findViewById(R.id.tv_favorites_count);
         tvLocation = (TextView) rootView.findViewById(R.id.tv_location);
         ivProfileBackground = (ImageView) rootView.findViewById(R.id.iv_profile_background);
-
+        lvProfile  = (ListView) rootView.findViewById(R.id.lv_profile);
     }
 
     private void setContent(User u) {
@@ -113,6 +116,7 @@ public class ProfileFragment extends Fragment {
         tvFollowersCount.setText(u.getFollowersCount());
         tvFavoritesCount.setText(u.getFavoritesCount());
         tvLocation.setText(u.getLocation());
+        lvProfile.setAdapter(new StatusListAdapter(getContext(), R.layout.list_item, model.getStatuses()));
     }
 
     @Override
@@ -130,7 +134,12 @@ public class ProfileFragment extends Fragment {
         super.onDestroy();
     }
 
-    public void changeListContents(ArrayList<Tweet> tweets) {
-
+    public void changeListContents(List<Tweet> tweets) {
+        Object adapter = lvProfile.getAdapter();
+        if (adapter instanceof StatusListAdapter) {
+            StatusListAdapter arrayAdapter = (StatusListAdapter) adapter;
+            arrayAdapter.clear();
+            arrayAdapter.addAll(tweets);
+        }
     }
 }
