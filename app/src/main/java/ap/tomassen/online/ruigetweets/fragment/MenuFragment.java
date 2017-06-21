@@ -18,7 +18,7 @@ import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
  */
 
 public class MenuFragment extends Fragment {
-    final public static String PROFILE_INTENT="ShowProfile";
+    final public static String PROFILE_INTENT = "ShowProfile";
     public CallBackListener listener;
 
     private LinearLayout llAddTweet;
@@ -26,8 +26,9 @@ public class MenuFragment extends Fragment {
     private LinearLayout llViewTimeline;
     private LinearLayout llViewProfile;
 
-    public MenuFragment (){
+    public MenuFragment() {
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -38,8 +39,9 @@ public class MenuFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
     public View onCreateView(LayoutInflater inflater,
-                            ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, Bundle savedInstanceState) {
 
 
         View view = inflater.inflate(R.layout.menu_fragment, container, false);
@@ -84,8 +86,17 @@ public class MenuFragment extends Fragment {
 
     public interface CallBackListener {
         void createNewTweet();
+
         void showSearchTweet();
+
         void refreshTimeline();
+
         void showProfile();
+
+        void showUserTimeline();
+
+        void showFavorites();
+
+        void showHomeTimeline();
     }
 }

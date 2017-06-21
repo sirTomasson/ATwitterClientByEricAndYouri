@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuth1RequestToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -26,6 +27,7 @@ import ap.tomassen.online.ruigetweets.fragment.AuthorizationFragment;
 
 
 import ap.tomassen.online.ruigetweets.fragment.LoginFragment;
+import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 /**
@@ -141,7 +143,9 @@ public class LoginActivity extends AppCompatActivity
                         getApplicationContext()).edit()
                         .putString(USER_TOKEN, token)
                         .putString(USER_SECRET, secret)
-                        .commit();
+                        .apply();
+
+                MyTwitterApi.getInstance().setAccessToken(accessToken);
 
                 startActivity(intent);
 

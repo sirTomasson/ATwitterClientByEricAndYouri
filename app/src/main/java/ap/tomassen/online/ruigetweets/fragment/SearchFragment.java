@@ -20,12 +20,12 @@ public class SearchFragment extends Fragment {
     ImageView searchButton;
     String searchText;
     EditText searchEditText;
-    public SearchFragmentCallbackListener listener;
+    public CallbackListener listener;
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
         try {
-            listener = (SearchFragmentCallbackListener) context;
+            listener = (CallbackListener) context;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    public interface SearchFragmentCallbackListener{
+    public interface CallbackListener {
         void searchTweet(String searchText);
     }
 

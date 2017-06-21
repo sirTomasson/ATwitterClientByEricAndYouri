@@ -13,10 +13,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
+import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
 
@@ -52,13 +55,11 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart: ");
     }
 
     @Override
     public void onAttach (Context context){
         super.onAttach(context);
-        Log.i(TAG, "onAttach: ");
 
         try {
             listener = (CallbackListener) context;
@@ -80,7 +81,6 @@ public class ProfileFragment extends Fragment {
             e.printStackTrace();
         }
 
-        Log.i(TAG, "onCreateView: ");
         return rootView;
     }
 
@@ -118,18 +118,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause: ");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.i(TAG, "onStop: ");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
+    }
+
+    public void changeListContents(ArrayList<Tweet> tweets) {
+
     }
 }

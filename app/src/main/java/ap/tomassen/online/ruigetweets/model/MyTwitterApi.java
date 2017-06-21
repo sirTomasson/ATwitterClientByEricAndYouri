@@ -60,4 +60,8 @@ public class MyTwitterApi extends DefaultApi10a {
     public OAuth1AccessToken getAccessToken() {
         return accessToken;
     }
+
+    public boolean isAccessTokenSet() {
+        return accessToken != null;
+    }
 }

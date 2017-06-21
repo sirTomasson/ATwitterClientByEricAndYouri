@@ -42,7 +42,7 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
-        UpdateStatusFragment.CallbackListener, SearchFragment.SearchFragmentCallbackListener {
+        UpdateStatusFragment.CallbackListener, SearchFragment.CallbackListener {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -74,16 +74,12 @@ public class MainActivity extends AppCompatActivity
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {
-            OAuth1AccessToken accessToken = new OAuth1AccessToken(token, secret);
+            if (!api.isAccessTokenSet()) api.setAccessToken(new OAuth1AccessToken(token, secret));
 
-            new UserProfileRequestTask().execute(accessToken);
-            new UserTimelineTask().execute(accessToken);
-
-            api.setAccessToken(accessToken);
+            new UserProfileTask().execute();
+            new TimeLineTask().execute("/statuses/home_timeline.json");
         }
     }
-
-
 
     /*=======================================CALLBACKS============================================*/
 
@@ -136,8 +132,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void showUserTimeline() {
+        new TimeLineTask().execute("/statuses/user_timeline.json");
+    }
+
+    @Override
+    public void showFavorites() {
+        new TimeLineTask().execute("/favorites/list.json");
+    }
+
+    @Override
+    public void showHomeTimeline() {
+        new TimeLineTask().execute("/statuses/home_timeline.json");
+        showTimeLine();
+    }
+
+    @Override
     public void refreshTimeline(){
-        new UserTimelineTask().execute(api.getAccessToken());
+        new TimeLineTask().execute("/statuses/home_timeline.json");
         showTimeLine();
     }
 
@@ -157,12 +169,12 @@ public class MainActivity extends AppCompatActivity
 
     /*==============================ASYNC TASKS===================================================*/
 
-    private class UserProfileRequestTask extends AsyncTask<OAuth1AccessToken, Void, Profile> {
+    private class UserProfileTask extends AsyncTask<Void, Void, Void> {
 
         @Override
-        protected Profile doInBackground(OAuth1AccessToken... accessTokens) {
+        protected Void doInBackground(Void... voids) {
             OAuth10aService authService = model.getAuthService();
-            Profile profile = null;
+            OAuth1AccessToken accessToken = api.getAccessToken();
 
             try {
 
@@ -170,15 +182,14 @@ public class MainActivity extends AppCompatActivity
                         "https://api.twitter.com/1.1/account/verify_credentials.json",
                         authService);
 
-                authService.signRequest(accessTokens[0], request);
+                authService.signRequest(accessToken, request);
 
                 Response response = request.send();
 
                 if (response.isSuccessful()) {
-                    String res = response.getBody();
 
-                    JSONObject userObj = new JSONObject(res);
-                    profile = Profile.getInstance(userObj, accessTokens[0]);
+                    JSONObject userObj = new JSONObject(response.getBody());
+                    Profile.getInstance(userObj);
 
                 } else {
                     createErrorDialog(response.getMessage());
@@ -187,7 +198,7 @@ public class MainActivity extends AppCompatActivity
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-            return profile;
+            return null;
         }
     }
 
@@ -219,6 +230,47 @@ public class MainActivity extends AppCompatActivity
                 }
 
             } catch (ProfileException | IOException | JSONException | ParseException e) {
+                e.printStackTrace();
+            }
+            return tweetsObject;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            super.onPostExecute(jsonArray);
+            showTimeLine();
+        }
+    }
+
+    private class TimeLineTask extends AsyncTask<String, JSONArray, JSONArray> {
+
+        @Override
+        protected JSONArray doInBackground(String... strings) {
+            String requestUrl = strings[0];
+            OAuth10aService authService = model.getAuthService();
+
+
+            OAuthRequest request = new OAuthRequest(Verb.GET,
+                    "https://api.twitter.com/1.1" + requestUrl,
+                    authService);
+
+            JSONArray tweetsObject = null;
+
+            try {
+                authService.signRequest(api.getAccessToken(), request);
+
+                Response response = request.send();
+
+                if (response.isSuccessful()) {
+
+                    tweetsObject = new JSONArray(response.getBody());
+                    model.setStatuses(tweetsObject);
+
+                } else {
+                    createErrorDialog(response.getBody());
+                }
+
+            } catch (IOException | JSONException | ParseException e) {
                 e.printStackTrace();
             }
             return tweetsObject;

@@ -16,10 +16,10 @@ public class Profile extends User {
 
     private static Profile instance = null;
 
-    public static Profile getInstance(JSONObject userObj, OAuth1AccessToken accessToken)
+    public static Profile getInstance(JSONObject userObj)
             throws JSONException {
         if (instance == null) {
-            instance = new Profile(userObj, accessToken);
+            instance = new Profile(userObj);
         }
         return instance;
     }
@@ -33,9 +33,8 @@ public class Profile extends User {
 
     }
 
-    private Profile(JSONObject userObj, OAuth1AccessToken accessToken) throws JSONException {
+    private Profile(JSONObject userObj) throws JSONException {
         super(userObj);
-        this.accessToken = accessToken;
     }
 
     public OAuth1AccessToken getAccessToken() {
