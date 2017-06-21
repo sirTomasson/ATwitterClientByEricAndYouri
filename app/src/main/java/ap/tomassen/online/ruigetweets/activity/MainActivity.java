@@ -36,6 +36,7 @@ import ap.tomassen.online.ruigetweets.fragment.UpdateStatusFragment;
 import ap.tomassen.online.ruigetweets.model.Error;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Profile;
+import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 
@@ -352,14 +353,23 @@ public class MainActivity extends AppCompatActivity
             Response response = request.send();
 
             try {
-                if (!response.isSuccessful()) {
+                if (response.isSuccessful()) {
+                    model.add(0, new Tweet(new JSONObject(response.getBody())));
+                } else {
                     createErrorDialog(response.getBody());
                 }
-            } catch (IOException e) {
+            } catch (IOException | ParseException | JSONException e) {
                 e.printStackTrace();
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            Fragment f = manager.findFragmentById(R.id.fl_container);
+            if (f instanceof TimelineFragment) ((TimelineFragment) f).updateStatuses();
         }
     }
 

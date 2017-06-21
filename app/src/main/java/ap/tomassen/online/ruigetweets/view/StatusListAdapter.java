@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -199,12 +200,13 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
             try {
 
                 if (response.isSuccessful()) {
+                    model.add(0, new Tweet(new JSONObject(response.getBody())));
                     tweet.increaseRetweetCount();
 
                 } else {
                     createErrorDialog(response.getBody());
                 }
-            } catch (IOException e) {
+            } catch (IOException | ParseException | JSONException e) {
                 e.printStackTrace();
             }
             return response.isSuccessful();
