@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment {
         tvFollowersCount = (TextView) rootView.findViewById(R.id.tv_followers_count);
         tvFavoritesCount = (TextView) rootView.findViewById(R.id.tv_favorites_count);
         tvLocation = (TextView) rootView.findViewById(R.id.tv_location);
-        ivProfileBackground = (ImageView) rootView.findViewById(R.id.iv_profile_background);
+//        ivProfileBackground = (ImageView) rootView.findViewById(R.id.iv_profile_background);
         lvProfile  = (ListView) rootView.findViewById(R.id.lv_profile);
     }
 
@@ -106,9 +106,9 @@ public class ProfileFragment extends Fragment {
                 load(u.getProfileImageUrl())
                 .into(ivProfileImg);
 
-        Picasso.with(getContext())
-                .load(u.getProfileBackgroundUrl())
-                .into(ivProfileBackground);
+//        Picasso.with(getContext())
+//                .load(u.getProfileBackgroundUrl())
+//                .into(ivProfileBackground);
 
         tvName.setText(u.getName());
         tvScreenName.setText(u.getScreenName());

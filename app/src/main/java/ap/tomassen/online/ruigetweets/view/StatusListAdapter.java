@@ -1,9 +1,10 @@
 package ap.tomassen.online.ruigetweets.view;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -13,7 +14,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +38,8 @@ import java.util.List;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.activity.MainActivity;
-import ap.tomassen.online.ruigetweets.activity.ProfileActivity;
 import ap.tomassen.online.ruigetweets.fragment.ErrorDialogFragment;
+import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
 import ap.tomassen.online.ruigetweets.model.Entity;
 import ap.tomassen.online.ruigetweets.model.Error;
 import ap.tomassen.online.ruigetweets.model.Mention;
@@ -47,9 +47,6 @@ import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
-/**
- * Created by youri on 10-5-2017.
- */
 
 public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
@@ -65,8 +62,6 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
     private TwitterModel model = TwitterModel.getInstance();
     private MyTwitterApi api = MyTwitterApi.getInstance();
-
-    private Intent userIntent;
 
     private FragmentManager manager;
 
@@ -112,13 +107,16 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         mTvRetweetCount.setText("" + tweet.getRetweetCount());
         mTvFavoriteCount.setText("" + tweet.getFavoritesCount());
 
-        userIntent = new Intent(getContext(), ProfileActivity.class);
-
         mIvProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userIntent.putExtra(MainActivity.PROFILE_ID, tweet.getUser().getId());
-                getContext().startActivity(userIntent);
+                Fragment f = new ProfileFragment();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction
+                        .replace(R.id.fl_container, f)
+                        .addToBackStack(null)
+                        .commit();
+
 
             }
         });
@@ -157,7 +155,6 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
                     if (e instanceof Mention) {
                         int id = ((Mention) e).getUserId();
 
-                        userIntent.putExtra(MainActivity.PROFILE_ID, id);
                     }
                 }
 

@@ -19,10 +19,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".activity.ProfileActivity"
-            android:parentActivityName=".activity.MainActivity" />
-
         <activity android:name=".activity.LoginActivity"
             android:parentActivityName=".activity.MainActivity"/>
 
