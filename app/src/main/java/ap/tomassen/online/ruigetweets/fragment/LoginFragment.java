@@ -11,10 +11,6 @@ import android.widget.Button;
 
 import ap.tomassen.online.ruigetweets.R;
 
-/**
- * Created by Eric on 17-5-2017.
- */
-
 public class LoginFragment extends Fragment {
 
     private LoginFragmentCallbackListener listener;
@@ -32,6 +28,7 @@ public class LoginFragment extends Fragment {
             e.printStackTrace();
         }
     }
+    @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -48,6 +45,9 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Starts the login procedure when the user clicks the login button
+     */
     public interface LoginFragmentCallbackListener {
         void onLoginClick();
     }

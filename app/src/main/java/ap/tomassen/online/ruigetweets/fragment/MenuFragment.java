@@ -11,9 +11,10 @@ import android.widget.LinearLayout;
 
 import ap.tomassen.online.ruigetweets.R;
 
+/**
+ * this is the menu bar that is visible on all the screens in the app
+ */
 public class MenuFragment extends Fragment {
-
-
 
     public CallBackListener listener;
 
@@ -110,19 +111,44 @@ public class MenuFragment extends Fragment {
         return view;
     }
 
+    /**
+     *  a set of methods that can be called by the listener
+     */
     public interface CallBackListener {
+        /**
+         * opens a fragment for updating your status
+         */
         void createNewTweet();
 
+        /**
+         * opens a fragment in which the user can input text
+         */
         void showSearchTweet();
 
+        /**
+         * opens a fragment that shows the profile of the authorized user
+         */
         void showProfile();
 
+        /**
+         * show the time line of the authorized user
+         */
         void showUserTimeline();
 
+        /**
+         * show a list of tweets that were favorited by the user
+         */
         void showFavoritesList();
 
+        /**
+         * show a list of tweets from various users that the authorized user is following
+         */
         void showHomeTimeline();
 
+        /**
+         * gets the fragment that is visible to the user at this time
+         * @return Fragment of any kind
+         */
         Fragment currentFragment();
     }
 }
