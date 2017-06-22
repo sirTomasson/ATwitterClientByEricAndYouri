@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 
 public class User {
-    private int id;
+    private long id;
     private String name;
     private String screenName;
     private String location;
@@ -66,7 +66,7 @@ public class User {
         return location;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

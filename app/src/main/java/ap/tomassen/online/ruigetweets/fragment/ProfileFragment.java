@@ -4,18 +4,15 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ap.tomassen.online.ruigetweets.R;
@@ -29,8 +26,6 @@ import ap.tomassen.online.ruigetweets.view.StatusListAdapter;
 
 public class ProfileFragment extends Fragment {
 
-
-    private ImageView ivProfileBackground;
     private ImageView ivProfileImg;
     private TextView tvName;
     private TextView tvScreenName;
@@ -41,9 +36,6 @@ public class ProfileFragment extends Fragment {
     private ListView lvProfile;
 
 
-    private final String TAG = ProfileFragment.class.getSimpleName();
-
-    private CallbackListener listener;
 
     private TwitterModel model = TwitterModel.getInstance();
 
@@ -51,24 +43,9 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public interface CallbackListener {
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
-    }
-
-    @Override
-    public void onAttach (Context context){
-        super.onAttach(context);
-
-        try {
-            listener = (CallbackListener) context;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -89,14 +66,13 @@ public class ProfileFragment extends Fragment {
 
     private void initXmlElements(View rootView) {
 
-        ivProfileImg = (ImageView) rootView.findViewById(R.id.iv_profile_img);
-        tvName = (TextView) rootView.findViewById(R.id.tv_name);
-        tvScreenName = (TextView) rootView.findViewById(R.id.tv_sceen_name);
-        tvDescription = (TextView) rootView.findViewById(R.id.tv_description);
-        tvFollowersCount = (TextView) rootView.findViewById(R.id.tv_followers_count);
+        ivProfileImg = (ImageView) rootView.findViewById(R.id.iv_user_profile_img);
+        tvName = (TextView) rootView.findViewById(R.id.tv_user_name);
+        tvScreenName = (TextView) rootView.findViewById(R.id.tv_user_sceen_name);
+        tvDescription = (TextView) rootView.findViewById(R.id.tv_user_description);
+        tvFollowersCount = (TextView) rootView.findViewById(R.id.tv_user_followers_count);
         tvFavoritesCount = (TextView) rootView.findViewById(R.id.tv_favorites_count);
-        tvLocation = (TextView) rootView.findViewById(R.id.tv_location);
-//        ivProfileBackground = (ImageView) rootView.findViewById(R.id.iv_profile_background);
+        tvLocation = (TextView) rootView.findViewById(R.id.tv_user_location);
         lvProfile  = (ListView) rootView.findViewById(R.id.lv_profile);
     }
 
@@ -106,17 +82,13 @@ public class ProfileFragment extends Fragment {
                 load(u.getProfileImageUrl())
                 .into(ivProfileImg);
 
-//        Picasso.with(getContext())
-//                .load(u.getProfileBackgroundUrl())
-//                .into(ivProfileBackground);
-
         tvName.setText(u.getName());
         tvScreenName.setText(u.getScreenName());
         tvDescription.setText(u.getDescription());
         tvFollowersCount.setText(u.getFollowersCount());
         tvFavoritesCount.setText(u.getFavoritesCount());
         tvLocation.setText(u.getLocation());
-        lvProfile.setAdapter(new StatusListAdapter(getContext(), R.layout.list_item, model.getStatuses()));
+        lvProfile.setAdapter(new StatusListAdapter(getContext(), R.layout.list_item_status, model.getStatuses()));
     }
 
     @Override

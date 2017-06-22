@@ -53,7 +53,6 @@ public class MenuFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
-
         ivTwitterFeed = (ImageView) view.findViewById(R.id.iv_twitter_feed);
         ivProfile = (ImageView) view.findViewById(R.id.iv_view_profile);
 

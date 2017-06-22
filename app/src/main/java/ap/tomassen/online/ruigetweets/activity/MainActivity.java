@@ -31,6 +31,7 @@ import ap.tomassen.online.ruigetweets.fragment.ErrorDialogFragment;
 import ap.tomassen.online.ruigetweets.fragment.MenuFragment;
 import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
 import ap.tomassen.online.ruigetweets.fragment.SearchFragment;
+import ap.tomassen.online.ruigetweets.fragment.StatusDetailFragment;
 import ap.tomassen.online.ruigetweets.fragment.TimelineFragment;
 import ap.tomassen.online.ruigetweets.fragment.UpdateStatusFragment;
 import ap.tomassen.online.ruigetweets.model.Error;
@@ -42,7 +43,8 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
-        UpdateStatusFragment.CallbackListener, SearchFragment.CallbackListener {
+        UpdateStatusFragment.CallbackListener, SearchFragment.CallbackListener,
+        StatusDetailFragment.CallbackListener {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -171,6 +173,12 @@ public class MainActivity extends AppCompatActivity
         manager.popBackStack();
     }
 
+    @Override
+    public void showErrorMessage(String message) {
+        createErrorDialog(message);
+    }
+
+
     /*==============================ASYNC TASKS===================================================*/
 
     private class UserProfileTask extends AsyncTask<Void, Void, Void> {
@@ -206,16 +214,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class UserTimelineTask extends AsyncTask<Void, Void, Response> {
+    private class UserTimelineTask extends AsyncTask<Long, Void, Response> {
 
         @Override
-        protected Response doInBackground(Void... voids) {
+        protected Response doInBackground(Long... longs) {
+//            long userId = longs[0];
             OAuth10aService authService = model.getAuthService();
             OAuth1AccessToken accessToken = api.getAccessToken();
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     "https://api.twitter.com/1.1/statuses/user_timeline.json",
                     authService);
+//            request.addBodyParameter("user_id", );
+
             authService.signRequest(accessToken, request);
 
             Response response = request.send();
@@ -408,6 +419,8 @@ public class MainActivity extends AppCompatActivity
                 showTimeLine();
         }
     }
+
+
 
     /*============================================================================================*/
 
