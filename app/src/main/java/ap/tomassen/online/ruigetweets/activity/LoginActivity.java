@@ -69,12 +69,14 @@ public class LoginActivity extends AppCompatActivity
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
 
+        Bundle b = new Bundle();
+        b.putString(AuthorizationFragment.AUTHORIZATION_URL_KEY, authorizationUrl);
+        authorizationFragment.setArguments(b);
+
         transaction
                 .replace(R.id.fl_fragment_container, authorizationFragment)
                 .addToBackStack(null)
                 .commit();
-
-        authorizationFragment.setAuthorizationUrl(authorizationUrl);
     }
 
     /**

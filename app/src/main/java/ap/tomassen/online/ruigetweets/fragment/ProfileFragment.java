@@ -24,8 +24,6 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
 import ap.tomassen.online.ruigetweets.view.StatusListAdapter;
 
-import static android.content.ContentValues.TAG;
-
 
 public class ProfileFragment extends Fragment {
 
@@ -69,8 +67,6 @@ public class ProfileFragment extends Fragment {
     }
 
     public void changeListHeader() {
-        Log.d(TAG, "changeListHeader: " + tvListHeader.getText().toString());
-
         if (tvListHeader.getText().toString().equals("Favorites")) {
             tvListHeader.setText("Statuses");
         } else {

@@ -9,9 +9,8 @@ import android.os.Bundle;
 import ap.tomassen.online.ruigetweets.activity.MainActivity;
 
 /**
- * Created by youri on 18-6-2017.
+ * Creates an DialogFragment that tells what went wrong when communicating with the twitter api
  */
-
 public class ErrorDialogFragment extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

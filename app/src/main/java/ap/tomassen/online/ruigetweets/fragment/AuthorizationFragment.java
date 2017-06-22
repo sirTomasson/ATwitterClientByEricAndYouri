@@ -3,7 +3,6 @@ package ap.tomassen.online.ruigetweets.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,9 @@ import android.webkit.WebViewClient;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 
-/**
- * Created by Eric on 17-5-2017.
- */
-
 public class AuthorizationFragment extends Fragment {
 
+    public static final String AUTHORIZATION_URL_KEY = "AUTHORIZATION_URL_KEY";
     private CallbackListener listener;
 
 
@@ -41,6 +37,13 @@ public class AuthorizationFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_twitter, container, false);
+
+        Bundle b = getArguments();
+
+        if (b != null && b.containsKey(AUTHORIZATION_URL_KEY)) {
+            String url = b.getString(AUTHORIZATION_URL_KEY, "bad url");
+            if (!url.equals("bad url")) authorizationUrl = url;
+        }
 
         WebView wvAuthorization = (WebView) view.findViewById(R.id.wv_twitterLogin);
         wvAuthorization.loadUrl(authorizationUrl);
@@ -72,11 +75,12 @@ public class AuthorizationFragment extends Fragment {
         return view;
     }
 
-    public void setAuthorizationUrl(String authorizationUrl) {
-        this.authorizationUrl = authorizationUrl;
-    }
 
     public interface CallbackListener {
+        /**
+         * Use the verifier to retrieve a access token. MORE? see AccessTokenTask in MainActivity
+         * @param verifier that was returned with the callback url
+         */
         void authorize(String verifier);
     }
 }
