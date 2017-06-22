@@ -3,7 +3,6 @@ package ap.tomassen.online.ruigetweets.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +11,12 @@ import android.widget.LinearLayout;
 
 import ap.tomassen.online.ruigetweets.R;
 
-/**
- * Created by Eric on 25-5-2017.
- */
-
 public class MenuFragment extends Fragment {
 
 
-    private final String TAG = MenuFragment.class.getSimpleName();
 
     public CallBackListener listener;
 
-    private LinearLayout llAddTweet;
-    private LinearLayout llSearchTweet;
-    private LinearLayout llViewTimeline;
-    private LinearLayout llViewProfile;
     private ImageView ivTwitterFeed;
     private ImageView ivProfile;
 
@@ -56,7 +46,7 @@ public class MenuFragment extends Fragment {
         ivTwitterFeed = (ImageView) view.findViewById(R.id.iv_twitter_feed);
         ivProfile = (ImageView) view.findViewById(R.id.iv_view_profile);
 
-        llAddTweet = (LinearLayout) view.findViewById(R.id.ll_add_tweet);
+        LinearLayout llAddTweet = (LinearLayout) view.findViewById(R.id.ll_add_tweet);
         llAddTweet.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -65,7 +55,7 @@ public class MenuFragment extends Fragment {
             }
         });
 
-        llSearchTweet = (LinearLayout) view.findViewById(R.id.ll_search_tweet);
+        LinearLayout llSearchTweet = (LinearLayout) view.findViewById(R.id.ll_search_tweet);
         llSearchTweet.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -74,7 +64,7 @@ public class MenuFragment extends Fragment {
             }
         });
 
-        llViewTimeline = (LinearLayout) view.findViewById(R.id.ll_go_to_timeline);
+        LinearLayout llViewTimeline = (LinearLayout) view.findViewById(R.id.ll_go_to_timeline);
         llViewTimeline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,12 +80,12 @@ public class MenuFragment extends Fragment {
                         currentList = USER_TIME_LINE;
                     }
                 } else {
-                    listener.refreshTimeline();
+                    listener.showHomeTimeline();
                 }
             }
         });
 
-        llViewProfile = (LinearLayout) view.findViewById(R.id.ll_go_to_profile);
+        LinearLayout llViewProfile = (LinearLayout) view.findViewById(R.id.ll_go_to_profile);
         llViewProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,8 +112,6 @@ public class MenuFragment extends Fragment {
         void createNewTweet();
 
         void showSearchTweet();
-
-        void refreshTimeline();
 
         void showProfile();
 

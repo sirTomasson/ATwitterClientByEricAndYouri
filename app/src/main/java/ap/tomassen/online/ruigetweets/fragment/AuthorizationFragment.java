@@ -20,9 +20,8 @@ import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 
 public class AuthorizationFragment extends Fragment {
 
-    private AuthorizationCallbackListener listener;
+    private CallbackListener listener;
 
-    private final String TAG = AuthorizationFragment.class.getSimpleName();
 
     private String authorizationUrl;
 
@@ -31,7 +30,7 @@ public class AuthorizationFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            listener = (AuthorizationCallbackListener) context;
+            listener = (CallbackListener) context;
         } catch (ClassCastException e) {
             System.err.println("CallbackListener should be implemented in host activity");
         }
@@ -64,18 +63,11 @@ public class AuthorizationFragment extends Fragment {
 
                     verifier = verifier.substring(start + 1);
 
-                    Log.i(TAG, "shouldOverrideUrlLoading: url " + url);
-
-                    Log.i(TAG, "shouldOverrideUrlLoading: verifier " + verifier);
-
-                    listener.AuthorizationListener(verifier);
-
-
+                    listener.authorize(verifier);
                 }
                 return false;
             }
         });
-
 
         return view;
     }
@@ -84,9 +76,8 @@ public class AuthorizationFragment extends Fragment {
         this.authorizationUrl = authorizationUrl;
     }
 
-
-    public interface AuthorizationCallbackListener {
-        void AuthorizationListener(String verifier);
+    public interface CallbackListener {
+        void authorize(String verifier);
     }
 }
 

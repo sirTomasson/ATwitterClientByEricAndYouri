@@ -43,24 +43,20 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 public class MainActivity extends AppCompatActivity
         implements MenuFragment.CallBackListener,
-        UpdateStatusFragment.CallbackListener, SearchFragment.CallbackListener,
+        UpdateStatusFragment.CallbackListener,
+        SearchFragment.CallbackListener,
         StatusDetailFragment.CallbackListener {
-
-
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    public static final String PROFILE_ID = "profile_id";
+    
     public static final String TOKEN_NOT_SAVED = "tokens not in shared preferences";
     public static final String TAG_DIALOG_FRAGMENT = "dialog_tag_fragment";
     public static final String ERROR_TITLE = "ERROR_TITLE";
     public static final String ERROR_MESSAGE = "ERROR_MESSAGE";
 
     private TwitterModel model = TwitterModel.getInstance();
+
     private MyTwitterApi api = MyTwitterApi.getInstance();
 
-
     private FragmentManager manager = getFragmentManager();
-    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,25 +69,30 @@ public class MainActivity extends AppCompatActivity
         String secret = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString(LoginActivity.USER_SECRET, TOKEN_NOT_SAVED);
 
+        //check if the access token is in the shared preferences, if not go authorize the user
         if (secret.equals(TOKEN_NOT_SAVED) && token.equals(TOKEN_NOT_SAVED)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {
+            //if the access token is NOT set in the MyTwitterApi go set it
             if (!api.isAccessTokenSet()) api.setAccessToken(new OAuth1AccessToken(token, secret));
 
-            new UserProfileTask().execute();
-            new HomeTimeLineTask().execute();
+
+            new UserProfileTask().execute();    //request the profile from the authorized user
+            new HomeTimeLineTask().execute();   //then get the users home time line
         }
     }
 
     /*=======================================CALLBACKS============================================*/
 
+    /**
+     * opens a new fragment in users can input text
+     */
     @Override
     public void createNewTweet() {
         Fragment fragment = manager.findFragmentById(R.id.fl_container);
 
         if (fragment != null && fragment instanceof UpdateStatusFragment) {
-            Log.d(TAG, "createNewTweet: ");
             manager.popBackStack();
         } else {
             fragment = new UpdateStatusFragment();
@@ -104,6 +105,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * SENDS the text that the user wrote in the UpdateStatusFragment
+     * @param tweet the text that was previously input by the user
+     */
+    @Override
+    public void sendTweet(String tweet) {
+        new UpdateStatusTask().execute(tweet);
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStack();
+    }
+
+    /**
+     * opens a new fragment in which users can search for users and tweets
+     */
     @Override
     public void showSearchTweet() {
 
@@ -122,6 +137,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * starts searching for tweets that match the searchText, after that it removes the search bar from view
+     * @param searchText the text the user wants to see tweets about
+     */
+    @Override
+    public void searchTweet(String searchText) {
+        new SearchTweetTask().execute(searchText);
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStack();
+    }
+
+    /**
+     * replaces the current fragment with a fragment of the currently authorized user's profile
+     */
     @Override
     public void showProfile() {
         ProfileFragment fragment = new ProfileFragment();
@@ -134,45 +163,44 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * shows the users timeline by starting a UserTimeLineTask
+     */
     @Override
     public void showUserTimeline() {
         new UserTimelineTask().execute();
     }
 
+    /**
+     * starts a FavoriteListTask that retrieves a list of tweets 'favorited' by the authorized user
+     */
     @Override
     public void showFavoritesList() {
         new FavoriteListTask().execute();
     }
 
+    /**
+     * starts a HomeTimeLineTask
+     */
     @Override
     public void showHomeTimeline() {
         new HomeTimeLineTask().execute();
     }
 
-    @Override
-    public void refreshTimeline() {
-        new HomeTimeLineTask().execute();
-    }
 
+    /**
+     * returns the fragment that is currently visible to the user
+     * @return Fragment of any kind
+     */
     @Override
     public Fragment currentFragment() {
         return manager.findFragmentById(R.id.fl_container);
     }
 
-    @Override
-    public void sendTweet(String tweet) {
-        new UpdateStatusTask().execute(tweet);
-        FragmentManager manager = getFragmentManager();
-        manager.popBackStack();
-    }
-
-    @Override
-    public void searchTweet(String searchText) {
-        new SearchTweetTask().execute(searchText);
-        FragmentManager manager = getFragmentManager();
-        manager.popBackStack();
-    }
-
+    /**
+     * Displays a dialog fragment explaining to the user what happened
+     * @param message a message from the twitter api when something went wrong.
+     */
     @Override
     public void showErrorMessage(String message) {
         createErrorDialog(message);
@@ -181,6 +209,9 @@ public class MainActivity extends AppCompatActivity
 
     /*==============================ASYNC TASKS===================================================*/
 
+    /**
+     * retrieves the twitter profile, from the twitter api for the authorized user
+     */
     private class UserProfileTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -214,18 +245,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private class UserTimelineTask extends AsyncTask<Long, Void, Response> {
+    /**
+     * retrieves the tweets from the twitter api made by the authorized user
+     */
+    private class UserTimelineTask extends AsyncTask<Void, Void, Response> {
 
         @Override
-        protected Response doInBackground(Long... longs) {
-//            long userId = longs[0];
+        protected Response doInBackground(Void... voids) {
             OAuth10aService authService = model.getAuthService();
             OAuth1AccessToken accessToken = api.getAccessToken();
 
             OAuthRequest request = new OAuthRequest(Verb.GET,
                     "https://api.twitter.com/1.1/statuses/user_timeline.json",
                     authService);
-//            request.addBodyParameter("user_id", );
 
             authService.signRequest(accessToken, request);
 
@@ -235,8 +267,6 @@ public class MainActivity extends AppCompatActivity
                 if (response.isSuccessful()) {
 
                     model.setStatuses(new JSONArray(response.getBody()));
-
-
 
                 } else {
                     createErrorDialog(response.getBody());
@@ -261,6 +291,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * retrieves tweets from the twitter api, from various users that are being followed by the
+     * authorized user
+     */
     private class HomeTimeLineTask extends AsyncTask<Void, Void, Response> {
 
         @Override
@@ -296,6 +330,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * retrieves tweets from the twitter api that where favorited by the authorized user
+     */
     private class FavoriteListTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -339,6 +376,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * updates the status of the authorized user a.k.a tweeting
+     */
     private class UpdateStatusTask extends AsyncTask<String, String, Void> {
 
         @Override
@@ -384,6 +424,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * retrieves a list of tweets from the twitter api based on a query made by the authorized
+     */
     private class SearchTweetTask extends AsyncTask<String, String, JSONArray> {
 
         @Override
@@ -424,35 +467,9 @@ public class MainActivity extends AppCompatActivity
 
     /*============================================================================================*/
 
-    private void showToastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-
-            InputStream is = getAssets().open("errors.json");
-
-            int size = is.available();
-
-            byte[] buffer = new byte[size];
-
-            is.read(buffer);
-
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
-
-    }
-
+    /**
+     * replaces the current fragment with a TimeLineFragment
+     */
     public void showTimeLine() {
         TimelineFragment fragment = new TimelineFragment();
 
@@ -463,6 +480,11 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * creates an ErrorDialogFragment explaining to the user what went wrong, based on the message that
+     * the twitter api sends back
+     * @param json a Json array with one or more messages that explain what happened and/or why the service failed
+     */
     public void createErrorDialog(String json) {
         ArrayList<Error> errors = null;
 
