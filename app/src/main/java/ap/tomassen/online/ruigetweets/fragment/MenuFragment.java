@@ -71,10 +71,12 @@ public class MenuFragment extends Fragment {
                 Fragment f = listener.currentFragment();
                 if (f instanceof ProfileFragment) {
                     if (currentList == USER_TIME_LINE) {
-                        ivTwitterFeed.setImageResource(R.drawable.twitterblue);
                         listener.showFavoritesList();
+                        ((ProfileFragment) f).changeListHeader();
+                        ivTwitterFeed.setImageResource(R.drawable.twitterblue);
                         currentList = FAVORITE_LIST;
                     } else if (currentList == FAVORITE_LIST) {
+                        ((ProfileFragment) f).changeListHeader();
                         ivTwitterFeed.setImageResource(R.drawable.favorite);
                         listener.showUserTimeline();
                         currentList = USER_TIME_LINE;

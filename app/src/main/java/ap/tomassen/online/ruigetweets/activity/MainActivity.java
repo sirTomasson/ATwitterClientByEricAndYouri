@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity
         UpdateStatusFragment.CallbackListener,
         SearchFragment.CallbackListener,
         StatusDetailFragment.CallbackListener {
-    
+
     public static final String TOKEN_NOT_SAVED = "tokens not in shared preferences";
     public static final String TAG_DIALOG_FRAGMENT = "dialog_tag_fragment";
     public static final String ERROR_TITLE = "ERROR_TITLE";

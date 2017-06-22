@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,8 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
 import ap.tomassen.online.ruigetweets.view.StatusListAdapter;
 
+import static android.content.ContentValues.TAG;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -34,6 +37,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvFavoritesCount;
     private TextView tvLocation;
     private ListView lvProfile;
+    private TextView tvListHeader;
 
 
 
@@ -64,7 +68,18 @@ public class ProfileFragment extends Fragment {
         return rootView;
     }
 
+    public void changeListHeader() {
+        Log.d(TAG, "changeListHeader: " + tvListHeader.getText().toString());
+
+        if (tvListHeader.getText().toString().equals("Favorites")) {
+            tvListHeader.setText("Statuses");
+        } else {
+            tvListHeader.setText("Favorites");
+        }
+    }
+
     private void initXmlElements(View rootView) {
+
 
         ivProfileImg = (ImageView) rootView.findViewById(R.id.iv_user_profile_img);
         tvName = (TextView) rootView.findViewById(R.id.tv_user_name);
@@ -74,6 +89,7 @@ public class ProfileFragment extends Fragment {
         tvFavoritesCount = (TextView) rootView.findViewById(R.id.tv_favorites_count);
         tvLocation = (TextView) rootView.findViewById(R.id.tv_user_location);
         lvProfile  = (ListView) rootView.findViewById(R.id.lv_profile);
+        tvListHeader = (TextView) rootView.findViewById(R.id.tv_list_header);
     }
 
     private void setContent(User u) {
@@ -89,6 +105,8 @@ public class ProfileFragment extends Fragment {
         tvFavoritesCount.setText(u.getFavoritesCount());
         tvLocation.setText(u.getLocation());
         lvProfile.setAdapter(new StatusListAdapter(getContext(), R.layout.list_item_status, model.getStatuses()));
+
+        tvListHeader.setText("Statuses");
     }
 
     @Override
