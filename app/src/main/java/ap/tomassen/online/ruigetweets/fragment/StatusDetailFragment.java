@@ -34,22 +34,21 @@ import java.util.ArrayList;
 
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.model.Entity;
-import ap.tomassen.online.ruigetweets.model.Mention;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.model.User;
 
+
 public class StatusDetailFragment extends Fragment {
     public static final java.lang.String STATUS_ID = "STATUS_ID";
 
-    private final String TAG = StatusDetailFragment.class.getSimpleName();
     private TwitterModel model = TwitterModel.getInstance();
     private MyTwitterApi api = MyTwitterApi.getInstance();
 
     private CallbackListener listener;
 
-    private ImageView ivUserProfileImage, ivMedia;
+    private ImageView ivUserProfileImage;
     private TextView tvUserFavoriteCount;
     private TextView tvUserFallowerCount;
     private TextView tvUserScreenName;
@@ -63,6 +62,10 @@ public class StatusDetailFragment extends Fragment {
 
 
     public interface CallbackListener {
+        /**
+         * calls back to main to show an error message regarding the twitter api
+         * @param message that was given back by the twitter api
+         */
         void showErrorMessage(String message);
     }
 
@@ -94,6 +97,10 @@ public class StatusDetailFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * sets all the TextViews and ImageViews in the rootView to the corresponding xml-elements
+     * @param rootView that holds all the xml elements
+     */
     public void initialize(View rootView) {
         ivUserProfileImage = (ImageView) rootView.findViewById(R.id.iv_user_profile_img);
         tvUserFavoriteCount = (TextView) rootView.findViewById(R.id.tv_user_favorites_count);
@@ -107,9 +114,12 @@ public class StatusDetailFragment extends Fragment {
         tvStatusReTweetCount = (TextView) rootView.findViewById(R.id.tv_status_retweet_count);
         tvStatusFavoriteCount = (TextView) rootView.findViewById(R.id.tv_status_favorite_count);
         tvStatusDate = (TextView) rootView.findViewById(R.id.tv_date);
-        ivMedia = (ImageView) rootView.findViewById(R.id.iv_media);
     }
 
+    /**
+     * Infuse the TextViews and ImageViews with data from a single tweet
+     * @param tweet object that holds data that needs to be displayed to the user
+     */
     private void setContentValues(Tweet tweet) {
         User user = tweet.getUser();
 
@@ -131,6 +141,10 @@ public class StatusDetailFragment extends Fragment {
         entitiesToClickableSpan(tweet);
     }
 
+    /**
+     * makes entities in a tweet clickable appear clickable, clicking functionality not working at the moment
+     * @param tweet that holds various entities
+     */
     private void entitiesToClickableSpan(Tweet tweet) {
         ArrayList<Entity> entities = new ArrayList<>(tweet.getEntities());
 
@@ -158,6 +172,10 @@ public class StatusDetailFragment extends Fragment {
         }
         tvStatusText.setText(tweetString);
     }
+
+    /**
+     * get a single status from twitter api with a statusId
+     */
     private class GetStatusTask extends AsyncTask<Long, Void, Tweet> {
 
         @Override

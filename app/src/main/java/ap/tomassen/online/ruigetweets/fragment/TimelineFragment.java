@@ -12,19 +12,15 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 import ap.tomassen.online.ruigetweets.view.StatusListAdapter;
 
 /**
- * Created by Eric on 4-6-2017.
+ * A list of tweets that is displayed on the main screen whenever the app opens
  */
-
 public class TimelineFragment extends ListFragment {
 
     private TwitterModel model = TwitterModel.getInstance();
 
-
-
     public TimelineFragment(){
 
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +31,10 @@ public class TimelineFragment extends ListFragment {
         return rootView;
     }
 
+    /**
+     * changes the statuses that reside in the ListAdapter to newer Statuses or Statuses that belong
+     * to a different collection like a list of tweets that were favorited by the user
+     */
     public void updateStatuses() {
         ListAdapter listAdapter = getListAdapter();
         if (listAdapter instanceof StatusListAdapter)

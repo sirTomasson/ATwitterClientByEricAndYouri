@@ -3,10 +3,10 @@ package ap.tomassen.online.ruigetweets.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Eric on 8-5-2017.
- */
 
+/**
+ * A twitter user that belongs to a tweet
+ */
 public class User {
     private long id;
     private String name;
@@ -20,6 +20,11 @@ public class User {
     private String favoritesCount;
 
 
+    /**
+     * creates a user object based on Json from the twitter api
+     * @param userObj JSON from the twitter api
+     * @throws JSONException when unexpected json is entered
+     */
     public User(JSONObject userObj) throws JSONException {
         id = userObj.getInt("id");
         name = userObj.getString("name");
@@ -31,19 +36,6 @@ public class User {
         profileBackgroundUrl = userObj.getString("profile_background_image_url");
         followersCount = userObj.getString("followers_count");
         favoritesCount = userObj.getString("favourites_count");
-    }
-
-    public User(int id, String name, String screenName, String description, String profileImageUrl, String profileUrl, String profileBackgroundUrl, String followersCount, String retweets, String location) {
-        this.id = id;
-        this.name = name;
-        this.screenName = screenName;
-        this.description = description;
-        this.profileImageUrl = profileImageUrl;
-        this.profileUrl = profileUrl;
-        this.profileBackgroundUrl = profileBackgroundUrl;
-        this.followersCount = followersCount;
-        this.favoritesCount = retweets;
-        this.location = location;
     }
 
     public String getProfileUrl() {

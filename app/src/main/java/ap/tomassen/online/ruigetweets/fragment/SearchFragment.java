@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import ap.tomassen.online.ruigetweets.R;
 
 /**
- * Created by Eric on 7-6-2017.
+ * A fragment that represents a search bar in which the user can input text to search for
+ * within the twitter api
  */
-
 public class SearchFragment extends Fragment {
     ImageView searchButton;
     String searchText;
@@ -50,6 +50,10 @@ public class SearchFragment extends Fragment {
     }
 
     public interface CallbackListener {
+        /**
+         * searches the twitter api for tweets based on a query made by the user
+         * @param searchText input from the user
+         */
         void searchTweet(String searchText);
     }
 

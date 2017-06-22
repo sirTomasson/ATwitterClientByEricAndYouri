@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,34 +18,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ap.tomassen.online.ruigetweets.R;
-import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
-import ap.tomassen.online.ruigetweets.model.TwitterModel;
+
 
 /**
- * Created by youri on 4-6-2017.
+ * This fragment can be used to write a status update and is displayed in front of the current visible elements
  */
-
 public class UpdateStatusFragment extends Fragment {
 
-    private final String TAG = UpdateStatusFragment.class.getSimpleName();
-
-    /*====================================================*/
-
-    private MyTwitterApi api = MyTwitterApi.getInstance();
-    private TwitterModel model = TwitterModel.getInstance();
-
-    private final int STATUS_LENGTH = 140;
+    private final int STATUS_LENGTH = 140;  // max length of a status
     private int charCount = STATUS_LENGTH;
 
     private EditText etWriteStatus;
-    private Button btnSendTweet;
-    private TextView tvDateTime, tvCharCount;
+    private TextView tvCharCount;
 
 
     private CallbackListener listener;
-
-    /*=====================================================*/
-
 
     public interface CallbackListener {
         void sendTweet(String tweet);
@@ -78,7 +64,7 @@ public class UpdateStatusFragment extends Fragment {
 
         tvCharCount = (TextView) rootView.findViewById(R.id.tv_char_count);
         tvCharCount.setText(STATUS_LENGTH + "");
-        tvDateTime = (TextView) rootView.findViewById(R.id.tv_date_time);
+        TextView tvDateTime = (TextView) rootView.findViewById(R.id.tv_date_time);
 
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm");
         dateFormatter.setLenient(false);
@@ -87,11 +73,7 @@ public class UpdateStatusFragment extends Fragment {
 
         tvDateTime.setText(s);
 
-        Log.i(TAG, "onCreateView: date " + s);
-
-
         etWriteStatus = (EditText) rootView.findViewById(R.id.et_write_tweet);
-
 
         etWriteStatus.addTextChangedListener(new TextWatcher() {
             @Override
@@ -104,7 +86,6 @@ public class UpdateStatusFragment extends Fragment {
 
                 charCount = STATUS_LENGTH - charSequence.length();
                 tvCharCount.setText(charCount + "");
-
             }
 
             @Override
@@ -115,8 +96,7 @@ public class UpdateStatusFragment extends Fragment {
             }
         });
 
-
-        btnSendTweet = (Button) rootView.findViewById(R.id.btn_send_tweet);
+        Button btnSendTweet = (Button) rootView.findViewById(R.id.btn_send_tweet);
         btnSendTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,20 +107,5 @@ public class UpdateStatusFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

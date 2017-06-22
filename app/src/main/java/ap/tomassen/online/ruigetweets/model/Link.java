@@ -5,9 +5,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Eric on 8-5-2017.
+ * Link entity from a tweet
  */
-
 public class Link extends Entity {
     private String url;
     private String displayUrl;
@@ -24,34 +23,18 @@ public class Link extends Entity {
         setIndices(indices);
     }
 
-    public Link(int[] indices, String url, String displayUrl, String expandedUrl) {
-        super(indices);
-        this.url = url;
-        this.displayUrl = displayUrl;
-        this.expandedUrl = expandedUrl;
-    }
-
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getDisplayUrl() {
         return displayUrl;
     }
 
-    public void setDisplayUrl(String displayUrl) {
-        this.displayUrl = displayUrl;
-    }
 
     public String getExpandedUrl() {
         return expandedUrl;
     }
 
-    public void setExpandedUrl(String expandedUrl) {
-        this.expandedUrl = expandedUrl;
-    }
 }

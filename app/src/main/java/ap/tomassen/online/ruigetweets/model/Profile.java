@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import ap.tomassen.online.ruigetweets.exception.ProfileException;
 
 /**
- * revers to the current authorized user
+ * a single for the current authorized user
  */
 public class Profile extends User {
     private static Profile instance = null;

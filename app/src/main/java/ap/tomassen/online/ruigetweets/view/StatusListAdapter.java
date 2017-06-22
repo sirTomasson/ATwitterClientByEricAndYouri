@@ -21,9 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
@@ -41,11 +39,9 @@ import java.util.List;
 import ap.tomassen.online.ruigetweets.R;
 import ap.tomassen.online.ruigetweets.activity.MainActivity;
 import ap.tomassen.online.ruigetweets.fragment.ErrorDialogFragment;
-import ap.tomassen.online.ruigetweets.fragment.ProfileFragment;
 import ap.tomassen.online.ruigetweets.fragment.StatusDetailFragment;
 import ap.tomassen.online.ruigetweets.model.Entity;
 import ap.tomassen.online.ruigetweets.model.Error;
-import ap.tomassen.online.ruigetweets.model.Mention;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
 import ap.tomassen.online.ruigetweets.model.Tweet;
 import ap.tomassen.online.ruigetweets.model.TwitterModel;
@@ -55,13 +51,7 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
     private final String TAG = StatusListAdapter.class.getSimpleName();
 
-    private ImageView mIvFavorites;
-    private ImageView mIvRetweet;
-    private ImageView mIvProfileImg;
-    private TextView mTvTweetText;
-    private TextView mTvDate;
-    private TextView mTvRetweetCount;
-    private TextView mTvFavoriteCount;
+    private TextView tvTweetText;
 
     private TwitterModel model = TwitterModel.getInstance();
     private MyTwitterApi api = MyTwitterApi.getInstance();
@@ -69,10 +59,15 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
     private FragmentManager manager;
 
 
+    /**
+     * default constructor for StatusListAdapter
+     * @param context from parent activity
+     * @param resource layout to be used for displaying content
+     * @param statuses a List of statuses to be used as content
+     */
     public StatusListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Tweet> statuses) {
         super(context, resource, statuses);
     }
-
 
     @NonNull
     @Override
@@ -86,34 +81,32 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_status, parent, false);
         }
 
-        mIvFavorites = (ImageView) convertView.findViewById(R.id.iv_favorites);
-        mIvRetweet = (ImageView) convertView.findViewById(R.id.iv_retweets);
-        mIvProfileImg = (ImageView) convertView.findViewById(R.id.iv_user_profile_img);
-        mTvTweetText = (TextView) convertView.findViewById(R.id.tv_status_text);
-        mTvDate = (TextView) convertView.findViewById(R.id.tv_date);
-        mTvRetweetCount = (TextView) convertView.findViewById(R.id.tv_retweet_count);
-        mTvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favorites_count);
+        ImageView IvFavorites = (ImageView) convertView.findViewById(R.id.iv_favorites);
+        ImageView ivRetweet = (ImageView) convertView.findViewById(R.id.iv_retweets);
+        ImageView ivProfileImg = (ImageView) convertView.findViewById(R.id.iv_user_profile_img);
+        TextView tvDate = (TextView) convertView.findViewById(R.id.tv_date);
+        TextView tvRetweetCount = (TextView) convertView.findViewById(R.id.tv_retweet_count);
+        TextView tvFavoriteCount = (TextView) convertView.findViewById(R.id.tv_favorites_count);
+        tvTweetText = (TextView) convertView.findViewById(R.id.tv_status_text);
 
         Picasso.with(getContext()).
                 load(tweet.getUser().getProfileImageUrl())
-                .into(mIvProfileImg);
+                .into(ivProfileImg);
 
         if (!tweet.getEntities().isEmpty()) {
             entitiesToClickableSpan(tweet);
         } else {
-            mTvTweetText.setText(tweet.getText());
+            tvTweetText.setText(tweet.getText());
         }
 
 
-        mTvDate.setText(tweet.getCreatedAt().toString());
-        mTvRetweetCount.setText("" + tweet.getRetweetCount());
-        mTvFavoriteCount.setText("" + tweet.getFavoritesCount());
+        tvDate.setText(tweet.getCreatedAt().toString());
+        tvRetweetCount.setText("" + tweet.getRetweetCount());
+        tvFavoriteCount.setText("" + tweet.getFavoritesCount());
 
-        mIvProfileImg.setOnClickListener(new View.OnClickListener() {
+        ivProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                new ShowStatusesByUser().execute(tweet.getUser().getId());
 
                 Bundle b = new Bundle();
                 b.putLong(StatusDetailFragment.STATUS_ID, tweet.getId());
@@ -130,14 +123,14 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
         });
 
-        mIvFavorites.setOnClickListener(new View.OnClickListener() {
+        IvFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new CreateFavoriteTask().execute(tweet);
             }
         });
 
-        mIvRetweet.setOnClickListener(new View.OnClickListener() {
+        ivRetweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new ReTweetTask().execute(tweet);
@@ -148,6 +141,10 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         return convertView;
     }
 
+    /**
+     * supposed to make parts of the text clickable but not working in this build. only makes text colored
+     * @param tweet that holds the entities that get colored
+     */
     private void entitiesToClickableSpan(Tweet tweet) {
         ArrayList<Entity> entities = new ArrayList<>(tweet.getEntities());
 
@@ -160,23 +157,6 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
             final ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View view) {
-                    if (e instanceof Mention) {
-                        Log.d(TAG, "onClick: mention");
-                        long id = ((Mention) e).getUserId();
-
-//                        new ShowStatusesByUser().execute(id);
-
-                        Fragment fragment = new ProfileFragment();
-                        Bundle b = new Bundle();
-                        b.putLong("USER_ID", id);
-                        fragment.setArguments(b);
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        transaction
-                                .replace(R.id.fl_container, fragment)
-                                .addToBackStack(null)
-                                .commit();
-
-                    }
                 }
 
                 @Override
@@ -192,52 +172,12 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         }
 
 
-        mTvTweetText.setText(tweetString);
+        tvTweetText.setText(tweetString);
     }
 
-    private class ShowStatusesByUser extends AsyncTask<Long, Void, Response> {
-
-        @Override
-        protected Response doInBackground(Long... longs) {
-            long userId = longs[0];
-            Log.d(TAG, "doInBackground: userId" + userId);
-
-            OAuth10aService service = model.getAuthService();
-            OAuth1AccessToken accessToken = api.getAccessToken();
-
-            OAuthRequest request = new OAuthRequest(Verb.GET,
-                    "https://api.twitter.com/1.1/statuses/show/.json",
-                    service);
-
-            service.signRequest(accessToken, request);
-
-            Response response = null;
-
-            try {
-                response = request.send();
-                if (response.isSuccessful()) {
-
-                } else {
-                    createErrorDialog(response.getBody());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(Response response) {
-            super.onPostExecute(response);
-            if (response.isSuccessful()) {
-                Fragment f = manager.findFragmentById(R.id.fl_container);
-                if (f != null && f instanceof ProfileFragment) {
-                    ((ProfileFragment) f).changeListContents(model.getStatuses());
-                }
-            }
-        }
-    }
-
+    /**
+     * POST a retweet to the twitter api with a tweet id
+     */
     private class ReTweetTask extends AsyncTask<Tweet, Void, Boolean> {
 
         @Override
@@ -282,6 +222,9 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         }
     }
 
+    /**
+     * POST a favorite to the twitter apit with a tweet id
+     */
     private class CreateFavoriteTask extends AsyncTask<Tweet, Void, Boolean> {
 
         @Override
@@ -326,10 +269,11 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         }
     }
 
-    private void makeToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-    }
-
+    /**
+     * creates an ErrorDialogFragment explaining to the user what went wrong, based on the message that
+     * the twitter api sends back
+     * @param json a Json array with one or more messages that explain what happened and/or why the service failed
+     */
     private void createErrorDialog(String json) {
         ArrayList<Error> errors = null;
 
@@ -357,8 +301,4 @@ public class StatusListAdapter extends ArrayAdapter<Tweet> {
         dialogFragment.show(manager, MainActivity.TAG_DIALOG_FRAGMENT);
     }
 
-    private void changeListItems(List<Tweet> tweets) {
-        clear();
-        addAll(tweets);
-    }
 }

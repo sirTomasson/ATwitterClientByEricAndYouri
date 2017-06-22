@@ -5,23 +5,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Eric on 8-5-2017.
+ * Hash tag entity from a tweet
  */
-
 public class HashTag extends Entity {
     private String text;
 
+    /**
+     * create hash tag object based on a JSONoObject
+     * @param hashTagObj
+     * @throws JSONException
+     */
     public HashTag(JSONObject hashTagObj)throws JSONException{
         super();
         text = hashTagObj.getString("text");
         JSONArray indicesArr = hashTagObj.getJSONArray("indices");
         int indices[] = {indicesArr.getInt(0), indicesArr.getInt(1) };
         setIndices(indices);
-    }
-
-    public HashTag(int[] indices, String text) {
-        super(indices);
-        this.text = text;
     }
 
     public String getText() {

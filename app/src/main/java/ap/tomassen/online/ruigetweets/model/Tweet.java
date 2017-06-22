@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Eric on 8-5-2017.
+ * An object that represents a tweet that holds various attributes and objects
  */
-
 public class Tweet {
     private Date createdAt;
     private long id;
