@@ -2,7 +2,9 @@ package ap.tomassen.online.ruigetweets.fragment;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import ap.tomassen.online.ruigetweets.R;
+import ap.tomassen.online.ruigetweets.activity.LoginActivity;
 import ap.tomassen.online.ruigetweets.model.MyTwitterApi;
+
+import static android.content.ContentValues.TAG;
 
 public class AuthorizationFragment extends Fragment {
 
@@ -52,7 +57,9 @@ public class AuthorizationFragment extends Fragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
-                if (url.startsWith(MyTwitterApi.CALL_BACK_URL)) {
+                if (url.startsWith(MyTwitterApi.CALL_BACK_URL+"?oath_token")) {
+
+                    Log.d(TAG, "shouldOverrideUrlLoading: " + url);
 
                     int start = url.indexOf("=");
 
@@ -67,6 +74,8 @@ public class AuthorizationFragment extends Fragment {
                     verifier = verifier.substring(start + 1);
 
                     listener.authorize(verifier);
+                } else {
+                    listener.showLoginFragment();
                 }
                 return false;
             }
@@ -82,6 +91,12 @@ public class AuthorizationFragment extends Fragment {
          * @param verifier that was returned with the callback url
          */
         void authorize(String verifier);
+
+        /**
+         * when login fails, reload the login fragment and get a new request token so the user can
+         * try again
+         */
+        void showLoginFragment();
     }
 }
 

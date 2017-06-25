@@ -49,8 +49,6 @@ import ap.tomassen.online.ruigetweets.model.TwitterModel;
 
 public class StatusListAdapter extends ArrayAdapter<Tweet> {
 
-    private final String TAG = StatusListAdapter.class.getSimpleName();
-
     private TextView tvTweetText;
 
     private TwitterModel model = TwitterModel.getInstance();

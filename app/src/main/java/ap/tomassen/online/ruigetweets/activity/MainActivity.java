@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
                 .getString(LoginActivity.USER_SECRET, TOKEN_NOT_SAVED);
 
         //check if the access token is in the shared preferences, if not go authorize the user
-        if (secret.equals(TOKEN_NOT_SAVED) && token.equals(TOKEN_NOT_SAVED)) {
+        if (true) {
+//        if (secret.equals(TOKEN_NOT_SAVED) && token.equals(TOKEN_NOT_SAVED)) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {

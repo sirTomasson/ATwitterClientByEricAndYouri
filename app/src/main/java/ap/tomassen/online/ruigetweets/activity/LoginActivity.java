@@ -49,15 +49,8 @@ public class LoginActivity extends AppCompatActivity
         setContentView(R.layout.activity_login);
         intent = new Intent(this, MainActivity.class);
 
-        LoginFragment loginFragment = new LoginFragment();
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
 
-        transaction
-                .replace(R.id.fl_fragment_container, loginFragment)
-                .addToBackStack(null)
-                .commit();
-
+        showLoginFragment();
     }
 
     /**
@@ -86,6 +79,19 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void authorize(String verifier) {
         new AccessTokenTask().execute(verifier);
+    }
+
+    @Override
+    public void showLoginFragment() {
+        new RequestTokenTask().execute();
+        LoginFragment loginFragment = new LoginFragment();
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+
+        transaction
+                .replace(R.id.fl_fragment_container, loginFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**
