@@ -59,8 +59,6 @@ public class AuthorizationFragment extends Fragment {
                 String url = request.getUrl().toString();
                 if (url.startsWith(MyTwitterApi.CALL_BACK_URL+"?oath_token")) {
 
-                    Log.d(TAG, "shouldOverrideUrlLoading: " + url);
-
                     int start = url.indexOf("=");
 
                     String s = url.substring(start + 1);
